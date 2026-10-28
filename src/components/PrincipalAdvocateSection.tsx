@@ -18,7 +18,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
   const [imgSrc, setImgSrc] = useState<string>(studioPhotoWebp);
 
   const whatsappText =
-    'Assalam-o-Alaikum, I would like to request a consultation with Senior Counsel Mr. Rahim Nawaz Khan Abbasi.';
+    'Assalam-o-Alaikum Qadeer Legal Chambers, I would like to request a consultation with Principal Advocate Mian Qadeer Hussain.';
   const whatsappHref = `https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
     whatsappText
   )}`;
@@ -56,10 +56,10 @@ export const PrincipalAdvocateSection: React.FC = () => {
         aria-hidden="true"
       >
         <span className="font-sans font-black text-[13vw] lg:text-[11vw] leading-[0.82] tracking-[-0.04em] text-white/[0.05] uppercase whitespace-nowrap">
-          SENIOR COUNSEL
+          PRINCIPAL ADVOCATE
         </span>
-        <span className="font-sans font-black text-[6.5vw] lg:text-[5.5vw] leading-[0.85] tracking-[-0.03em] text-[#94542D]/[0.12] uppercase whitespace-nowrap mt-1">
-          RAHIM NAWAZ KHAN ABBASI
+        <span className="font-sans font-black text-[7.5vw] lg:text-[6.2vw] leading-[0.85] tracking-[-0.03em] text-[#94542D]/[0.12] uppercase whitespace-nowrap mt-1">
+          MIAN QADEER HUSSAIN
         </span>
       </div>
 
@@ -69,7 +69,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
           <div className="flex items-center gap-2">
             <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#94542D]" aria-hidden="true" />
             <span className="font-sans text-[10.5px] sm:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#F3F0E7]">
-              FOUNDING MEMBER & SENIOR COUNSEL
+              QADEER LEGAL CHAMBERS
             </span>
           </div>
 
@@ -78,7 +78,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-1.5 font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.12em] sm:tracking-[0.16em] text-[#94542D] font-semibold">
-            <span>HIGH COURT & TRIBUNALS</span>
+            <span>SIALKOT & LAHORE</span>
           </div>
         </div>
 
@@ -87,23 +87,23 @@ export const PrincipalAdvocateSection: React.FC = () => {
           {/* Left Column */}
           <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-center items-center text-center sm:items-start sm:text-left self-center order-1 pt-28 pb-2 sm:pt-10 sm:pb-4 lg:pt-14 lg:pb-8 z-20">
             {/* Poster Title */}
-            <h2 className="font-sans font-bold text-[2.2rem] sm:text-4.5xl md:text-[3rem] lg:text-[3.5rem] xl:text-[4.2rem] text-[#F6F6F6] leading-[1.05] sm:leading-[1.02] tracking-[-0.02em] mb-3.5 sm:mb-4 drop-shadow-sm text-center sm:text-left">
-              <span className="block whitespace-nowrap">Mr. Rahim Nawaz</span>
+            <h2 className="font-sans font-bold text-[2.35rem] sm:text-5xl md:text-[3.25rem] lg:text-[3.8rem] xl:text-[4.5rem] text-[#F6F6F6] leading-[1.05] sm:leading-[1.02] tracking-[-0.02em] mb-3.5 sm:mb-4 drop-shadow-sm text-center sm:text-left">
+              <span className="block whitespace-nowrap">Mian Qadeer</span>
               <span className="block whitespace-nowrap text-[#F3F0E7] italic font-semibold">
-                Khan Abbasi
+                Hussain
               </span>
             </h2>
 
             {/* Practice Designation Line */}
             <div className="flex items-center justify-center sm:justify-start mb-4.5 sm:mb-5">
               <p className="font-sans text-[11px] sm:text-[12.5px] md:text-[13px] uppercase tracking-[0.12em] sm:tracking-[0.16em] text-[#F3F0E7] font-bold">
-                Advocate High Court · Founding Member
+                Advocate High Court · Punjab Bar Council
               </p>
             </div>
 
             {/* High-Impact Editorial Statement */}
             <p className="font-sans text-[14px] sm:text-[15px] lg:text-[16.5px] text-[#F6F6F6]/90 leading-[1.65] sm:leading-[1.65] font-normal mb-6 sm:mb-8 max-w-lg text-center sm:text-left mx-auto sm:mx-0">
-              Senior Counsel overseeing Taxation, Corporate and Company Laws, Intellectual Property, Banking, and NBFCs. Vast experience in complex tax and corporate cases with individuals, AOPs, and corporations.
+              Eighteen years of disciplined courtroom advocacy, appellate counsel, and strategic advisory across Pakistan's High Courts, regulatory tribunals, and commercial benches.
             </p>
 
             {/* Credentials in vertical stack */}
@@ -112,11 +112,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 <div className="flex items-center gap-1.5 text-white mb-0.5 sm:mb-1">
                   <Award className="w-3.5 h-3.5 text-[#94542D] shrink-0" aria-hidden="true" />
                   <span className="font-sans text-[15px] sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight whitespace-nowrap text-[#F6F6F6]">
-                    M.Phil & MBA
+                    18+ Yrs
                   </span>
                 </div>
                 <div className="font-sans text-[10.5px] sm:text-[11px] md:text-[11.5px] uppercase tracking-[0.08em] sm:tracking-[0.1em] text-[#F3F0E7]/80 font-semibold whitespace-nowrap">
-                  Finance & Corporate Strategy
+                  Court Practice
                 </div>
               </div>
 
@@ -124,11 +124,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 <div className="flex items-center gap-1.5 text-white mb-0.5 sm:mb-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#94542D] shrink-0" aria-hidden="true" />
                   <span className="font-sans text-[15px] sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight whitespace-nowrap text-[#F6F6F6]">
-                    Fellow ICSP & FBR
+                    High Court
                   </span>
                 </div>
                 <div className="font-sans text-[10.5px] sm:text-[11px] md:text-[11.5px] uppercase tracking-[0.08em] sm:tracking-[0.1em] text-[#F3F0E7]/80 font-semibold whitespace-nowrap">
-                  Registered Tax Practitioner
+                  Enrolled Counsel
                 </div>
               </div>
 
@@ -136,11 +136,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 <div className="flex items-center gap-1.5 text-white mb-0.5 sm:mb-1">
                   <Landmark className="w-3.5 h-3.5 text-[#94542D] shrink-0" aria-hidden="true" />
                   <span className="font-sans text-[15px] sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight whitespace-nowrap text-[#F6F6F6]">
-                    Corporate & Banking
+                    Dual Benches
                   </span>
                 </div>
                 <div className="font-sans text-[10.5px] sm:text-[11px] md:text-[11.5px] uppercase tracking-[0.08em] sm:tracking-[0.1em] text-[#F3F0E7]/80 font-semibold whitespace-nowrap">
-                  Institute of Bankers Member
+                  Sialkot & Lahore
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 className="group w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full bg-[#94542D] hover:bg-[#a65f33] text-white font-sans text-[11.5px] sm:text-[13px] uppercase tracking-[0.08em] font-bold shadow-xl sm:shadow-2xl transition-all duration-200 cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-                <span>Consult Senior Counsel</span>
+                <span>Consult Principal Advocate</span>
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </div>
@@ -174,7 +174,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
                     setImgSrc(studioPhotoPng);
                   }
                 }}
-                alt="Mr. Rahim Nawaz Khan Abbasi — Founding Member & Senior Counsel"
+                alt="Mian Qadeer Hussain — Founder & Principal Advocate, Qadeer Legal Chambers"
                 loading="eager"
                 decoding="async"
                 className="w-auto h-full max-h-[1040px] object-contain object-bottom drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)] scale-125 sm:scale-105 lg:scale-110 xl:scale-115 origin-bottom translate-y-0.5 sm:translate-y-1 lg:translate-y-1.5"

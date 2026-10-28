@@ -106,8 +106,7 @@ export const heroConfig: HeroConfig = {
   // Navigation (top-right)
   navigation: [
     { label: "About", href: "#about" },
-    { label: "Senior Counsel", href: "#principal-advocate" },
-    { label: "Our Team", href: "#team" },
+    { label: "Principal", href: "#principal-advocate" },
     { label: "Practice Areas", href: "#practice-areas" },
     { label: "Insights", href: "#insights" },
     { label: "Contact", href: "#contact" },
