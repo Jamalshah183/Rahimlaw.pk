@@ -122,15 +122,15 @@ export const GlobalCounselMap: React.FC = () => {
           aria-label="Global Counsel Network Map connecting Pakistan to the World"
         >
           <defs>
-            {/* Metallic Linear Gradient for Continents */}
+            {/* Golden Metallic Linear Gradient for Continents */}
             <linearGradient id="goldContinentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#94542D" stopOpacity="0.45" />
-              <stop offset="45%" stopColor="#612912" stopOpacity="0.35" />
-              <stop offset="85%" stopColor="#452415" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#452415" stopOpacity="0.18" />
+              <stop offset="0%" stopColor="#C99738" stopOpacity="0.42" />
+              <stop offset="45%" stopColor="#8C5C1E" stopOpacity="0.32" />
+              <stop offset="85%" stopColor="#4A2E0E" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#2D1A08" stopOpacity="0.18" />
             </linearGradient>
 
-            {/* Radiant Saddle Brown Glow for Arcs & Nodes */}
+            {/* Radiant Gold Glow for Arcs & Nodes */}
             <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
               <feMerge>
@@ -151,19 +151,19 @@ export const GlobalCounselMap: React.FC = () => {
 
             {/* Arc Beam Gradient */}
             <linearGradient id="arcBeamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#F3F0E7" stopOpacity="0.95" />
-              <stop offset="35%" stopColor="#94542D" stopOpacity="0.85" />
-              <stop offset="70%" stopColor="#94542D" stopOpacity="0.65" />
-              <stop offset="100%" stopColor="#612912" stopOpacity="0.4" />
+              <stop offset="0%" stopColor="#FFEAA7" stopOpacity="0.95" />
+              <stop offset="35%" stopColor="#E5B842" stopOpacity="0.85" />
+              <stop offset="70%" stopColor="#C99738" stopOpacity="0.65" />
+              <stop offset="100%" stopColor="#9B6C1E" stopOpacity="0.4" />
             </linearGradient>
           </defs>
 
           {/* ==================================================================
-              CONTINENTS VECTOR SILHOUETTE (Metallic Texture)
+              CONTINENTS VECTOR SILHOUETTE (Golden Bronze Metallic Texture)
               ================================================================== */}
           <g
             fill="url(#goldContinentGrad)"
-            stroke="#94542D"
+            stroke="#E5B842"
             strokeWidth="0.8"
             strokeOpacity="0.45"
             strokeLinejoin="round"
@@ -196,7 +196,7 @@ export const GlobalCounselMap: React.FC = () => {
           </g>
 
           {/* ==================================================================
-              SADDLE BROWN CONNECTION ARCS RADIATING FROM PAKISTAN
+              GOLDEN CONNECTION ARCS RADIATING FROM PAKISTAN
               Exact curved parabolic trajectories from reference image
               ================================================================== */}
           <g>
@@ -212,7 +212,7 @@ export const GlobalCounselMap: React.FC = () => {
                   <path
                     d={`M ${PAKISTAN_HUB.x} ${PAKISTAN_HUB.y} Q ${region.arcControlX} ${region.arcControlY} ${region.x} ${region.y}`}
                     fill="none"
-                    stroke="#94542D"
+                    stroke="#E5B842"
                     strokeWidth={strokeWidth + 3}
                     strokeOpacity={isHovered ? 0.6 : 0.2}
                     filter="url(#goldGlow)"
@@ -245,24 +245,24 @@ export const GlobalCounselMap: React.FC = () => {
                 onMouseEnter={() => setActiveRegion(region.id)}
                 onMouseLeave={() => setActiveRegion(null)}
               >
-                {/* Angled Saddle Brown Leader Line */}
+                {/* Angled Gold Leader Line */}
                 <polyline
                   points={region.leaderPoints}
                   fill="none"
-                  stroke="#94542D"
+                  stroke="#E5B842"
                   strokeWidth="1.2"
                   strokeOpacity={isHovered ? 0.95 : 0.6}
                   className="transition-all duration-300"
                 />
 
-                {/* Outer Saddle Brown Target Halo */}
+                {/* Outer Golden Target Halo */}
                 <circle
                   cx={region.x}
                   cy={region.y}
                   r={isHovered ? 14 : 10}
-                  fill="#94542D"
+                  fill="#E5B842"
                   fillOpacity={isHovered ? 0.25 : 0.12}
-                  stroke="#94542D"
+                  stroke="#E5B842"
                   strokeWidth="1"
                   strokeOpacity={isHovered ? 0.8 : 0.4}
                   className="transition-all duration-300"
@@ -273,8 +273,8 @@ export const GlobalCounselMap: React.FC = () => {
                   cx={region.x}
                   cy={region.y}
                   r={isHovered ? 5.5 : 4}
-                  fill="#F3F0E7"
-                  stroke="#94542D"
+                  fill="#FFF2B2"
+                  stroke="#E5B842"
                   strokeWidth="1.5"
                   filter="url(#goldGlow)"
                   className="transition-all duration-300"
@@ -292,7 +292,7 @@ export const GlobalCounselMap: React.FC = () => {
                         ? 'middle'
                         : 'start'
                     }
-                    className="font-sans font-bold text-[12px] sm:text-[13px] fill-[#F6F6F6] tracking-[0.14em] uppercase"
+                    className="font-sans font-bold text-[12px] sm:text-[13px] fill-white tracking-[0.14em] uppercase"
                   >
                     {region.name}
                   </text>
@@ -306,7 +306,7 @@ export const GlobalCounselMap: React.FC = () => {
                         ? 'middle'
                         : 'start'
                     }
-                    className="font-sans font-normal text-[10px] sm:text-[11px] fill-[#F3F0E7]/90 tracking-normal"
+                    className="font-sans font-normal text-[10px] sm:text-[11px] fill-[#E5B842]/90 tracking-normal"
                   >
                     {region.subtext}
                   </text>
@@ -317,7 +317,7 @@ export const GlobalCounselMap: React.FC = () => {
 
           {/* ==================================================================
               CENTRAL EPICENTER: PAKISTAN HUB
-              Radiant Node + Distinctive Dark Walnut Plaque Badge
+              Radiant Golden Node + Distinctive Dark/Gold Plaque Badge
               ================================================================== */}
           <g className="cursor-default">
             {/* Radiant Ambient Halo */}
@@ -325,8 +325,8 @@ export const GlobalCounselMap: React.FC = () => {
               cx={PAKISTAN_HUB.x}
               cy={PAKISTAN_HUB.y}
               r="24"
-              fill="#94542D"
-              fillOpacity="0.22"
+              fill="#E5B842"
+              fillOpacity="0.18"
               filter="url(#pakistanEpicenterGlow)"
             />
 
@@ -336,7 +336,7 @@ export const GlobalCounselMap: React.FC = () => {
               cy={PAKISTAN_HUB.y}
               r="14"
               fill="none"
-              stroke="#94542D"
+              stroke="#E5B842"
               strokeWidth="1.5"
               strokeOpacity="0.75"
             />
@@ -344,13 +344,13 @@ export const GlobalCounselMap: React.FC = () => {
               cx={PAKISTAN_HUB.x}
               cy={PAKISTAN_HUB.y}
               r="7"
-              fill="#F3F0E7"
-              stroke="#94542D"
+              fill="#FFFFFF"
+              stroke="#E5B842"
               strokeWidth="2"
               filter="url(#goldGlow)"
             />
 
-            {/* Iconic Dark Walnut Plaque Badge: [ PAKISTAN ] */}
+            {/* Iconic Dark/Gold Plaque Badge: [ PAKISTAN ] (from reference image) */}
             <g transform={`translate(${PAKISTAN_HUB.x + 18}, ${PAKISTAN_HUB.y - 12})`}>
               {/* Badge Background */}
               <rect
@@ -359,8 +359,8 @@ export const GlobalCounselMap: React.FC = () => {
                 width="82"
                 height="24"
                 rx="3"
-                fill="#452415"
-                stroke="#94542D"
+                fill="#150206"
+                stroke="#E5B842"
                 strokeWidth="1.2"
                 className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
               />
@@ -369,7 +369,7 @@ export const GlobalCounselMap: React.FC = () => {
                 x="41"
                 y="16"
                 textAnchor="middle"
-                className="font-sans font-bold text-[11px] fill-[#F3F0E7] tracking-[0.2em] uppercase"
+                className="font-sans font-bold text-[11px] fill-[#E5B842] tracking-[0.2em] uppercase"
               >
                 PAKISTAN
               </text>
@@ -382,18 +382,18 @@ export const GlobalCounselMap: React.FC = () => {
           MOBILE & ACCESSIBLE REGIONAL CAPABILITIES LIST
           Ensures high touch legibility on smaller screens
           ====================================================================== */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-3 mt-4 pt-4 border-t border-[#94542D]/20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-3 mt-4 pt-4 border-t border-[#E5B842]/20">
         {REGIONS.map((region) => (
           <div
             key={`mobile-${region.id}`}
-            className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-[#94542D]/20 text-left"
+            className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-[#E5B842]/20 text-left"
           >
-            <span className="w-2 h-2 rounded-full bg-[#94542D] mt-1 shrink-0 shadow-[0_0_8px_#94542D]" />
+            <span className="w-2 h-2 rounded-full bg-[#E5B842] mt-1 shrink-0 shadow-[0_0_8px_#E5B842]" />
             <div>
-              <div className="font-sans text-[11.5px] uppercase tracking-[0.14em] font-bold text-[#F6F6F6]">
+              <div className="font-sans text-[11.5px] uppercase tracking-[0.14em] font-bold text-white">
                 {region.name}
               </div>
-              <div className="font-sans text-[12px] text-[#F3F0E7] mt-0.5">
+              <div className="font-sans text-[12px] text-[#E5B842] mt-0.5">
                 {region.subtext}
               </div>
             </div>

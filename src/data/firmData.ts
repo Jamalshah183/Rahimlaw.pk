@@ -48,22 +48,17 @@ export const FIRM_CONFIG = {
   logoUrl: logoTight,
   establishedYear: "2026",
 
-  // Color System Constants (5-Color Official Palette: Dark Walnut, Saddle Brown, Bright Snow, Dark Walnut 2, Soft Linen)
+  // Color System Constants (for direct reference where needed)
   colors: {
-    darkWalnut: "#452415",
-    saddleBrown: "#94542D",
-    brightSnow: "#F6F6F6",
-    darkWalnut2: "#612912",
-    softLinen: "#F3F0E7",
-    burgundy: "#94542D",
-    burgundyDeep: "#452415",
-    burgundyVibrant: "#612912",
-    cream: "#F6F6F6",
-    creamSoft: "#F3F0E7",
-    gold: "#94542D",
-    goldBright: "#94542D",
-    darkText: "#452415",
-    mutedText: "#612912",
+    burgundy: "#9B112C",
+    burgundyDeep: "#6A0C1E",
+    burgundyVibrant: "#B81D3C",
+    cream: "#FFFFFF",
+    creamSoft: "#F8FAFC",
+    gold: "#E5B842",
+    goldBright: "#F5D061",
+    darkText: "#0F172A",
+    mutedText: "#475569",
   },
 
   // Contact Information (Easily editable placeholders)

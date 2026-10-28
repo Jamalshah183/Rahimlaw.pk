@@ -53,37 +53,39 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
   return (
     <section
       id="international-counsel"
-      className="relative z-[13] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#94542D]/40 shadow-[0_-25px_50px_-15px_rgba(69,36,21,0.5)] overflow-hidden bg-gradient-to-b from-[#452415] via-[#612912] to-[#452415] py-8 sm:py-12 lg:py-16"
+      className="relative z-[13] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.35)] overflow-hidden bg-gradient-to-b from-[#9B112C] via-[#800F24] to-[#6A0C1E] py-8 sm:py-12 lg:py-16"
     >
       {/* ======================================================================
-          BACKGROUND LAYER: Dark Walnut & Dark Walnut 2 Luxury Canvas
+          BACKGROUND LAYER: Website-Matched Royal Chamber Burgundy Canvas
+          Matching Principal Advocate & Experience sections (#9B112C to #6A0C1E)
           ====================================================================== */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Studio Vignette */}
+        {/* Soft Radial Studio Vignette matching Principal Advocate section */}
         <div
-          className="absolute inset-0 bg-radial from-transparent via-black/15 to-black/45 pointer-events-none"
+          className="absolute inset-0 bg-radial from-transparent via-black/10 to-black/35 pointer-events-none"
           aria-hidden="true"
         />
 
-        {/* Saddle Brown Ambient Spotlight behind the world map */}
+        {/* Enlarged Warm Gold Ambient Spotlight directly behind the world map */}
         <div
-          className="absolute top-1/4 right-0 lg:right-4 w-[52rem] h-[52rem] xl:w-[62rem] xl:h-[62rem] bg-[#94542D]/[0.18] rounded-full blur-[170px] pointer-events-none"
+          className="absolute top-1/4 right-0 lg:right-4 w-[52rem] h-[52rem] xl:w-[62rem] xl:h-[62rem] bg-[#E5B842]/[0.14] rounded-full blur-[170px] pointer-events-none"
           aria-hidden="true"
         />
 
-        {/* Dark Walnut Radial Glow */}
+        {/* Royal Burgundy Radial Ambient Glow matching website primary #9B112C */}
         <div
-          className="absolute bottom-1/4 left-4 w-[42rem] h-[42rem] bg-[#452415]/60 rounded-full blur-[160px] pointer-events-none"
+          className="absolute bottom-1/4 left-4 w-[42rem] h-[42rem] bg-[#9B112C]/40 rounded-full blur-[160px] pointer-events-none"
           aria-hidden="true"
         />
 
-        {/* Top/Bottom Edge Feathers */}
+
+        {/* Top/Bottom Edge Feathers to seamlessly melt into surrounding sections */}
         <div
-          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#452415]/80 to-transparent pointer-events-none"
+          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#9B112C]/80 to-transparent pointer-events-none"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#452415]/90 to-transparent pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#6A0C1E]/90 to-transparent pointer-events-none"
           aria-hidden="true"
         />
       </div>
@@ -98,32 +100,32 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
               LEFT SIDE: Content & Mandates
               ================================================================== */}
           <div className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center items-center text-center">
-            {/* Section Eyebrow */}
+            {/* Section Eyebrow (Hidden on mobile version only) */}
             <div className="hidden sm:inline-flex items-center justify-center gap-2 mb-3 sm:mb-3.5">
-              <span className="w-1.5 h-1.5 rotate-45 bg-[#94542D]" aria-hidden="true" />
-              <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#F3F0E7]">
+              <span className="w-1.5 h-1.5 rotate-45 bg-[#E5B842]" aria-hidden="true" />
+              <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
                 YOUR GLOBAL LEGAL PARTNER IN PAKISTAN
               </span>
-              <span className="w-1.5 h-1.5 rotate-45 bg-[#94542D]" aria-hidden="true" />
+              <span className="w-1.5 h-1.5 rotate-45 bg-[#E5B842]" aria-hidden="true" />
             </div>
 
             {/* Main Headline */}
-            <h2 className="text-[2.25rem] sm:text-[2.85rem] md:text-[3.25rem] xl:text-[3.65rem] font-sans font-bold text-[#F6F6F6] leading-[1.05] tracking-[-0.02em] mb-3 sm:mb-3.5 drop-shadow-sm text-center">
+            <h2 className="text-[2.25rem] sm:text-[2.85rem] md:text-[3.25rem] xl:text-[3.65rem] font-sans font-bold text-white leading-[1.05] tracking-[-0.02em] mb-3 sm:mb-3.5 drop-shadow-sm text-center">
               <span className="block font-sans">International</span>
-              <span className="block text-[#F3F0E7] italic font-semibold font-sans">
+              <span className="block text-[#E5B842] italic font-semibold font-sans">
                 Counsel Services
               </span>
             </h2>
 
-            {/* Core Practice Positioning Line */}
+            {/* Core Practice Positioning Line (Hidden on mobile version only) */}
             <div className="hidden sm:flex items-center justify-center mb-3.5 sm:mb-4">
-              <p className="font-sans text-[11.5px] sm:text-[12.5px] uppercase tracking-[0.14em] text-[#F3F0E7]/90 font-bold text-center">
+              <p className="font-sans text-[11.5px] sm:text-[12.5px] uppercase tracking-[0.14em] text-white/90 font-bold text-center">
                 Cross-Border Advocacy • Pakistan Local Counsel
               </p>
             </div>
 
             {/* Narrative Statement */}
-            <p className="font-sans text-[14.5px] sm:text-[16px] text-[#F6F6F6]/90 leading-[1.6] sm:leading-[1.65] font-normal mb-6 sm:mb-8 text-center max-w-xl mx-auto">
+            <p className="font-sans text-[14.5px] sm:text-[16px] text-white/95 leading-[1.6] sm:leading-[1.65] font-normal mb-6 sm:mb-8 text-center max-w-xl mx-auto">
               For international law firms, businesses and individuals — we handle your
               legal matters in Pakistan, so you can focus on what matters most, globally.
             </p>
@@ -133,12 +135,12 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
               {INTERNATIONAL_SERVICES.map((service) => (
                 <div key={service.title} className="flex flex-col items-center text-center">
                   <div className="inline-flex items-center gap-1.5 justify-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#94542D] shrink-0 shadow-[0_0_6px_#94542D]" />
-                    <span className="font-sans text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.1em] text-[#F6F6F6]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E5B842] shrink-0 shadow-[0_0_6px_#E5B842]" />
+                    <span className="font-sans text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.1em] text-white">
                       {service.title}
                     </span>
                   </div>
-                  <div className="font-sans text-[12px] text-[#F3F0E7]/80 leading-tight mt-0.5 text-center">
+                  <div className="font-sans text-[12px] text-[#E5B842]/90 leading-tight mt-0.5 text-center">
                     {service.description}
                   </div>
                 </div>
@@ -152,22 +154,22 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleActionClick}
-                className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-6 sm:pl-7 pr-2 sm:pr-2.5 h-[50px] sm:h-[54px] rounded-full bg-[#94542D] hover:bg-[#a65f33] text-white font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-6 sm:pl-7 pr-2 sm:pr-2.5 h-[50px] sm:h-[54px] rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
               >
                 <span className="tracking-[0.05em] uppercase">GET IN TOUCH</span>
-                <span className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-[#452415] text-[#F3F0E7] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
+                <span className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white text-[#0F172A] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
                   <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                 </span>
               </a>
 
               <div
-                className="hidden sm:block h-8 w-[1.5px] bg-[#94542D]/40"
+                className="hidden sm:block h-8 w-[1.5px] bg-[#E5B842]/30"
                 aria-hidden="true"
               />
 
               <div className="font-sans text-[10.5px] sm:text-[11.5px] uppercase tracking-[0.12em] text-white/85 font-bold leading-tight text-center sm:text-left">
                 <span className="block">LET US HANDLE THE LEGAL SIDE</span>
-                <span className="block text-[#F3F0E7]">IN PAKISTAN</span>
+                <span className="block text-[#E5B842]">IN PAKISTAN</span>
               </div>
             </div>
           </div>

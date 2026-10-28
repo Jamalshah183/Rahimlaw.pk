@@ -21,7 +21,7 @@ export const WhatsAppButton: React.FC = () => {
               e.stopPropagation();
               setShowTooltip(false);
             }}
-            className="text-[#612912]/70 hover:text-[#94542D] p-0.5 cursor-pointer"
+            className="text-[#64748B] hover:text-[#9B112C] p-0.5 cursor-pointer"
             aria-label="Dismiss message"
           >
             <X className="w-3 h-3" />
@@ -35,7 +35,7 @@ export const WhatsAppButton: React.FC = () => {
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setShowTooltip(true)}
-        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#F6F6F6] border-2 border-[#94542D] shadow-xl hover:scale-106 active:scale-95 transition-transform duration-300 focus:outline-none focus:ring-3 focus:ring-[#94542D]"
+        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-white border-2 border-[#9B112C] shadow-xl hover:scale-106 active:scale-95 transition-transform duration-300 focus:outline-none focus:ring-3 focus:ring-[#E5B842]"
         aria-label="Chat with Qadeer Legal Chambers on WhatsApp"
         title="Direct WhatsApp Consultation"
       >

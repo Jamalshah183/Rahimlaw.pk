@@ -27,26 +27,26 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Luminous Bright Snow / Soft Linen highlight gradient overlay */}
+        {/* Layer 2: Luminous Bright / Pearl highlight gradient overlay */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
             background:
-              'linear-gradient(180deg, #F6F6F6 0%, rgba(246, 246, 246, 0.70) 45%, #F3F0E7 95%)',
+              'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.70) 45%, #F8FAFC 95%)',
           }}
           aria-hidden="true"
         />
 
         {/* Soft radial highlight behind scales */}
         <div
-          className="absolute inset-0 w-full h-full bg-radial from-white/30 via-[#F3F0E7]/50 to-[#F6F6F6]/90 pointer-events-none"
+          className="absolute inset-0 w-full h-full bg-radial from-white/30 via-white/50 to-[#F8FAFC]/90 pointer-events-none"
           aria-hidden="true"
         />
       </div>
 
       {/* 
         ========================================================================
-        IMAGE 1 — LEFT BACKGROUND (Desk, Paperwork, Signing) + DARK WALNUT OVERLAY
+        IMAGE 1 — LEFT BACKGROUND (Desk, Paperwork, Signing) + BURGUNDY OVERLAY
         Desktop: ~58% width.
         Mobile: Tall enough (h-[65%] min-h-[545px]) to fully contain all HeroContent.
         z-index: 2 (renders ON TOP of IMAGE 2).
@@ -68,7 +68,7 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Independent Primary Dark Walnut Color Overlay (#452415 at 92% opacity) */}
+        {/* Layer 2: Independent Primary Burgundy Color Overlay (#5B1111 at 88% opacity) */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
@@ -78,9 +78,9 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Subtle rich walnut depth gradient on left */}
+        {/* Subtle vignette depth gradient on left without shadow on the right */}
         <div
-          className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/35 via-transparent to-[#612912]/20 pointer-events-none"
+          className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/25 via-transparent to-transparent pointer-events-none"
           aria-hidden="true"
         />
       </div>

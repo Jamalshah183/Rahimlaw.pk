@@ -64,16 +64,16 @@ export const heroConfig: HeroConfig = {
   lawyerImage: heroLawyerCutout,
   logo: logoTight,
 
-  // Brand Palette (5-Color Palette)
+  // Brand Palette
   colors: {
-    primaryBurgundy: "#452415", // Dark Walnut
-    deepBurgundy: "#612912", // Dark Walnut 2
-    primaryCream: "#F6F6F6", // Bright Snow
-    softCream: "#F3F0E7", // Soft Linen
-    warmGold: "#94542D", // Saddle Brown
-    darkText: "#452415",
-    mutedText: "#612912",
-    leftOverlayOpacity: 0.92,
+    primaryBurgundy: "#9B112C",
+    deepBurgundy: "#6A0C1E",
+    primaryCream: "#FFFFFF",
+    softCream: "#F8FAFC",
+    warmGold: "#E5B842",
+    darkText: "#0F172A",
+    mutedText: "#475569",
+    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby burgundy overlay
   },
 
   // Eyebrow badge
