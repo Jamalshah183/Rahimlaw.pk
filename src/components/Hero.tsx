@@ -16,7 +16,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
     >
       {/* 
         Two Independent Background Layers:
-        1. Left Background Image (Desk & Paperwork) + Independent Primary Burgundy Overlay (#5B1111, 88%)
+        1. Left Background Image (Desk & Paperwork) + Independent Primary copper Overlay (#5B1111, 88%)
         2. Right Background Image (Warm Legal & Subtle Justice Scales) + Warm Cream Overlay
         Right border of the left section is smoothly rounded.
       */}
@@ -34,7 +34,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
       */}
       <div className="w-full flex-1 flex flex-col justify-center relative pt-10 sm:pt-6 lg:pt-0 my-auto">
         <div className="w-full relative flex flex-col lg:flex-row items-center justify-start my-auto">
-          {/* Hero Content (Positioned over Burgundy side with left spacing, vertically centered) */}
+          {/* Hero Content (Positioned over copper side with left spacing, vertically centered) */}
           <HeroContent onOpenConsultation={onOpenConsultation} />
 
           {/* Foreground Statue of Justice Cutout */}

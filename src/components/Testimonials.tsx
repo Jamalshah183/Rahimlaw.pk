@@ -21,9 +21,9 @@ export const Testimonials: React.FC = () => {
   return (
     <section
       id="testimonials"
-      className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-gradient-to-b from-[#9B112C] via-[#800F24] to-[#6A0C1E] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.35)] overflow-hidden"
+      className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-gradient-to-b from-[#612912] via-[#612912] to-[#2A160E] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.35)] overflow-hidden"
     >
-      {/* Background Atmosphere: Royal Chamber Burgundy Canvas */}
+      {/* Background Atmosphere: Royal Chamber copper Canvas */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Soft Radial Vignette */}
         <div
@@ -37,19 +37,19 @@ export const Testimonials: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Royal Burgundy Radial Ambient Glow */}
+        {/* Royal copper Radial Ambient Glow */}
         <div
-          className="absolute bottom-1/4 left-1/4 w-[38rem] h-[38rem] bg-[#9B112C]/40 rounded-full blur-[150px] pointer-events-none"
+          className="absolute bottom-1/4 left-1/4 w-[38rem] h-[38rem] bg-[#612912]/40 rounded-full blur-[150px] pointer-events-none"
           aria-hidden="true"
         />
 
         {/* Top/Bottom Edge Feathers */}
         <div
-          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#9B112C]/80 to-transparent pointer-events-none"
+          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#612912]/80 to-transparent pointer-events-none"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#6A0C1E]/90 to-transparent pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#2A160E]/90 to-transparent pointer-events-none"
           aria-hidden="true"
         />
       </div>
@@ -77,7 +77,7 @@ export const Testimonials: React.FC = () => {
 
         {/* Carousel Container */}
         <div className="max-w-4xl mx-auto w-full">
-          <div className="relative bg-[#5C0818]/75 backdrop-blur-xs rounded-2xl p-8 sm:p-12 md:p-16 border border-[#E5B842]/35 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
+          <div className="relative bg-[#2A160E]/75 backdrop-blur-xs rounded-2xl p-8 sm:p-12 md:p-16 border border-[#E5B842]/35 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
             {/* Gold Quotation Mark Icon */}
             <div className="absolute top-6 left-8 sm:top-10 sm:left-12">
               <Quote className="w-12 h-12 sm:w-16 sm:h-16 text-[#E5B842]/20 -scale-x-100" />

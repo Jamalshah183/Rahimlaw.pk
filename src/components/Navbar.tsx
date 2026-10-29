@@ -50,10 +50,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               aria-label="Qadeer Legal Chambers - Home"
             >
               <div className="flex items-center gap-2.5">
-                <span className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-[#9B112C]">
+                <span className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-[#612912]">
                   Qadeer
                 </span>
-                <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border border-[#9B112C]/25 text-[#9B112C] bg-[#9B112C]/5">
+                <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border border-[#612912]/25 text-[#612912] bg-[#612912]/5">
                   Legal Chambers
                 </span>
               </div>
@@ -62,28 +62,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             {/* 
               Navigation Links
             */}
-            <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#0F172A]">
+            <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#2A160E]">
               <a
                 href="#about"
-                className="hover:text-[#9B112C] transition-colors relative py-1"
+                className="hover:text-[#612912] transition-colors relative py-1"
               >
                 About
               </a>
               <a
                 href="#practice-areas"
-                className="hover:text-[#9B112C] transition-colors relative py-1"
+                className="hover:text-[#612912] transition-colors relative py-1"
               >
                 Practice Areas
               </a>
               <a
                 href="#testimonials"
-                className="hover:text-[#9B112C] transition-colors relative py-1"
+                className="hover:text-[#612912] transition-colors relative py-1"
               >
                 Testimonials
               </a>
               <a
                 href="#contact"
-                className="hover:text-[#9B112C] transition-colors relative py-1"
+                className="hover:text-[#612912] transition-colors relative py-1"
               >
                 Contact
               </a>
@@ -94,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               <button
                 type="button"
                 onClick={onOpenConsultation}
-                className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-[#9B112C] hover:bg-[#800C22] text-white text-xs uppercase tracking-wider font-semibold rounded-full transition-all duration-200 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 cursor-pointer whitespace-nowrap"
+                className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-[#612912] hover:bg-[#800C22] text-white text-xs uppercase tracking-wider font-semibold rounded-full transition-all duration-200 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 cursor-pointer whitespace-nowrap"
               >
                 <span>Free Consultation</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className={`lg:hidden p-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842] transition-colors ${
                   isScrolled
-                    ? 'text-[#9B112C] hover:bg-[#9B112C]/10'
+                    ? 'text-[#612912] hover:bg-[#612912]/10'
                     : 'text-white hover:bg-white/10'
                 }`}
                 aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
@@ -137,14 +137,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   <span className="text-[10px] uppercase tracking-widest text-[#E5B842] font-semibold block mb-0.5">
                     Advocates • Litigation • Legal Advisory
                   </span>
-                  <span className="text-lg font-serif font-bold text-[#9B112C]">
+                  <span className="text-lg font-serif font-bold text-[#612912]">
                     Qadeer Legal Chambers
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-full text-[#0F172A] hover:bg-slate-100"
+                  className="p-1.5 rounded-full text-[#2A160E] hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-base font-sans font-medium text-[#0F172A] hover:text-[#9B112C] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
+                    className="text-base font-sans font-medium text-[#2A160E] hover:text-[#612912] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
                   >
                     <span>{item.label}</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
@@ -178,14 +178,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-3 bg-[#9B112C] text-white text-xs uppercase tracking-wider font-semibold rounded-full text-center block shadow-md hover:bg-[#800C22] transition-colors cursor-pointer"
+                className="w-full py-3 bg-[#612912] text-white text-xs uppercase tracking-wider font-semibold rounded-full text-center block shadow-md hover:bg-[#800C22] transition-colors cursor-pointer"
               >
                 Free Consultation
               </button>
 
               <a
                 href={`tel:${FIRM_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`}
-                className="w-full py-2.5 bg-transparent border border-slate-200 text-[#0F172A] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
+                className="w-full py-2.5 bg-transparent border border-slate-200 text-[#2A160E] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-[#E5B842]" />
                 <span className="tabular-nums">{FIRM_CONFIG.contact.phoneDisplay}</span>

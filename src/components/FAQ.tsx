@@ -12,7 +12,7 @@ export const FAQ: React.FC = () => {
   return (
     <section
       id="faq"
-      className="relative z-[17] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-gradient-to-b from-[#8C0E26] via-[#750B1F] to-[#5C0818] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(106,12,30,0.35)] overflow-hidden"
+      className="relative z-[17] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(69, 36, 21,0.35)] overflow-hidden"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -41,7 +41,7 @@ export const FAQ: React.FC = () => {
             return (
               <div
                 key={faq.id}
-                className="bg-[#5C0818]/75 rounded-xl border border-[#E5B842]/35 overflow-hidden transition-colors"
+                className="bg-[#2A160E]/75 rounded-xl border border-[#E5B842]/35 overflow-hidden transition-colors"
               >
                 <button
                   type="button"
@@ -55,11 +55,11 @@ export const FAQ: React.FC = () => {
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
                       isOpen
-                        ? 'bg-[#E5B842] text-[#0F172A] rotate-180'
+                        ? 'bg-[#E5B842] text-[#2A160E] rotate-180'
                         : 'bg-white/15 text-[#E5B842]'
                     }`}
                   >
-                    <ChevronDown className={`w-4 h-4 ${isOpen ? 'text-[#0F172A]' : 'text-[#E5B842]'}`} />
+                    <ChevronDown className={`w-4 h-4 ${isOpen ? 'text-[#2A160E]' : 'text-[#E5B842]'}`} />
                   </div>
                 </button>
 
@@ -74,7 +74,7 @@ export const FAQ: React.FC = () => {
         </div>
 
         {/* Still have questions prompt */}
-        <div className="mt-12 p-6 rounded-xl bg-[#5C0818]/90 border border-[#E5B842]/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg">
+        <div className="mt-12 p-6 rounded-xl bg-[#2A160E]/90 border border-[#E5B842]/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#E5B842]/20 flex items-center justify-center shrink-0">
               <HelpCircle className="w-5 h-5 text-[#E5B842]" />
@@ -95,9 +95,9 @@ export const FAQ: React.FC = () => {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors whitespace-nowrap shadow-md"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors whitespace-nowrap shadow-md"
           >
-            <PhoneCall className="w-3.5 h-3.5 text-[#0F172A]" />
+            <PhoneCall className="w-3.5 h-3.5 text-[#2A160E]" />
             <span>Inquire on WhatsApp</span>
           </a>
         </div>

@@ -39,7 +39,7 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0F172A]/75 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#2A160E]/75 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -47,19 +47,19 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
       {/* Modal Dialog */}
       <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[calc(100dvh-2rem)] overflow-y-auto border border-slate-200/90 shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200">
         {/* Top Image Banner */}
-        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-[#5C0818]">
+        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-[#2A160E]">
           <img
             src={practice.image}
             alt={practice.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#5C0818] via-[#5C0818]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2A160E] via-[#2A160E]/40 to-transparent" />
 
           {/* Close button */}
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/40 hover:bg-[#9B112C] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#E5B842] cursor-pointer"
+            className="absolute top-4 right-4 p-2 rounded-full bg-black/40 hover:bg-[#612912] text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#E5B842] cursor-pointer"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -86,14 +86,14 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
           </p>
 
           <div className="pt-2">
-            <h4 className="font-sans text-[11px] uppercase tracking-[0.14em] font-bold text-[#9B112C] mb-3 flex items-center gap-2">
+            <h4 className="font-sans text-[11px] uppercase tracking-[0.14em] font-bold text-[#612912] mb-3 flex items-center gap-2">
               <Shield className="w-4 h-4 text-[#E5B842]" />
               <span>Core Chambers Services & Representation</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {practice.keyServices.map((service, idx) => (
                 <div key={idx} className="flex items-start gap-2 font-sans text-[14.5px] font-medium text-[#1E293B] leading-[1.5]">
-                  <CheckCircle2 className="w-4 h-4 text-[#9B112C] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-[#612912] shrink-0 mt-0.5" />
                   <span>{service}</span>
                 </div>
               ))}
@@ -112,7 +112,7 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
                 onClose();
                 onConsult(practice.title);
               }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#9B112C] hover:bg-[#750B1F] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#612912] hover:bg-[#2A160E] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
             >
               <span>Consult on {practice.title}</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#E5B842]" />

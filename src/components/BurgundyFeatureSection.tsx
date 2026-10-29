@@ -1,11 +1,11 @@
 import React from 'react';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 
-interface BurgundyFeatureSectionProps {
+interface copperFeatureSectionProps {
   onOpenConsultation: () => void;
 }
 
-export const BurgundyFeatureSection: React.FC<BurgundyFeatureSectionProps> = ({
+export const copperFeatureSection: React.FC<copperFeatureSectionProps> = ({
   onOpenConsultation,
 }) => {
   return (
@@ -34,7 +34,7 @@ export const BurgundyFeatureSection: React.FC<BurgundyFeatureSectionProps> = ({
           We maintain an uncompromising dedication to clear communication, strategic legal advice, and client-focused representation. When critical business assets, personal integrity, or family rights are at stake, our counsel brings clarity and deliberate direction.
         </p>
 
-        {/* CTA Button: Cream background with burgundy text */}
+        {/* CTA Button: Cream background with copper text */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             type="button"

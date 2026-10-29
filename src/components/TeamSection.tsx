@@ -294,13 +294,13 @@ const TeamMemberCard: React.FC<{
       className="group relative w-full max-w-[295px] mx-auto aspect-[3/3.66] select-none overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-tl-[38px] rounded-b-xl transition-transform duration-300 hover:-translate-y-1"
     >
       {/* 
-        1. Left Vertical Burgundy Pillar (Matches reference card's red left bar):
+        1. Left Vertical copper Pillar (Matches reference card's red left bar):
            - Covers ~46% of the card width on the left
            - Rounded top-left corner (rounded-tl-[38px])
            - Contains vertical outlined watermark text
       */}
       <div
-        className="absolute top-0 left-0 bottom-0 w-[46%] bg-[#9B112C] rounded-tl-[38px] z-[1] overflow-hidden flex items-start justify-center pt-5"
+        className="absolute top-0 left-0 bottom-0 w-[46%] bg-[#612912] rounded-tl-[38px] z-[1] overflow-hidden flex items-start justify-center pt-5"
         aria-hidden="true"
       >
         <span
@@ -318,7 +318,7 @@ const TeamMemberCard: React.FC<{
 
       {/* 
         2. Foreground Cutout Portrait:
-           - Overlaps both the left Burgundy pillar and the right space
+           - Overlaps both the left copper pillar and the right space
       */}
       <div className="absolute inset-x-0 bottom-0 top-2.5 z-[2] flex items-end justify-center pointer-events-none">
         <img
@@ -332,15 +332,15 @@ const TeamMemberCard: React.FC<{
       </div>
 
       {/* 
-        3. Bottom Full-Width Burgundy Gradient Fade & Member Info Lockup:
-           - Smoothly fades upward from solid vibrant burgundy (#6A0C1E) at the bottom edge
+        3. Bottom Full-Width copper Gradient Fade & Member Info Lockup:
+           - Smoothly fades upward from solid vibrant copper (#2A160E) at the bottom edge
            - Displays Name, Designation, and subtle View Profile arrow
       */}
       <div
         className="absolute inset-x-0 bottom-0 h-[36%] z-[3] pointer-events-none"
         style={{
           background:
-            'linear-gradient(to top, #6A0C1E 0%, rgba(106, 12, 30, 0.92) 38%, rgba(106, 12, 30, 0.45) 72%, transparent 100%)',
+            'linear-gradient(to top, #2A160E 0%, rgba(71, 51, 42, 0.92) 38%, rgba(71, 51, 42, 0.45) 72%, transparent 100%)',
         }}
         aria-hidden="true"
       />
@@ -356,7 +356,7 @@ const TeamMemberCard: React.FC<{
         </div>
 
         <span
-          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#0F172A] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
+          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#2A160E] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
           aria-hidden="true"
         >
           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -389,21 +389,21 @@ export const TeamSection: React.FC = () => {
   return (
     <section
       id="team"
-      className="relative z-[18] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-24 md:pb-32 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] rounded-b-[50px] sm:rounded-b-[65px] lg:rounded-b-[80px] border-t-2 border-b-2 border-[#9B112C]/20 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.10),0_30px_60px_-15px_rgba(15,23,42,0.12)] overflow-hidden"
+      className="relative z-[18] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-24 md:pb-32 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] rounded-b-[50px] sm:rounded-b-[65px] lg:rounded-b-[80px] border-t-2 border-b-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10),0_30px_60px_-15px_rgba(15,23,42,0.12)] overflow-hidden"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Centered Heading */}
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
-            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#9B112C]">
+            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#612912]">
               LEADERSHIP & PARTNERS
             </span>
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#0F172A] leading-[1.08] tracking-[-0.02em]">
-            Board Of <span className="font-sans italic font-semibold text-[#9B112C]">Directors</span>
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em]">
+            Board Of <span className="font-sans italic font-semibold text-[#612912]">Directors</span>
           </h2>
         </div>
 
@@ -436,7 +436,7 @@ export const TeamSection: React.FC = () => {
           >
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-[#0F172A]/80 backdrop-blur-xs transition-opacity"
+              className="fixed inset-0 bg-[#2A160E]/80 backdrop-blur-xs transition-opacity"
               onClick={() => setSelectedProfile(null)}
               aria-hidden="true"
             />
@@ -445,7 +445,7 @@ export const TeamSection: React.FC = () => {
             <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90dvh] flex flex-col border-2 border-[#E5B842]/50 shadow-[0_30px_80px_-15px_rgba(15,23,42,0.6)] overflow-hidden z-10">
               {/* Top Gold Accent Bar */}
               <div
-                className="h-1.5 w-full shrink-0 bg-gradient-to-r from-[#9B112C] via-[#E5B842] to-[#9B112C]"
+                className="h-1.5 w-full shrink-0 bg-gradient-to-r from-[#612912] via-[#E5B842] to-[#612912]"
                 aria-hidden="true"
               />
 
@@ -453,7 +453,7 @@ export const TeamSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedProfile(null)}
-                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-9 h-9 rounded-full bg-[#9B112C] text-white hover:bg-[#750B1F] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
+                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-9 h-9 rounded-full bg-[#612912] text-white hover:bg-[#2A160E] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
                 aria-label="Close profile modal"
               >
                 <X className="w-4.5 h-4.5" />
@@ -463,7 +463,7 @@ export const TeamSection: React.FC = () => {
                 {/* 
                   Left Column (4 Cols): Tailored Executive Portrait Frame & Chamber Seal
                 */}
-                <div className="md:col-span-5 bg-gradient-to-b from-[#8C0E26] via-[#750B1F] to-[#5C0818] pt-10 pb-6 px-5 sm:p-8 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
+                <div className="md:col-span-5 bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] pt-10 pb-6 px-5 sm:p-8 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
                   {/* Subtle radial ambient glow */}
                   <div
                     className="absolute inset-0 bg-radial from-[#E5B842]/15 via-transparent to-black/30 pointer-events-none"
@@ -472,9 +472,9 @@ export const TeamSection: React.FC = () => {
 
                   {/* Framed Executive Portrait Card */}
                   <div className="relative z-10 w-[215px] h-[276px] sm:w-[235px] sm:h-[302px] rounded-2xl bg-white border-2 border-[#E5B842]/60 shadow-2xl overflow-hidden shrink-0">
-                    {/* Left Vertical Burgundy Pillar inside portrait frame */}
+                    {/* Left Vertical copper Pillar inside portrait frame */}
                     <div
-                      className="absolute top-0 left-0 bottom-0 w-[44%] bg-[#6A0C1E] z-[1] flex items-start justify-center pt-6"
+                      className="absolute top-0 left-0 bottom-0 w-[44%] bg-[#2A160E] z-[1] flex items-start justify-center pt-6"
                       aria-hidden="true"
                     >
                       <span
@@ -499,12 +499,12 @@ export const TeamSection: React.FC = () => {
                       />
                     </div>
 
-                    {/* Smooth Bottom Burgundy Gradient Anchor */}
+                    {/* Smooth Bottom copper Gradient Anchor */}
                     <div
                       className="absolute inset-x-0 bottom-0 h-[32%] z-[3] pointer-events-none"
                       style={{
                         background:
-                          'linear-gradient(to top, #6A0C1E 0%, rgba(106, 12, 30, 0.88) 40%, transparent 100%)',
+                          'linear-gradient(to top, #2A160E 0%, rgba(71, 51, 42, 0.88) 40%, transparent 100%)',
                       }}
                       aria-hidden="true"
                     />
@@ -535,9 +535,9 @@ export const TeamSection: React.FC = () => {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans text-[12px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all duration-200 cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[12px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all duration-200 cursor-pointer"
                     >
-                      <MessageSquare className="w-4 h-4 text-[#0F172A]" />
+                      <MessageSquare className="w-4 h-4 text-[#2A160E]" />
                       <span>Consult via WhatsApp</span>
                     </a>
                   </div>
@@ -546,21 +546,21 @@ export const TeamSection: React.FC = () => {
                 {/* 
                   Right Column (7 Cols): Executive Legal Dossier & Specializations
                 */}
-                <div className="md:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between bg-white text-[#0F172A]">
+                <div className="md:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between bg-white text-[#2A160E]">
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#9B112C]/10 border border-[#9B112C]/20 text-[#9B112C] font-sans text-[11px] uppercase tracking-[0.14em] font-bold mb-3.5">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#612912]/10 border border-[#612912]/20 text-[#612912] font-sans text-[11px] uppercase tracking-[0.14em] font-bold mb-3.5">
                       <Award className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
                       <span>Professional Profile</span>
                     </div>
 
                     <h3
                       id="profile-modal-title"
-                      className="font-sans text-2xl sm:text-4xl font-bold text-[#0F172A] tracking-[-0.02em] leading-[1.08]"
+                      className="font-sans text-2xl sm:text-4xl font-bold text-[#2A160E] tracking-[-0.02em] leading-[1.08]"
                     >
                       {selectedProfile.member.fullName}
                     </h3>
 
-                    <p className="font-sans text-[12.5px] sm:text-[14px] uppercase tracking-[0.08em] font-bold text-[#9B112C] mt-1.5 mb-5 pb-4 border-b border-slate-200">
+                    <p className="font-sans text-[12.5px] sm:text-[14px] uppercase tracking-[0.08em] font-bold text-[#612912] mt-1.5 mb-5 pb-4 border-b border-slate-200">
                       {selectedProfile.member.credentials}
                     </p>
 
@@ -571,7 +571,7 @@ export const TeamSection: React.FC = () => {
                           key={idx}
                           className={
                             idx === 0
-                              ? 'border-l-2 border-[#E5B842] pl-4 font-medium text-[#0F172A]'
+                              ? 'border-l-2 border-[#E5B842] pl-4 font-medium text-[#2A160E]'
                               : 'text-[#475569]'
                           }
                         >
@@ -582,7 +582,7 @@ export const TeamSection: React.FC = () => {
 
                     {/* Specializations */}
                     <div className="mt-6 sm:mt-7">
-                      <h4 className="font-sans text-[11px] uppercase tracking-[0.16em] text-[#9B112C] font-bold mb-3">
+                      <h4 className="font-sans text-[11px] uppercase tracking-[0.16em] text-[#612912] font-bold mb-3">
                         Areas of Specialization
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -591,8 +591,8 @@ export const TeamSection: React.FC = () => {
                             key={spec}
                             className="flex items-center gap-2.5 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200/90 shadow-2xs"
                           >
-                            <CheckCircle2 className="w-4 h-4 text-[#9B112C] shrink-0" />
-                            <span className="font-sans text-[13px] font-semibold text-[#0F172A] leading-snug">
+                            <CheckCircle2 className="w-4 h-4 text-[#612912] shrink-0" />
+                            <span className="font-sans text-[13px] font-semibold text-[#2A160E] leading-snug">
                               {spec}
                             </span>
                           </div>
@@ -607,7 +607,7 @@ export const TeamSection: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setSelectedProfile(null)}
-                      className="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-[#9B112C] text-[#475569] hover:text-white font-semibold transition-colors cursor-pointer shrink-0"
+                      className="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-[#612912] text-[#475569] hover:text-white font-semibold transition-colors cursor-pointer shrink-0"
                     >
                       Close Profile
                     </button>

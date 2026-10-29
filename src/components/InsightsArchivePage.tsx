@@ -72,11 +72,11 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
   )}`;
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#0F172A]">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#2A160E]">
       {/* ====================================================================
-          1. VIBRANT RUBY BURGUNDY ARCHITECTURAL HERO HEADER & TOP BAR
+          1. VIBRANT RUBY copper ARCHITECTURAL HERO HEADER & TOP BAR
           ==================================================================== */}
-      <div className="relative bg-gradient-to-b from-[#8C0E26] via-[#750B1F] to-[#5C0818] text-white border-b-2 border-[#E5B842]/45 overflow-hidden">
+      <div className="relative bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white border-b-2 border-[#E5B842]/45 overflow-hidden">
         {/* Person-Free Legal Library Still-Life Background */}
         <div
           className="absolute inset-0 bg-cover bg-center pointer-events-none scale-105"
@@ -91,7 +91,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(165deg, rgba(140, 14, 38, 0.94) 0%, rgba(106, 12, 30, 0.92) 55%, rgba(74, 7, 19, 0.97) 100%)',
+              'linear-gradient(165deg, rgba(71, 51, 42, 0.94) 0%, rgba(71, 51, 42, 0.92) 55%, rgba(44, 24, 17, 0.97) 100%)',
           }}
           aria-hidden="true"
         />
@@ -112,7 +112,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
             <img
               src={logoSrc}
               alt="Qadeer Legal Chambers"
-              className="h-12 sm:h-14 lg:h-16 w-auto object-contain shrink-0"
+              className="h-16 sm:h-20 lg:h-24 w-auto object-contain shrink-0"
             />
           </a>
 
@@ -175,7 +175,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                 e.preventDefault();
                 onNavigateHome();
               }}
-              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans text-[11.5px] sm:text-[12px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-md"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[11.5px] sm:text-[12px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-md"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Home</span>
@@ -229,7 +229,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       isAllTab ? 'col-span-2 sm:col-span-1' : 'col-span-1'
                     } min-h-[42px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-lg font-sans text-[11.5px] sm:text-[12.5px] leading-snug font-semibold tracking-[0.02em] transition-all flex items-center justify-between sm:justify-center gap-1.5 cursor-pointer ${
                       isActive
-                        ? 'bg-[#E5B842] text-[#0F172A] shadow-md'
+                        ? 'bg-[#E5B842] text-[#2A160E] shadow-md'
                         : 'bg-white/10 text-white/90 hover:bg-white/20 border border-[#E5B842]/30'
                     }`}
                   >
@@ -238,7 +238,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                     <span
                       className={`sm:hidden text-[10px] font-serif font-bold px-1.5 py-0.5 rounded-md shrink-0 tabular-nums ${
                         isActive
-                          ? 'bg-[#6A0C1E] text-[#E5B842]'
+                          ? 'bg-[#2A160E] text-[#E5B842]'
                           : 'bg-white/15 text-[#E5B842]'
                       }`}
                     >
@@ -263,7 +263,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles or statutes..."
                 aria-label="Search legal blogs"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl sm:rounded-lg bg-[#5C0818]/85 border border-[#E5B842]/40 text-white placeholder:text-white/60 font-sans text-[13.5px] focus:outline-none focus:border-[#E5B842]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl sm:rounded-lg bg-[#2A160E]/85 border border-[#E5B842]/40 text-white placeholder:text-white/60 font-sans text-[13.5px] focus:outline-none focus:border-[#E5B842]"
               />
             </div>
           </div>
@@ -278,11 +278,11 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2 pb-4 sm:pb-6 mb-6 sm:mb-8 border-b border-slate-200">
           <div className="font-sans text-[13px] sm:text-[13.5px] text-[#64748B]">
             Showing{' '}
-            <span className="font-semibold text-[#0F172A] tabular-nums">
+            <span className="font-semibold text-[#2A160E] tabular-nums">
               {filteredPosts.length}
             </span>{' '}
             of{' '}
-            <span className="font-semibold text-[#0F172A] tabular-nums">
+            <span className="font-semibold text-[#2A160E] tabular-nums">
               {INSIGHTS_DATA.length}
             </span>{' '}
             published legal blogs
@@ -296,7 +296,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                 setSelectedCategory('All Publications');
                 setSearchQuery('');
               }}
-              className="font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#9B112C] hover:underline cursor-pointer"
+              className="font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#612912] hover:underline cursor-pointer"
             >
               Reset Filters
             </button>
@@ -305,7 +305,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
 
         {filteredPosts.length === 0 ? (
           <div className="bg-slate-50 rounded-2xl border border-slate-200/90 p-10 sm:p-12 text-center max-w-xl mx-auto">
-            <h2 className="font-serif text-2xl font-semibold text-[#0F172A] mb-2">
+            <h2 className="font-serif text-2xl font-semibold text-[#2A160E] mb-2">
               No Matching Legal Publications Found
             </h2>
             <p className="font-sans text-[14.5px] text-[#64748B] mb-6">
@@ -317,7 +317,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                 setSelectedCategory('All Publications');
                 setSearchQuery('');
               }}
-              className="px-6 py-2.5 rounded-full bg-[#9B112C] text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold cursor-pointer hover:bg-[#750B1F] shadow-sm transition-colors"
+              className="px-6 py-2.5 rounded-full bg-[#612912] text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold cursor-pointer hover:bg-[#2A160E] shadow-sm transition-colors"
             >
               Show All Blogs
             </button>
@@ -336,12 +336,12 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                   return (
                     <article
                       key={post.id}
-                      className="rounded-3xl bg-gradient-to-b from-[#8C0E26] via-[#750B1F] to-[#5C0818] text-white border-2 border-[#E5B842]/45 shadow-xl overflow-hidden"
+                      className="rounded-3xl bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white border-2 border-[#E5B842]/45 shadow-xl overflow-hidden"
                     >
                       <a
                         href={`/insights/${post.slug}`}
                         onClick={(e) => handlePostLinkClick(e, post.slug)}
-                        className="block relative aspect-[16/9] w-full overflow-hidden bg-[#5C0818]"
+                        className="block relative aspect-[16/9] w-full overflow-hidden bg-[#2A160E]"
                       >
                         <img
                           src={post.image}
@@ -351,7 +351,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           className="w-full h-full object-cover"
                         />
                         <div
-                          className="absolute inset-0 bg-gradient-to-t from-[#5C0818] via-[#5C0818]/30 to-transparent"
+                          className="absolute inset-0 bg-gradient-to-t from-[#2A160E] via-[#2A160E]/30 to-transparent"
                           aria-hidden="true"
                         />
                         <div className="absolute bottom-2.5 left-4 right-4 flex items-end justify-between gap-2">
@@ -402,10 +402,10 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           <a
                             href={`/insights/${post.slug}`}
                             onClick={(e) => handlePostLinkClick(e, post.slug)}
-                            className="inline-flex items-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-[#E5B842] text-[#0F172A] font-sans text-[11px] font-bold uppercase tracking-[0.06em] shadow-sm"
+                            className="inline-flex items-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-[#E5B842] text-[#2A160E] font-sans text-[11px] font-bold uppercase tracking-[0.06em] shadow-sm"
                           >
                             <span>Read Article</span>
-                            <span className="w-5 h-5 rounded-full bg-white text-[#0F172A] flex items-center justify-center">
+                            <span className="w-5 h-5 rounded-full bg-white text-[#2A160E] flex items-center justify-center">
                               <ArrowUpRight className="w-3 h-3" />
                             </span>
                           </a>
@@ -426,7 +426,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       onClick={(e) => handlePostLinkClick(e, post.slug)}
                       className="flex items-start gap-3.5"
                     >
-                      <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-[#5C0818] border border-slate-200 shrink-0">
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-[#2A160E] border border-slate-200 shrink-0">
                         <img
                           src={post.image}
                           alt={post.title}
@@ -435,7 +435,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           className="w-full h-full object-cover"
                         />
                         <div
-                          className="absolute inset-0 bg-gradient-to-t from-[#5C0818]/85 via-transparent to-transparent"
+                          className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/85 via-transparent to-transparent"
                           aria-hidden="true"
                         />
                         <span className="absolute bottom-1 left-2 font-serif text-sm font-bold text-[#E5B842] leading-none">
@@ -444,13 +444,13 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-1 font-sans text-[10.5px] text-[#9B112C] font-semibold mb-1">
+                        <div className="flex flex-wrap items-center gap-1 font-sans text-[10.5px] text-[#612912] font-semibold mb-1">
                           <span>{post.category}</span>
                           <span className="text-[#64748B]" aria-hidden="true">·</span>
                           <span className="text-[#64748B] font-normal">{post.readTime}</span>
                         </div>
 
-                        <h2 className="font-serif text-[1.18rem] font-semibold text-[#0F172A] leading-[1.2] line-clamp-2">
+                        <h2 className="font-serif text-[1.18rem] font-semibold text-[#2A160E] leading-[1.2] line-clamp-2">
                           {post.title}
                         </h2>
                       </div>
@@ -464,13 +464,13 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                     {/* Bottom Action Bar */}
                     <div className="pt-2.5 border-t border-slate-200 flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="font-sans text-[11px] font-semibold text-[#0F172A] truncate">
+                        <span className="font-sans text-[11px] font-semibold text-[#2A160E] truncate">
                           {post.author.name}
                         </span>
                         <button
                           type="button"
                           onClick={(e) => handleCopyPostLink(e, post.slug)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-slate-100 text-[10.5px] font-sans font-semibold text-[#9B112C] shrink-0 cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-slate-100 text-[10.5px] font-sans font-semibold text-[#612912] shrink-0 cursor-pointer"
                           title="Copy direct link to this blog"
                         >
                           {isCopied ? (
@@ -490,10 +490,10 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       <a
                         href={`/insights/${post.slug}`}
                         onClick={(e) => handlePostLinkClick(e, post.slug)}
-                        className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.06em] text-[#9B112C] whitespace-nowrap shrink-0"
+                        className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.06em] text-[#612912] whitespace-nowrap shrink-0"
                       >
                         <span>Read Blog</span>
-                        <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-[#9B112C] text-[#9B112C] flex items-center justify-center">
+                        <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-[#612912] text-[#612912] flex items-center justify-center">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </span>
                       </a>
@@ -512,14 +512,14 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                 return (
                   <article
                     key={post.id}
-                    className="group bg-white rounded-2xl border border-slate-200/90 hover:border-[#9B112C]/50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between"
+                    className="group bg-white rounded-2xl border border-slate-200/90 hover:border-[#612912]/50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between"
                   >
                     <div>
                       {/* Clickable Image Link */}
                       <a
                         href={`/insights/${post.slug}`}
                         onClick={(e) => handlePostLinkClick(e, post.slug)}
-                        className="block relative aspect-[16/10] w-full overflow-hidden bg-[#5C0818]"
+                        className="block relative aspect-[16/10] w-full overflow-hidden bg-[#2A160E]"
                       >
                         <img
                           src={post.image}
@@ -529,7 +529,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div
-                          className="absolute inset-0 bg-gradient-to-t from-[#5C0818]/80 via-transparent to-transparent pointer-events-none"
+                          className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/80 via-transparent to-transparent pointer-events-none"
                           aria-hidden="true"
                         />
                         <span className="absolute bottom-3 left-4 font-serif text-2xl font-bold text-white drop-shadow">
@@ -540,7 +540,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       {/* Card Content */}
                       <div className="p-6 pb-4">
                         {/* Clean Unboxed Metadata */}
-                        <div className="flex flex-wrap items-center gap-1.5 font-sans text-[12px] text-[#9B112C] font-semibold mb-2.5">
+                        <div className="flex flex-wrap items-center gap-1.5 font-sans text-[12px] text-[#612912] font-semibold mb-2.5">
                           <span>{post.category}</span>
                           <span className="text-[#64748B]" aria-hidden="true">·</span>
                           <span className="text-[#64748B] font-normal">{post.publishedDate}</span>
@@ -548,7 +548,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           <span className="text-[#64748B] font-normal">{post.readTime}</span>
                         </div>
 
-                        <h2 className="font-serif text-[1.5rem] sm:text-[1.6rem] font-semibold text-[#0F172A] group-hover:text-[#9B112C] leading-[1.18] tracking-[-0.01em] transition-colors mb-2.5">
+                        <h2 className="font-serif text-[1.5rem] sm:text-[1.6rem] font-semibold text-[#2A160E] group-hover:text-[#612912] leading-[1.18] tracking-[-0.01em] transition-colors mb-2.5">
                           <a
                             href={`/insights/${post.slug}`}
                             onClick={(e) => handlePostLinkClick(e, post.slug)}
@@ -564,18 +564,18 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
 
                         {/* Direct Permalink Path Display & Copy Button */}
                         <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-[11.5px] font-sans text-[#64748B]">
-                          <span className="truncate font-sans text-[11px] font-medium text-[#9B112C]/80">
+                          <span className="truncate font-sans text-[11px] font-medium text-[#612912]/80">
                             /insights/{post.slug}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleCopyPostLink(e, post.slug)}
-                            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#9B112C] hover:text-[#750B1F] whitespace-nowrap shrink-0 cursor-pointer"
+                            className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#612912] hover:text-[#2A160E] whitespace-nowrap shrink-0 cursor-pointer"
                             title="Copy direct link to this blog"
                           >
                             {isCopied ? (
                               <>
-                                <Check className="w-3.5 h-3.5 text-[#9B112C]" />
+                                <Check className="w-3.5 h-3.5 text-[#612912]" />
                                 <span>Link Copied</span>
                               </>
                             ) : (
@@ -592,7 +592,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                     {/* Bottom Author & Open Article Link */}
                     <div className="px-6 pb-5 pt-3.5 border-t border-slate-200 bg-slate-50/60 flex items-center justify-between gap-3">
                       <div className="font-sans text-[12px] text-[#475569] truncate">
-                        <span className="font-semibold text-[#0F172A]">{post.author.name}</span>
+                        <span className="font-semibold text-[#2A160E]">{post.author.name}</span>
                         <span className="mx-1.5 text-[#64748B]" aria-hidden="true">·</span>
                         <span className="text-[#64748B]">{post.author.role}</span>
                       </div>
@@ -600,10 +600,10 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                       <a
                         href={`/insights/${post.slug}`}
                         onClick={(e) => handlePostLinkClick(e, post.slug)}
-                        className="inline-flex items-center gap-1.5 font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#9B112C] group-hover:text-[#750B1F] whitespace-nowrap shrink-0"
+                        className="inline-flex items-center gap-1.5 font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#612912] group-hover:text-[#2A160E] whitespace-nowrap shrink-0"
                       >
                         <span>Read Article</span>
-                        <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-[#9B112C] text-[#9B112C] group-hover:text-white flex items-center justify-center transition-colors">
+                        <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-[#612912] text-[#612912] group-hover:text-white flex items-center justify-center transition-colors">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </span>
                       </a>
@@ -616,7 +616,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
         )}
 
         {/* Bottom Direct Chambers Advisory Callout */}
-        <div className="mt-12 sm:mt-16 rounded-3xl bg-gradient-to-r from-[#8C0E26] via-[#750B1F] to-[#5C0818] text-white p-6 sm:p-10 lg:p-12 border-2 border-[#E5B842]/40 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div className="mt-12 sm:mt-16 rounded-3xl bg-gradient-to-r from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white p-6 sm:p-10 lg:p-12 border-2 border-[#E5B842]/40 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="max-w-2xl text-center lg:text-left">
             <div className="font-sans text-[10.5px] sm:text-[11px] uppercase tracking-[0.16em] text-[#E5B842] font-bold mb-2">
               BESPOKE LEGAL OPINIONS & REPRESENTATION
@@ -633,11 +633,11 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans text-[12.5px] sm:text-[13px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all whitespace-nowrap shrink-0"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[12.5px] sm:text-[13px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all whitespace-nowrap shrink-0"
           >
-            <MessageSquare className="w-4 h-4 text-[#0F172A]" />
+            <MessageSquare className="w-4 h-4 text-[#2A160E]" />
             <span>Consult via WhatsApp</span>
-            <ArrowUpRight className="w-4 h-4 text-[#0F172A]" />
+            <ArrowUpRight className="w-4 h-4 text-[#2A160E]" />
           </a>
         </div>
       </div>

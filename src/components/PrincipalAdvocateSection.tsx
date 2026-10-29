@@ -26,11 +26,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
   return (
     <section
       id="principal-advocate"
-      className="relative z-[11] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-20 lg:pt-24 pb-10 sm:pb-12 lg:pb-14 bg-[#9B112C] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.35)] overflow-hidden font-sans"
+      className="relative z-[11] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-20 lg:pt-24 pb-10 sm:pb-12 lg:pb-14 bg-[#612912] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.35)] overflow-hidden font-sans"
     >
-      {/* 1. Hero Page Matching Burgundy Atmospheric Lighting */}
+      {/* 1. Hero Page Matching copper Atmospheric Lighting */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[#9B112C] via-[#9B112C] to-[#6A0C1E] pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-[#612912] via-[#612912] to-[#2A160E] pointer-events-none"
         aria-hidden="true"
       />
       {/* Warm Golden Studio Spotlight Halo behind the Advocate */}
@@ -151,11 +151,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans text-[11.5px] sm:text-[13px] uppercase tracking-[0.08em] font-bold shadow-xl sm:shadow-2xl transition-all duration-200 cursor-pointer"
+                className="group w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[11.5px] sm:text-[13px] uppercase tracking-[0.08em] font-bold shadow-xl sm:shadow-2xl transition-all duration-200 cursor-pointer"
               >
-                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0F172A]" />
+                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2A160E]" />
                 <span>Consult Principal Advocate</span>
-                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0F172A] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2A160E] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </div>
           </div>

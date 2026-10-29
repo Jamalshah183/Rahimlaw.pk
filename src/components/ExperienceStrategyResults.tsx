@@ -50,20 +50,20 @@ export const ExperienceStrategyResults: React.FC = () => {
   return (
     <section
       id="approach"
-      className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#0F172A] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#9B112C]/20 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.10)] overflow-hidden font-sans"
+      className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#2A160E] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden font-sans"
     >
       {/* ======================================================================
           BACKGROUND ACCENTS:
-          1. Top-Left Burgundy & Gold Architectural Arc Swoosh
-          2. Bottom-Right Burgundy & Gold Architectural Arc Swoosh
+          1. Top-Left copper & Gold Architectural Arc Swoosh
+          2. Bottom-Right copper & Gold Architectural Arc Swoosh
           3. Right Classical Marble Column with Sunlight Bleed
           ====================================================================== */}
-      {/* Top-Left Burgundy & Gold Corner Arc */}
+      {/* Top-Left copper & Gold Corner Arc */}
       <div className="absolute -top-6 -left-6 sm:-top-8 sm:-left-8 md:-top-10 md:-left-10 w-44 sm:w-56 md:w-72 lg:w-80 h-44 sm:h-56 md:h-72 lg:h-80 pointer-events-none select-none z-[1]">
         <svg viewBox="0 0 240 240" fill="none" className="w-full h-full">
           <path
             d="M0 0 L180 0 C180 85 95 180 0 180 Z"
-            fill="#6A0C1E"
+            fill="#2A160E"
           />
           <path
             d="M180 0 C180 85 95 180 0 180"
@@ -78,12 +78,12 @@ export const ExperienceStrategyResults: React.FC = () => {
         </svg>
       </div>
 
-      {/* Bottom-Right Burgundy & Gold Corner Arc */}
+      {/* Bottom-Right copper & Gold Corner Arc */}
       <div className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 md:-bottom-10 md:-right-10 w-44 sm:w-56 md:w-72 lg:w-80 h-44 sm:h-56 md:h-72 lg:h-80 pointer-events-none select-none z-[1]">
         <svg viewBox="0 0 240 240" fill="none" className="w-full h-full">
           <path
             d="M240 240 L60 240 C60 155 145 60 240 60 Z"
-            fill="#6A0C1E"
+            fill="#2A160E"
           />
           <path
             d="M60 240 C60 155 145 60 240 60"
@@ -126,20 +126,20 @@ export const ExperienceStrategyResults: React.FC = () => {
           {/* Eyebrow with flanking gold rules */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
             <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#C6A15B]" aria-hidden="true" />
-            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-[#9B112C] font-bold">
+            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-[#612912] font-bold">
               WHY CHOOSE
             </span>
             <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#C6A15B]" aria-hidden="true" />
           </div>
 
           {/* Main Headline matching Upper Sections */}
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#0F172A] leading-[1.08] tracking-[-0.02em] mb-3 sm:mb-4">
-            Qadeer Legal <span className="font-sans italic font-semibold text-[#800F24]">Chambers</span>
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em] mb-3 sm:mb-4">
+            Qadeer Legal <span className="font-sans italic font-semibold text-[#612912]">Chambers</span>
           </h2>
 
           {/* Subtitle / Positioning Tagline */}
           <div className="mb-3.5 sm:mb-4">
-            <span className="font-sans text-[11px] sm:text-[12px] md:text-[12.5px] uppercase tracking-[0.22em] text-[#0F172A] font-bold">
+            <span className="font-sans text-[11px] sm:text-[12px] md:text-[12.5px] uppercase tracking-[0.22em] text-[#2A160E] font-bold">
               EXPERIENCE • STRATEGY • RESULTS
             </span>
           </div>
@@ -188,10 +188,10 @@ export const ExperienceStrategyResults: React.FC = () => {
                   key={pillar.number}
                   className="flex flex-col items-center text-center group"
                 >
-                  {/* Circular Medallion with Outer Gold Ring & Deep Burgundy Core */}
+                  {/* Circular Medallion with Outer Gold Ring & Deep copper Core */}
                   <div className="relative flex items-center justify-center mb-5 sm:mb-6">
                     <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-full border-2 border-[#C6A15B] p-1 bg-white shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-                      <div className="w-full h-full rounded-full bg-[#6A0C1E] flex items-center justify-center text-[#E5B842] shadow-inner">
+                      <div className="w-full h-full rounded-full bg-[#2A160E] flex items-center justify-center text-[#E5B842] shadow-inner">
                         <IconComp className="w-8 h-8 sm:w-9 sm:h-9 text-[#E5B842]" />
                       </div>
                     </div>
@@ -202,8 +202,8 @@ export const ExperienceStrategyResults: React.FC = () => {
                     {pillar.number}
                   </div>
 
-                  {/* Burgundy Sans Title matching Upper Sections (No explanatory paragraphs) */}
-                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.3rem] font-bold text-[#800F24] leading-[1.2] tracking-[-0.01em]">
+                  {/* copper Sans Title matching Upper Sections (No explanatory paragraphs) */}
+                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.3rem] font-bold text-[#612912] leading-[1.2] tracking-[-0.01em]">
                     <span className="block">{pillar.titleLine1}</span>
                     <span className="block">{pillar.titleLine2}</span>
                   </h3>

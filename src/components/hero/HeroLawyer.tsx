@@ -9,7 +9,7 @@ export const HeroLawyer: React.FC = () => {
       <div className="relative flex items-start justify-center">
         {/* 
           Foreground Statue of Justice Cutout:
-          - Centered on the 58% split boundary between the left burgundy and right cream containers
+          - Centered on the 58% split boundary between the left copper and right cream containers
           - Top edge (object-top, top-0) aligned level with the top of the hero writing, safely below the navbar
           - Increased height extends downward so the lower pedestal tucks behind the second section (AboutSection, z-10)
         */}

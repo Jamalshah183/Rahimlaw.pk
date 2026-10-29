@@ -38,7 +38,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0F172A]/75 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#2A160E]/75 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -46,7 +46,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
       {/* Modal Dialog */}
       <div className="relative bg-white rounded-2xl max-w-xl w-full border border-slate-200/90 shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#8C0E26] via-[#750B1F] to-[#5C0818] p-6 text-white relative border-b border-[#E5B842]/30">
+        <div className="bg-gradient-to-r from-[#2A160E] via-[#2A160E] to-[#2A160E] p-6 text-white relative border-b border-[#E5B842]/30">
           <button
             type="button"
             onClick={onClose}
@@ -73,7 +73,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         {/* Content — Strictly WhatsApp Only, No Form */}
         <div className="p-6 sm:p-8 space-y-6">
           <div>
-            <span className="block font-sans text-[11px] uppercase tracking-[0.12em] font-bold text-[#0F172A] mb-2">
+            <span className="block font-sans text-[11px] uppercase tracking-[0.12em] font-bold text-[#2A160E] mb-2">
               Optional: Select Matter Topic to Pre-fill Message
             </span>
             <div className="flex flex-wrap gap-2">
@@ -88,8 +88,8 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                     }
                     className={`px-3 py-1.5 rounded-lg font-sans text-[12.5px] font-medium transition-all cursor-pointer border ${
                       isSelected
-                        ? 'bg-[#9B112C] text-white border-[#9B112C] shadow-xs'
-                        : 'bg-slate-50 text-[#0F172A] border-slate-200 hover:border-[#9B112C]/40'
+                        ? 'bg-[#612912] text-white border-[#612912] shadow-xs'
+                        : 'bg-slate-50 text-[#2A160E] border-slate-200 hover:border-[#612912]/40'
                     }`}
                   >
                     {area.title}
@@ -100,7 +100,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/90 space-y-2">
-            <div className="flex items-center gap-2 font-sans text-[13px] font-semibold text-[#9B112C]">
+            <div className="flex items-center gap-2 font-sans text-[13px] font-semibold text-[#612912]">
               <CheckCircle2 className="w-4 h-4 text-[#E5B842] shrink-0" />
               <span>Official Chambers WhatsApp: {FIRM_CONFIG.contact.whatsappDisplay}</span>
             </div>
@@ -120,7 +120,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#9B112C] hover:bg-[#750B1F] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full shadow-md transition-colors cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#612912] hover:bg-[#2A160E] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full shadow-md transition-colors cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-[#E5B842]" />
               <span>Open WhatsApp Chat</span>

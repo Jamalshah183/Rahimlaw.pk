@@ -32,21 +32,21 @@ export const HeroBackground: React.FC = () => {
           className="absolute inset-0 w-full h-full"
           style={{
             background:
-              'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.70) 45%, #F8FAFC 95%)',
+              'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.70) 45%, #F3F0E7 95%)',
           }}
           aria-hidden="true"
         />
 
         {/* Soft radial highlight behind scales */}
         <div
-          className="absolute inset-0 w-full h-full bg-radial from-white/30 via-white/50 to-[#F8FAFC]/90 pointer-events-none"
+          className="absolute inset-0 w-full h-full bg-radial from-white/30 via-white/50 to-[#F3F0E7]/90 pointer-events-none"
           aria-hidden="true"
         />
       </div>
 
       {/* 
         ========================================================================
-        IMAGE 1 — LEFT BACKGROUND (Desk, Paperwork, Signing) + BURGUNDY OVERLAY
+        IMAGE 1 — LEFT BACKGROUND (Desk, Paperwork, Signing) + copper OVERLAY
         Desktop: ~58% width.
         Mobile: Tall enough (h-[65%] min-h-[545px]) to fully contain all HeroContent.
         z-index: 2 (renders ON TOP of IMAGE 2).
@@ -68,11 +68,11 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Independent Primary Burgundy Color Overlay (#5B1111 at 88% opacity) */}
+        {/* Layer 2: Independent Primary copper Color Overlay (#5B1111 at 88% opacity) */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundColor: heroConfig.colors.primaryBurgundy,
+            backgroundColor: heroConfig.colors.primarycopper,
             opacity: heroConfig.colors.leftOverlayOpacity,
           }}
           aria-hidden="true"

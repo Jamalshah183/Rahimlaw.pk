@@ -93,7 +93,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
   return (
     <section
       id="about"
-      className="relative z-[10] -mt-16 sm:-mt-20 lg:-mt-24 xl:-mt-28 pt-20 sm:pt-24 md:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#9B112C]/20 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.12)] overflow-hidden font-sans"
+      className="relative z-[10] -mt-16 sm:-mt-20 lg:-mt-24 xl:-mt-28 pt-20 sm:pt-24 md:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.12)] overflow-hidden font-sans"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -102,9 +102,9 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             ==================================================================== */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           {/* Centered Headline matching Hero typography */}
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#0F172A] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#2A160E] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
             Bringing Disciplined Advocacy &{' '}
-            <span className="font-sans italic font-semibold text-[#9B112C]">
+            <span className="font-sans italic font-semibold text-[#612912]">
               Strategic Counsel
             </span>{' '}
             to Every Mandate
@@ -123,7 +123,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             - loading="eager", decoding="async", fetchPriority="high" for instant load
             ==================================================================== */}
         <div className="relative mb-6 sm:mb-8">
-          <div className="relative w-full aspect-[16/10] sm:aspect-[16/8.5] lg:aspect-[21/9] rounded-[24px] sm:rounded-[34px] lg:rounded-[42px] overflow-hidden shadow-xl border border-slate-200/90 bg-[#6A0C1E] group">
+          <div className="relative w-full aspect-[16/10] sm:aspect-[16/8.5] lg:aspect-[21/9] rounded-[24px] sm:rounded-[34px] lg:rounded-[42px] overflow-hidden shadow-xl border border-slate-200/90 bg-[#2A160E] group">
             {/* Instant 0ms Base64 Blur Background (396 bytes) */}
             <div
               className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 filter blur-md scale-105 pointer-events-none ${
@@ -174,10 +174,10 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   idx === 4 ? 'col-span-2 sm:col-span-1 pt-2.5 sm:pt-0' : idx > 1 ? 'pt-2.5 sm:pt-0' : ''
                 } ${idx > 0 ? 'sm:pl-3 lg:pl-5' : ''}`}
               >
-                <div className="font-sans text-xl sm:text-2xl lg:text-[1.65rem] font-bold text-[#0F172A] tracking-tight leading-none mb-1 [font-variant-numeric:lining-nums]">
+                <div className="font-sans text-xl sm:text-2xl lg:text-[1.65rem] font-bold text-[#2A160E] tracking-tight leading-none mb-1 [font-variant-numeric:lining-nums]">
                   {stat.value}
                 </div>
-                <div className="font-sans text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#9B112C] leading-tight">
+                <div className="font-sans text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#612912] leading-tight">
                   {stat.label}
                 </div>
               </div>
@@ -202,9 +202,9 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
         <div className="block md:hidden">
           {/* Minimalist Automated Presentation Card */}
           <div className="relative rounded-2xl bg-white border border-slate-200/80 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] p-6 sm:p-7 overflow-hidden text-center transition-all duration-300">
-            {/* Top Gilded/Burgundy Hairline Accent */}
+            {/* Top Gilded/copper Hairline Accent */}
             <div
-              className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#9B112C] to-transparent opacity-80"
+              className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#612912] to-transparent opacity-80"
               aria-hidden="true"
             />
 
@@ -212,15 +212,15 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             <div key={activePillarIndex} className="animate-card-fade-in flex flex-col items-center">
               {/* Category Eyebrow Text - Clean text without badge */}
               <div className="mb-2 text-center">
-                <span className="font-sans text-[11px] sm:text-[11.5px] font-bold uppercase tracking-[0.18em] text-[#9B112C]">
+                <span className="font-sans text-[11px] sm:text-[11.5px] font-bold uppercase tracking-[0.18em] text-[#612912]">
                   {activePillar.question}
                 </span>
               </div>
 
               {/* Title - Single Line, Center Aligned, matching Hero typography */}
-              <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#0F172A] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full mb-3">
+              <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#2A160E] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full mb-3">
                 <span className="inline font-sans">{activePillar.titleMain} </span>
-                <span className="font-sans italic font-semibold text-[#9B112C] inline">
+                <span className="font-sans italic font-semibold text-[#612912] inline">
                   {activePillar.titleAccent}
                 </span>
               </h3>
@@ -235,7 +235,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     key={bIdx}
                     className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-50/70 border border-slate-100/80 text-slate-700 w-full overflow-hidden text-center"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#9B112C] shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#612912] shrink-0" />
                     <span className="font-sans text-[12.5px] sm:text-[13px] font-medium whitespace-nowrap truncate text-center">
                       {bullet}
                     </span>
@@ -254,15 +254,15 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
           {CREDIBILITY_PILLARS.map((pillar) => (
             <div
               key={pillar.number}
-              className="group relative h-full rounded-2xl bg-gradient-to-b from-white via-[#FDFCFA] to-[#FAF8F5] border border-slate-200/90 hover:border-[#E5B842]/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_45px_-12px_rgba(155,17,44,0.18),0_0_0_1px_rgba(229,184,66,0.35)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col justify-between"
+              className="group relative h-full rounded-2xl bg-gradient-to-b from-white via-[#FDFCFA] to-[#FAF8F5] border border-slate-200/90 hover:border-[#E5B842]/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_45px_-12px_rgba(148, 84, 45,0.18),0_0_0_1px_rgba(229,184,66,0.35)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col justify-between"
             >
               {/* Top Gilded Accent Filigree */}
-              <div className="h-[3px] bg-gradient-to-r from-[#9B112C] via-[#E5B842] to-[#9B112C] group-hover:h-[4px] transition-all shrink-0" aria-hidden="true" />
+              <div className="h-[3px] bg-gradient-to-r from-[#612912] via-[#E5B842] to-[#612912] group-hover:h-[4px] transition-all shrink-0" aria-hidden="true" />
 
-              {/* Royal Burgundy & Radiant Gold Header Bar - Center Aligned */}
-              <div className="bg-gradient-to-r from-[#6A0C1E] via-[#850E24] to-[#9B112C] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
+              {/* Royal copper & Radiant Gold Header Bar - Center Aligned */}
+              <div className="bg-gradient-to-r from-[#2A160E] via-[#850E24] to-[#612912] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
                 <div
-                  className="absolute inset-0 bg-gradient-to-r from-[#6A0C1E]/60 via-transparent to-[#6A0C1E]/30 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-r from-[#2A160E]/60 via-transparent to-[#2A160E]/30 pointer-events-none"
                   aria-hidden="true"
                 />
                 
@@ -276,18 +276,18 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               <div className="p-6 sm:p-7 flex-1 flex flex-col items-center justify-between text-center relative">
                 <div className="w-full flex flex-col items-center text-center">
                   {/* Card Title - Single Line, Center Aligned, matching Hero typography */}
-                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.35rem] font-bold text-[#0F172A] group-hover:text-[#9B112C] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full transition-colors mb-0">
+                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.35rem] font-bold text-[#2A160E] group-hover:text-[#612912] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full transition-colors mb-0">
                     <span className="inline font-sans">{pillar.titleMain} </span>
-                    <span className="font-sans italic font-semibold text-[#9B112C] inline">
+                    <span className="font-sans italic font-semibold text-[#612912] inline">
                       {pillar.titleAccent}
                     </span>
                   </h3>
 
                   {/* Symmetrical Dual-Tone Divider - Center Aligned */}
                   <div className="flex items-center justify-center gap-2 my-4 w-full" aria-hidden="true">
-                    <div className="h-[1.5px] w-8 lg:w-10 bg-gradient-to-r from-transparent via-[#9B112C] to-[#E5B842]" />
+                    <div className="h-[1.5px] w-8 lg:w-10 bg-gradient-to-r from-transparent via-[#612912] to-[#E5B842]" />
                     <div className="w-1.5 h-1.5 rotate-45 bg-[#E5B842] shrink-0" />
-                    <div className="h-[1.5px] w-8 lg:w-10 bg-gradient-to-l from-transparent via-[#9B112C] to-[#E5B842]" />
+                    <div className="h-[1.5px] w-8 lg:w-10 bg-gradient-to-l from-transparent via-[#612912] to-[#E5B842]" />
                   </div>
 
                   {/* Focused Practice Points - Single Line per item, Center Aligned, Font Matching Hero */}
@@ -297,7 +297,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                         key={idx}
                         className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-50/80 border border-slate-100/90 group-hover:bg-white group-hover:border-[#E5B842]/30 transition-all duration-300 w-full overflow-hidden text-center"
                       >
-                        <span className="w-1.5 h-1.5 rotate-45 bg-[#9B112C] border border-[#E5B842] shrink-0 group-hover:bg-[#E5B842] group-hover:border-[#9B112C] transition-colors" />
+                        <span className="w-1.5 h-1.5 rotate-45 bg-[#612912] border border-[#E5B842] shrink-0 group-hover:bg-[#E5B842] group-hover:border-[#612912] transition-colors" />
                         <span className="font-sans text-[12.5px] lg:text-[13px] font-medium text-[#1E293B] whitespace-nowrap truncate text-center">
                           {bullet}
                         </span>

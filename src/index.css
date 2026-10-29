@@ -71,19 +71,27 @@
   --font-body: "Neue Haas Grotesk Display", "Neue Haas Grotesk Display Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: "Neue Haas Grotesk Display", "Neue Haas Grotesk Display Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  --color-burgundy: #9B112C;
-  --color-burgundy-deep: #6A0C1E;
-  --color-burgundy-vibrant: #B81D3C;
-  --color-cream: #FFFFFF;
-  --color-cream-soft: #F8FAFC;
-  --color-gold: #E5B842;
-  --color-gold-bright: #F5D061;
-  --color-dark: #0F172A;
-  --color-muted: #475569;
+  --color-rich-mahogany: #461C0C;
+  --color-soft-linen: #F3F0E7;
+  --color-dark-coffee: #2A160E;
+  --color-dark-walnut: #612912;
+  --color-rich-mahogany-2: #34160B;
+
+  --color-primary: #612912;
+  --color-secondary: #461C0C;
+  --color-background: #F3F0E7;
+  --color-surface: #FFFFFF;
+  --color-text-main: #2A160E;
+  --color-text-muted: #461C0C;
 }
 
 :root {
   color-scheme: light;
+  --rich-mahogany: #461C0C;
+  --soft-linen: #F3F0E7;
+  --dark-coffee: #2A160E;
+  --dark-walnut: #612912;
+  --rich-mahogany-2: #34160B;
 }
 
 html {
@@ -119,13 +127,14 @@ body {
   font-feature-settings: "kern" 1, "liga" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FFFFFF;
-  color: #0F172A;
+  background-color: var(--soft-linen, #F3F0E7);
+  color: var(--dark-coffee, #2A160E);
 }
 
 h1, h2, h3, h4, h5, h6, .font-editorial, .font-serif, .font-display, .font-header {
   font-family: var(--font-header);
   font-feature-settings: "kern" 1, "liga" 1;
+  color: var(--dark-coffee, #2A160E);
 }
 
 h1.font-sans, h2.font-sans, h3.font-sans, h4.font-sans, h5.font-sans, h6.font-sans,
@@ -141,22 +150,26 @@ p, span, li, a, label, small, time, td, th, caption, button, input, textarea, se
   font-family: var(--font-body);
 }
 
+button, a {
+  transition: all 0.2s ease-in-out;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: #F3F0E7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9B112C;
+  background: #612912;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6A0C1E;
+  background: #2A160E;
 }
 
 /* Automated Pillar Card Progress & Transition */

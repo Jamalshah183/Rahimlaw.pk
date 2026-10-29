@@ -18,8 +18,8 @@ export interface HeroConfig {
 
   // 2. Color System
   colors: {
-    primaryBurgundy: string;
-    deepBurgundy: string;
+    primarycopper: string;
+    deepcopper: string;
     primaryCream: string;
     softCream: string;
     warmGold: string;
@@ -66,14 +66,14 @@ export const heroConfig: HeroConfig = {
 
   // Brand Palette
   colors: {
-    primaryBurgundy: "#9B112C",
-    deepBurgundy: "#6A0C1E",
+    primarycopper: "#612912",
+    deepcopper: "#2A160E",
     primaryCream: "#FFFFFF",
-    softCream: "#F8FAFC",
+    softCream: "#F3F0E7",
     warmGold: "#E5B842",
-    darkText: "#0F172A",
+    darkText: "#2A160E",
     mutedText: "#475569",
-    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby burgundy overlay
+    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby copper overlay
   },
 
   // Eyebrow badge

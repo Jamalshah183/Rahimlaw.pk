@@ -50,14 +50,14 @@ export const FIRM_CONFIG = {
 
   // Color System Constants (for direct reference where needed)
   colors: {
-    burgundy: "#9B112C",
-    burgundyDeep: "#6A0C1E",
-    burgundyVibrant: "#B81D3C",
+    copper: "#612912",
+    copperDeep: "#2A160E",
+    copperVibrant: "#612912",
     cream: "#FFFFFF",
-    creamSoft: "#F8FAFC",
+    creamSoft: "#F3F0E7",
     gold: "#E5B842",
     goldBright: "#F5D061",
-    darkText: "#0F172A",
+    darkText: "#2A160E",
     mutedText: "#475569",
   },
 

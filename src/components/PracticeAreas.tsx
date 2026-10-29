@@ -47,7 +47,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
             >
               <div>
                 {/* Practice Card Image Container */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#3E0808]">
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#2A160E]">
                   <img
                     src={practice.image}
                     alt={practice.title}
@@ -56,7 +56,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   {/* Subtle warm gradient scrim */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#3E0808]/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
 
                   {/* Corner gold decorative badge indicator */}
                   <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#FFF9EC]/90 backdrop-blur-xs flex items-center justify-center text-[#5B1111] group-hover:bg-[#5B1111] group-hover:text-[#FDF0D5] transition-colors shadow-xs">
@@ -66,7 +66,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
 
                 {/* Card Content */}
                 <div className="p-6">
-                  {/* Subtle decorative line that turns burgundy on hover */}
+                  {/* Subtle decorative line that turns copper on hover */}
                   <div className="w-8 h-[2px] bg-[#C6A15B] group-hover:w-16 group-hover:bg-[#5B1111] transition-all duration-300 mb-3" />
 
                   <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#171313] group-hover:text-[#5B1111] transition-colors mb-2.5">
@@ -80,7 +80,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
               </div>
 
               {/* Card Footer / Action Link */}
-              <div className="px-6 pb-6 pt-0 border-t border-[#5B1111]/10 flex items-center justify-between text-xs font-semibold text-[#5B1111] group-hover:text-[#3E0808]">
+              <div className="px-6 pb-6 pt-0 border-t border-[#5B1111]/10 flex items-center justify-between text-xs font-semibold text-[#5B1111] group-hover:text-[#2A160E]">
                 <span className="uppercase tracking-wider">Explore Scope & Counsel</span>
                 <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   <span>View Details</span>
@@ -99,7 +99,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
           <button
             type="button"
             onClick={() => onSelectPracticeForConsultation('General Advisory & Special Brief')}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#5B1111] hover:text-[#3E0808] underline underline-offset-4 decoration-[#C6A15B]"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#5B1111] hover:text-[#2A160E] underline underline-offset-4 decoration-[#C6A15B]"
           >
             Inquire about tailored appellate or constitutional representation →
           </button>

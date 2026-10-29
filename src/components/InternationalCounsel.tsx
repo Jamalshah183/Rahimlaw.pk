@@ -53,11 +53,11 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
   return (
     <section
       id="international-counsel"
-      className="relative z-[13] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(155,17,44,0.35)] overflow-hidden bg-gradient-to-b from-[#9B112C] via-[#800F24] to-[#6A0C1E] py-8 sm:py-12 lg:py-16"
+      className="relative z-[13] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.35)] overflow-hidden bg-gradient-to-b from-[#612912] via-[#612912] to-[#2A160E] py-8 sm:py-12 lg:py-16"
     >
       {/* ======================================================================
-          BACKGROUND LAYER: Website-Matched Royal Chamber Burgundy Canvas
-          Matching Principal Advocate & Experience sections (#9B112C to #6A0C1E)
+          BACKGROUND LAYER: Website-Matched Royal Chamber copper Canvas
+          Matching Principal Advocate & Experience sections (#612912 to #2A160E)
           ====================================================================== */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Soft Radial Studio Vignette matching Principal Advocate section */}
@@ -72,20 +72,20 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
           aria-hidden="true"
         />
 
-        {/* Royal Burgundy Radial Ambient Glow matching website primary #9B112C */}
+        {/* Royal copper Radial Ambient Glow matching website primary #612912 */}
         <div
-          className="absolute bottom-1/4 left-4 w-[42rem] h-[42rem] bg-[#9B112C]/40 rounded-full blur-[160px] pointer-events-none"
+          className="absolute bottom-1/4 left-4 w-[42rem] h-[42rem] bg-[#612912]/40 rounded-full blur-[160px] pointer-events-none"
           aria-hidden="true"
         />
 
 
         {/* Top/Bottom Edge Feathers to seamlessly melt into surrounding sections */}
         <div
-          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#9B112C]/80 to-transparent pointer-events-none"
+          className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#612912]/80 to-transparent pointer-events-none"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#6A0C1E]/90 to-transparent pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#2A160E]/90 to-transparent pointer-events-none"
           aria-hidden="true"
         />
       </div>
@@ -154,10 +154,10 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleActionClick}
-                className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-6 sm:pl-7 pr-2 sm:pr-2.5 h-[50px] sm:h-[54px] rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#0F172A] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-6 sm:pl-7 pr-2 sm:pr-2.5 h-[50px] sm:h-[54px] rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
               >
                 <span className="tracking-[0.05em] uppercase">GET IN TOUCH</span>
-                <span className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white text-[#0F172A] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
+                <span className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white text-[#2A160E] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
                   <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                 </span>
               </a>
@@ -176,7 +176,7 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
 
           {/* ==================================================================
               RIGHT SIDE: Illuminated Golden World Counsel Map
-              Contained within viewport - engraved directly in burgundy background
+              Contained within viewport - engraved directly in copper background
               ================================================================== */}
           <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center relative">
             <div className="relative w-full flex items-center justify-center pointer-events-none select-none py-2 sm:py-4">

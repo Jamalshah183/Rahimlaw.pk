@@ -13,7 +13,7 @@ export const WhatsAppButton: React.FC = () => {
     <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
       {/* Optional prompt popup badge on first hover / view */}
       {showTooltip && (
-        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white text-[#0F172A] border border-slate-200 shadow-xl rounded-lg text-xs font-medium animate-in fade-in slide-in-from-right-3 duration-200">
+        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white text-[#2A160E] border border-slate-200 shadow-xl rounded-lg text-xs font-medium animate-in fade-in slide-in-from-right-3 duration-200">
           <span>Inquire via official WhatsApp</span>
           <button
             type="button"
@@ -21,7 +21,7 @@ export const WhatsAppButton: React.FC = () => {
               e.stopPropagation();
               setShowTooltip(false);
             }}
-            className="text-[#64748B] hover:text-[#9B112C] p-0.5 cursor-pointer"
+            className="text-[#64748B] hover:text-[#612912] p-0.5 cursor-pointer"
             aria-label="Dismiss message"
           >
             <X className="w-3 h-3" />
@@ -35,7 +35,7 @@ export const WhatsAppButton: React.FC = () => {
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setShowTooltip(true)}
-        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-white border-2 border-[#9B112C] shadow-xl hover:scale-106 active:scale-95 transition-transform duration-300 focus:outline-none focus:ring-3 focus:ring-[#E5B842]"
+        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-white border-2 border-[#612912] shadow-xl hover:scale-106 active:scale-95 transition-transform duration-300 focus:outline-none focus:ring-3 focus:ring-[#E5B842]"
         aria-label="Chat with Qadeer Legal Chambers on WhatsApp"
         title="Direct WhatsApp Consultation"
       >

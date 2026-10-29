@@ -28,7 +28,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
   return (
     <section
       id="contact"
-      className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-[#5B1111] text-[#FDF0D5] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#C6A15B]/35 shadow-[0_-25px_50px_-15px_rgba(62,8,8,0.35)] overflow-hidden"
+      className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-[#5B1111] text-[#FDF0D5] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#C6A15B]/35 shadow-[0_-25px_50px_-15px_rgba(44, 24, 17,0.35)] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -56,7 +56,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
               {/* Contact Details List — Strictly WhatsApp & Chambers Location */}
               <div className="space-y-6 mb-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#3E0808] border border-[#C6A15B]/35 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-10 h-10 rounded-lg bg-[#2A160E] border border-[#C6A15B]/35 flex items-center justify-center shrink-0 mt-0.5">
                     <MessageSquare className="w-4 h-4 text-[#C6A15B]" />
                   </div>
                   <div>
@@ -75,7 +75,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#3E0808] border border-[#C6A15B]/35 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-10 h-10 rounded-lg bg-[#2A160E] border border-[#C6A15B]/35 flex items-center justify-center shrink-0 mt-0.5">
                     <MapPin className="w-4 h-4 text-[#C6A15B]" />
                   </div>
                   <div>
@@ -91,7 +91,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
             </div>
 
             {/* Operating Hours Note */}
-            <div className="p-4 rounded-xl bg-[#3E0808]/80 border border-[#C6A15B]/30 flex items-center gap-3">
+            <div className="p-4 rounded-xl bg-[#2A160E]/80 border border-[#C6A15B]/30 flex items-center gap-3">
               <Clock className="w-5 h-5 text-[#C6A15B] shrink-0" />
               <div className="font-sans text-[12.5px] text-[#FDF0D5]/85 leading-[1.5]">
                 <span className="font-semibold text-[#C6A15B]">Consultation Hours: </span>
@@ -179,7 +179,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
                     href={whatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#5B1111] hover:bg-[#3E0808] text-[#FDF0D5] font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-lg transition-all duration-200 shadow-md cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#5B1111] hover:bg-[#2A160E] text-[#FDF0D5] font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-lg transition-all duration-200 shadow-md cursor-pointer"
                   >
                     <MessageSquare className="w-4 h-4 text-[#C6A15B]" />
                     <span>Chat on WhatsApp Now</span>
