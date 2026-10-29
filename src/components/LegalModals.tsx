@@ -17,13 +17,13 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, onClose }) => {
       aria-modal="true"
     >
       <div
-        className="fixed inset-0 bg-[#2A160E]/75 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#452415]/75 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       <div className="relative bg-white rounded-2xl max-w-2xl w-full border border-slate-200/90 shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200">
-        <div className="bg-gradient-to-r from-[#2A160E] via-[#2A160E] to-[#2A160E] p-6 text-white relative flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#452415] via-[#452415] to-[#452415] p-6 text-white relative flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-[#E5B842]" />
             <h3 className="font-serif text-xl sm:text-2xl font-semibold tracking-[-0.015em] text-white">
@@ -77,7 +77,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-2.5 bg-[#612912] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full hover:bg-[#2A160E] shadow-sm transition-colors cursor-pointer"
+            className="px-6 py-2.5 bg-[#612912] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full hover:bg-[#452415] shadow-sm transition-colors cursor-pointer"
           >
             Acknowledge & Close
           </button>

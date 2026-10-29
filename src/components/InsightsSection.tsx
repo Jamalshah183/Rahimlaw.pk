@@ -83,7 +83,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
   return (
     <section
       id="insights"
-      className="relative z-[16] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-22 lg:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] text-[#2A160E] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
+      className="relative z-[16] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-22 lg:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
     >
       {/* Subtle ambient depth */}
       <div
@@ -109,7 +109,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em]">
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
             Chamber Briefings &{' '}
             <span className="font-sans italic font-semibold text-[#612912]">
               Legal Perspectives.
@@ -151,7 +151,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 <span
                   className={`text-[10px] font-sans font-bold px-1.5 py-0.5 rounded-md shrink-0 tabular-nums ${
                     isActive
-                      ? 'bg-[#E5B842] text-[#2A160E]'
+                      ? 'bg-[#E5B842] text-[#452415]'
                       : 'bg-slate-200 text-[#475569]'
                   }`}
                 >
@@ -165,7 +165,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         </div>
 
         {/* 3. Interactive Deep Ruby copper & Gold Spotlight Briefing Card */}
-        <div className="rounded-3xl bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white border-2 border-[#E5B842]/50 shadow-2xl overflow-hidden mb-5">
+        <div className="rounded-3xl bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] text-white border-2 border-[#E5B842]/50 shadow-2xl overflow-hidden mb-5">
           {/* Top Switcher Bar inside Spotlight Card */}
           <div className="px-4 py-2.5 bg-[#4A0713]/90 border-b border-[#E5B842]/25 flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5">
@@ -189,7 +189,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                       aria-label={`Preview briefing ${post.number}`}
                       className={`w-6 h-6 rounded-full font-sans text-[11px] font-bold transition-all flex items-center justify-center cursor-pointer tabular-nums ${
                         isCurrent
-                          ? 'bg-[#E5B842] text-[#2A160E] shadow-xs'
+                          ? 'bg-[#E5B842] text-[#452415] shadow-xs'
                           : 'bg-white/10 text-white/75 hover:bg-white/20'
                       }`}
                     >
@@ -215,7 +215,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               className="w-full h-full object-cover"
             />
             <div
-              className="absolute inset-0 bg-gradient-to-t from-[#2A160E] via-[#2A160E]/35 to-transparent pointer-events-none"
+              className="absolute inset-0 bg-gradient-to-t from-[#452415] via-[#452415]/35 to-transparent pointer-events-none"
               aria-hidden="true"
             />
 
@@ -286,10 +286,10 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 <a
                   href={`/insights/${mobileSpotlightPost.slug}`}
                   onClick={(e) => handlePostClick(e, mobileSpotlightPost.slug)}
-                  className="inline-flex items-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-[#E5B842] active:bg-[#d4a833] text-[#2A160E] font-sans text-[11px] font-bold uppercase tracking-[0.06em] shadow-md whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 pl-3.5 pr-2 py-1.5 rounded-full bg-[#E5B842] active:bg-[#d4a833] text-[#452415] font-sans text-[11px] font-bold uppercase tracking-[0.06em] shadow-md whitespace-nowrap"
                 >
                   <span>Read Blog</span>
-                  <span className="w-5 h-5 rounded-full bg-white text-[#2A160E] flex items-center justify-center">
+                  <span className="w-5 h-5 rounded-full bg-white text-[#452415] flex items-center justify-center">
                     <ArrowUpRight className="w-3 h-3" />
                   </span>
                 </a>
@@ -319,7 +319,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                   className="group p-3.5 flex items-center justify-between gap-3.5 active:bg-slate-50 transition-colors"
                 >
                   {/* Left: Framed Still-Life Square Thumbnail with Number */}
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#2A160E] border border-slate-200 shrink-0">
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#452415] border border-slate-200 shrink-0">
                     <img
                       src={post.image}
                       alt={post.title}
@@ -328,7 +328,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                       className="w-full h-full object-cover"
                     />
                     <div
-                      className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/85 via-transparent to-transparent"
+                      className="absolute inset-0 bg-gradient-to-t from-[#452415]/85 via-transparent to-transparent"
                       aria-hidden="true"
                     />
                     <span className="absolute bottom-1 left-1.5 font-sans text-xs font-bold text-[#E5B842] leading-none">
@@ -348,7 +348,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                       </span>
                     </div>
 
-                    <h4 className="font-sans text-[15px] font-bold text-[#2A160E] leading-[1.25] line-clamp-2">
+                    <h4 className="font-sans text-[15px] font-bold text-[#452415] leading-[1.25] line-clamp-2">
                       {post.title}
                     </h4>
                   </div>
@@ -367,13 +367,13 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         <a
           href="/insights"
           onClick={handleAllClick}
-          className="w-full inline-flex items-center justify-between pl-5 pr-2 h-[50px] rounded-full bg-[#612912] active:bg-[#2A160E] text-white font-sans font-bold text-[12px] uppercase tracking-[0.06em] shadow-xl border border-[#E5B842]/40"
+          className="w-full inline-flex items-center justify-between pl-5 pr-2 h-[50px] rounded-full bg-[#612912] active:bg-[#452415] text-white font-sans font-bold text-[12px] uppercase tracking-[0.06em] shadow-xl border border-[#E5B842]/40"
         >
           <span className="inline-flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-[#E5B842]" aria-hidden="true" />
             <span>Explore All {INSIGHTS_DATA.length} Legal Blogs</span>
           </span>
-          <span className="w-8.5 h-8.5 rounded-full bg-[#E5B842] text-[#2A160E] flex items-center justify-center shadow-xs shrink-0">
+          <span className="w-8.5 h-8.5 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center shadow-xs shrink-0">
             <ArrowUpRight className="w-4 h-4" />
           </span>
         </a>
@@ -395,7 +395,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
             </div>
 
-            <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em]">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
               Chamber Briefings &{' '}
               <span className="font-sans italic font-semibold text-[#612912]">
                 Legal Perspectives.
@@ -412,10 +412,10 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             <a
               href="/insights"
               onClick={handleAllClick}
-              className="group inline-flex items-center justify-between gap-3.5 pl-6 pr-2.5 h-[52px] rounded-full bg-[#612912] hover:bg-[#2A160E] text-white font-sans font-bold text-[12.5px] uppercase tracking-[0.06em] shadow-lg hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap shrink-0"
+              className="group inline-flex items-center justify-between gap-3.5 pl-6 pr-2.5 h-[52px] rounded-full bg-[#612912] hover:bg-[#452415] text-white font-sans font-bold text-[12.5px] uppercase tracking-[0.06em] shadow-lg hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap shrink-0"
             >
               <span>View All Publications</span>
-              <span className="w-9 h-9 rounded-full bg-[#E5B842] text-[#2A160E] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">
+              <span className="w-9 h-9 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">
                 <ArrowUpRight className="w-4 h-4" />
               </span>
             </a>
@@ -454,11 +454,11 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           <a
             href={`/insights/${leadPost.slug}`}
             onClick={(e) => handlePostClick(e, leadPost.slug)}
-            className="group block mb-10 sm:mb-12 rounded-3xl bg-gradient-to-r from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white border-2 border-[#E5B842]/45 shadow-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842]"
+            className="group block mb-10 sm:mb-12 rounded-3xl bg-gradient-to-r from-[#452415] via-[#452415] to-[#452415] text-white border-2 border-[#E5B842]/45 shadow-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842]"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
               {/* Left 5 Cols: Editorial Still-Life Photography */}
-              <div className="lg:col-span-5 relative min-h-[240px] sm:min-h-[300px] lg:min-h-full overflow-hidden bg-[#2A160E]">
+              <div className="lg:col-span-5 relative min-h-[240px] sm:min-h-[300px] lg:min-h-full overflow-hidden bg-[#452415]">
                 <img
                   src={leadPost.image}
                   alt={leadPost.title}
@@ -467,7 +467,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/85 via-[#2A160E]/25 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-[#2A160E]/20 lg:to-[#2A160E]/90 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-t from-[#452415]/85 via-[#452415]/25 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-[#452415]/20 lg:to-[#452415]/90 pointer-events-none"
                   aria-hidden="true"
                 />
                 <div className="absolute top-5 left-5 font-sans text-3xl sm:text-4xl font-bold text-[#E5B842] drop-shadow-md tabular-nums">
@@ -507,7 +507,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
 
                   <span className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.08em] font-bold text-[#E5B842] group-hover:text-white transition-colors whitespace-nowrap shrink-0">
                     <span>Read Full Article</span>
-                    <span className="w-7 h-7 rounded-full bg-[#E5B842] text-[#2A160E] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5">
+                    <span className="w-7 h-7 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5">
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </span>
                   </span>
@@ -528,7 +528,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             >
               <div>
                 {/* 16:9 Still-Life Thumbnail */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#2A160E]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#452415]">
                   <img
                     src={post.image}
                     alt={post.title}
@@ -537,7 +537,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div
-                    className="absolute inset-0 bg-gradient-to-t from-[#2A160E]/75 via-transparent to-transparent pointer-events-none"
+                    className="absolute inset-0 bg-gradient-to-t from-[#452415]/75 via-transparent to-transparent pointer-events-none"
                     aria-hidden="true"
                   />
                   <span className="absolute bottom-3 left-4 font-sans text-2xl font-bold text-white drop-shadow tabular-nums">
@@ -556,7 +556,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                     <span className="text-[#64748B] font-normal">{post.readTime}</span>
                   </div>
 
-                  <h3 className="font-sans text-xl sm:text-[1.35rem] font-bold text-[#2A160E] group-hover:text-[#612912] leading-[1.22] tracking-[-0.01em] transition-colors mb-2.5">
+                  <h3 className="font-sans text-xl sm:text-[1.35rem] font-bold text-[#452415] group-hover:text-[#612912] leading-[1.22] tracking-[-0.01em] transition-colors mb-2.5">
                     {post.title}
                   </h3>
 
@@ -569,10 +569,10 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               {/* Card Footer with Direct Link Affordance */}
               <div className="px-6 pb-5 pt-3.5 border-t border-slate-200 flex items-center justify-between gap-2">
                 <div className="font-sans text-[12px] text-[#475569] truncate">
-                  By <span className="font-semibold text-[#2A160E]">{post.author.name}</span>
+                  By <span className="font-semibold text-[#452415]">{post.author.name}</span>
                 </div>
 
-                <span className="inline-flex items-center gap-1.5 font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#612912] group-hover:text-[#2A160E] whitespace-nowrap shrink-0">
+                <span className="inline-flex items-center gap-1.5 font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#612912] group-hover:text-[#452415] whitespace-nowrap shrink-0">
                   <span>Read Blog</span>
                   <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-[#612912] text-[#612912] group-hover:text-white flex items-center justify-center transition-colors">
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -590,7 +590,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               <BookOpen className="w-4.5 h-4.5" aria-hidden="true" />
             </div>
             <div>
-              <div className="font-sans text-base sm:text-lg font-bold text-[#2A160E]">
+              <div className="font-sans text-base sm:text-lg font-bold text-[#452415]">
                 Explore the Complete Qadeer Legal Chambers Publication Archive
               </div>
               <div className="font-sans text-[13px] text-[#64748B]">
@@ -602,7 +602,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           <a
             href="/insights"
             onClick={handleAllClick}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#612912] hover:bg-[#2A160E] text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#612912] hover:bg-[#452415] text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-sm"
           >
             <span>Open All Blogs Page</span>
             <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />

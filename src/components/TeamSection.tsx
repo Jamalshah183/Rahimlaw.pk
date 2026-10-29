@@ -333,14 +333,14 @@ const TeamMemberCard: React.FC<{
 
       {/* 
         3. Bottom Full-Width copper Gradient Fade & Member Info Lockup:
-           - Smoothly fades upward from solid vibrant copper (#2A160E) at the bottom edge
+           - Smoothly fades upward from solid vibrant copper (#452415) at the bottom edge
            - Displays Name, Designation, and subtle View Profile arrow
       */}
       <div
         className="absolute inset-x-0 bottom-0 h-[36%] z-[3] pointer-events-none"
         style={{
           background:
-            'linear-gradient(to top, #2A160E 0%, rgba(71, 51, 42, 0.92) 38%, rgba(71, 51, 42, 0.45) 72%, transparent 100%)',
+            'linear-gradient(to top, #452415 0%, rgba(71, 51, 42, 0.92) 38%, rgba(71, 51, 42, 0.45) 72%, transparent 100%)',
         }}
         aria-hidden="true"
       />
@@ -356,7 +356,7 @@ const TeamMemberCard: React.FC<{
         </div>
 
         <span
-          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#2A160E] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
+          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#452415] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
           aria-hidden="true"
         >
           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -402,7 +402,7 @@ export const TeamSection: React.FC = () => {
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em]">
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
             Board Of <span className="font-sans italic font-semibold text-[#612912]">Directors</span>
           </h2>
         </div>
@@ -436,7 +436,7 @@ export const TeamSection: React.FC = () => {
           >
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-[#2A160E]/80 backdrop-blur-xs transition-opacity"
+              className="fixed inset-0 bg-[#452415]/80 backdrop-blur-xs transition-opacity"
               onClick={() => setSelectedProfile(null)}
               aria-hidden="true"
             />
@@ -453,7 +453,7 @@ export const TeamSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedProfile(null)}
-                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-9 h-9 rounded-full bg-[#612912] text-white hover:bg-[#2A160E] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
+                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-9 h-9 rounded-full bg-[#612912] text-white hover:bg-[#452415] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
                 aria-label="Close profile modal"
               >
                 <X className="w-4.5 h-4.5" />
@@ -463,7 +463,7 @@ export const TeamSection: React.FC = () => {
                 {/* 
                   Left Column (4 Cols): Tailored Executive Portrait Frame & Chamber Seal
                 */}
-                <div className="md:col-span-5 bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] pt-10 pb-6 px-5 sm:p-8 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
+                <div className="md:col-span-5 bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] pt-10 pb-6 px-5 sm:p-8 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
                   {/* Subtle radial ambient glow */}
                   <div
                     className="absolute inset-0 bg-radial from-[#E5B842]/15 via-transparent to-black/30 pointer-events-none"
@@ -474,7 +474,7 @@ export const TeamSection: React.FC = () => {
                   <div className="relative z-10 w-[215px] h-[276px] sm:w-[235px] sm:h-[302px] rounded-2xl bg-white border-2 border-[#E5B842]/60 shadow-2xl overflow-hidden shrink-0">
                     {/* Left Vertical copper Pillar inside portrait frame */}
                     <div
-                      className="absolute top-0 left-0 bottom-0 w-[44%] bg-[#2A160E] z-[1] flex items-start justify-center pt-6"
+                      className="absolute top-0 left-0 bottom-0 w-[44%] bg-[#452415] z-[1] flex items-start justify-center pt-6"
                       aria-hidden="true"
                     >
                       <span
@@ -504,7 +504,7 @@ export const TeamSection: React.FC = () => {
                       className="absolute inset-x-0 bottom-0 h-[32%] z-[3] pointer-events-none"
                       style={{
                         background:
-                          'linear-gradient(to top, #2A160E 0%, rgba(71, 51, 42, 0.88) 40%, transparent 100%)',
+                          'linear-gradient(to top, #452415 0%, rgba(71, 51, 42, 0.88) 40%, transparent 100%)',
                       }}
                       aria-hidden="true"
                     />
@@ -535,9 +535,9 @@ export const TeamSection: React.FC = () => {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[12px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all duration-200 cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans text-[12px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all duration-200 cursor-pointer"
                     >
-                      <MessageSquare className="w-4 h-4 text-[#2A160E]" />
+                      <MessageSquare className="w-4 h-4 text-[#452415]" />
                       <span>Consult via WhatsApp</span>
                     </a>
                   </div>
@@ -546,7 +546,7 @@ export const TeamSection: React.FC = () => {
                 {/* 
                   Right Column (7 Cols): Executive Legal Dossier & Specializations
                 */}
-                <div className="md:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between bg-white text-[#2A160E]">
+                <div className="md:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between bg-white text-[#452415]">
                   <div>
                     <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#612912]/10 border border-[#612912]/20 text-[#612912] font-sans text-[11px] uppercase tracking-[0.14em] font-bold mb-3.5">
                       <Award className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
@@ -555,7 +555,7 @@ export const TeamSection: React.FC = () => {
 
                     <h3
                       id="profile-modal-title"
-                      className="font-sans text-2xl sm:text-4xl font-bold text-[#2A160E] tracking-[-0.02em] leading-[1.08]"
+                      className="font-sans text-2xl sm:text-4xl font-bold text-[#452415] tracking-[-0.02em] leading-[1.08]"
                     >
                       {selectedProfile.member.fullName}
                     </h3>
@@ -571,7 +571,7 @@ export const TeamSection: React.FC = () => {
                           key={idx}
                           className={
                             idx === 0
-                              ? 'border-l-2 border-[#E5B842] pl-4 font-medium text-[#2A160E]'
+                              ? 'border-l-2 border-[#E5B842] pl-4 font-medium text-[#452415]'
                               : 'text-[#475569]'
                           }
                         >
@@ -592,7 +592,7 @@ export const TeamSection: React.FC = () => {
                             className="flex items-center gap-2.5 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200/90 shadow-2xs"
                           >
                             <CheckCircle2 className="w-4 h-4 text-[#612912] shrink-0" />
-                            <span className="font-sans text-[13px] font-semibold text-[#2A160E] leading-snug">
+                            <span className="font-sans text-[13px] font-semibold text-[#452415] leading-snug">
                               {spec}
                             </span>
                           </div>

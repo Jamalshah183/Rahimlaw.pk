@@ -13,7 +13,7 @@ export const WhatsAppButton: React.FC = () => {
     <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
       {/* Optional prompt popup badge on first hover / view */}
       {showTooltip && (
-        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white text-[#2A160E] border border-slate-200 shadow-xl rounded-lg text-xs font-medium animate-in fade-in slide-in-from-right-3 duration-200">
+        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white text-[#452415] border border-slate-200 shadow-xl rounded-lg text-xs font-medium animate-in fade-in slide-in-from-right-3 duration-200">
           <span>Inquire via official WhatsApp</span>
           <button
             type="button"

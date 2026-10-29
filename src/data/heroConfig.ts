@@ -7,7 +7,6 @@
 import heroLeftBg from '../assets/reference/hero_bg_left.avif';
 import heroRightBg from '../assets/reference/hero_bg_scales.avif';
 import heroLawyerCutout from '../assets/images/hero_statue_justice_cutout.png';
-import logoTight from '../assets/logo.png';
 
 export interface HeroConfig {
   // 1. Separate Image Layers (Independently controllable & replaceable)
@@ -18,8 +17,8 @@ export interface HeroConfig {
 
   // 2. Color System
   colors: {
-    primarycopper: string;
-    deepcopper: string;
+    primaryBurgundy: string;
+    deepBurgundy: string;
     primaryCream: string;
     softCream: string;
     warmGold: string;
@@ -62,18 +61,18 @@ export const heroConfig: HeroConfig = {
   leftBackground: heroLeftBg,
   rightBackground: heroRightBg,
   lawyerImage: heroLawyerCutout,
-  logo: logoTight,
+  logo: "https://i.ibb.co/6cjxyQnF/logo.png",
 
   // Brand Palette
   colors: {
-    primarycopper: "#612912",
-    deepcopper: "#2A160E",
+    primaryBurgundy: "#9B112C",
+    deepBurgundy: "#6A0C1E",
     primaryCream: "#FFFFFF",
-    softCream: "#F3F0E7",
+    softCream: "#F8FAFC",
     warmGold: "#E5B842",
-    darkText: "#2A160E",
+    darkText: "#0F172A",
     mutedText: "#475569",
-    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby copper overlay
+    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby burgundy overlay
   },
 
   // Eyebrow badge

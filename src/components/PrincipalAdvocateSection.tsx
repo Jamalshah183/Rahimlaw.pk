@@ -30,7 +30,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
     >
       {/* 1. Hero Page Matching copper Atmospheric Lighting */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[#612912] via-[#612912] to-[#2A160E] pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-[#612912] via-[#612912] to-[#452415] pointer-events-none"
         aria-hidden="true"
       />
       {/* Warm Golden Studio Spotlight Halo behind the Advocate */}
@@ -151,11 +151,11 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[11.5px] sm:text-[13px] uppercase tracking-[0.08em] font-bold shadow-xl sm:shadow-2xl transition-all duration-200 cursor-pointer"
+                className="group w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-7 sm:py-4 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans text-[11.5px] sm:text-[13px] uppercase tracking-[0.08em] font-bold shadow-xl sm:shadow-2xl transition-all duration-200 cursor-pointer"
               >
-                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2A160E]" />
+                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#452415]" />
                 <span>Consult Principal Advocate</span>
-                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2A160E] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#452415] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </div>
           </div>

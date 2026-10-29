@@ -39,7 +39,7 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#2A160E]/75 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#452415]/75 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -47,13 +47,13 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
       {/* Modal Dialog */}
       <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[calc(100dvh-2rem)] overflow-y-auto border border-slate-200/90 shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200">
         {/* Top Image Banner */}
-        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-[#2A160E]">
+        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-[#452415]">
           <img
             src={practice.image}
             alt={practice.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2A160E] via-[#2A160E]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#452415] via-[#452415]/40 to-transparent" />
 
           {/* Close button */}
           <button
@@ -112,7 +112,7 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
                 onClose();
                 onConsult(practice.title);
               }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#612912] hover:bg-[#2A160E] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#612912] hover:bg-[#452415] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
             >
               <span>Consult on {practice.title}</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#E5B842]" />

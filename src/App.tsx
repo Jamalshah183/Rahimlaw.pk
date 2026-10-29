@@ -265,7 +265,7 @@ export default function App() {
   }, [route.view, activePost]);
 
   return (
-    <div className="min-h-screen bg-[#2A160E] text-[#2A160E] selection:bg-[#612912] selection:text-white font-sans">
+    <div className="min-h-screen bg-[#452415] text-[#452415] selection:bg-[#612912] selection:text-white font-sans">
       <main
         id="main-content"
         className="relative z-[10] bg-[#FFFFFF] rounded-b-[50px] sm:rounded-b-[65px] lg:rounded-b-[80px] shadow-[0_30px_60px_-15px_rgba(69, 36, 21,0.35)] overflow-hidden"

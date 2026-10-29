@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             {/* 
               Navigation Links
             */}
-            <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#2A160E]">
+            <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#452415]">
               <a
                 href="#about"
                 className="hover:text-[#612912] transition-colors relative py-1"
@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-full text-[#2A160E] hover:bg-slate-100"
+                  className="p-1.5 rounded-full text-[#452415] hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-base font-sans font-medium text-[#2A160E] hover:text-[#612912] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
+                    className="text-base font-sans font-medium text-[#452415] hover:text-[#612912] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
                   >
                     <span>{item.label}</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
@@ -185,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
 
               <a
                 href={`tel:${FIRM_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`}
-                className="w-full py-2.5 bg-transparent border border-slate-200 text-[#2A160E] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
+                className="w-full py-2.5 bg-transparent border border-slate-200 text-[#452415] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-[#E5B842]" />
                 <span className="tabular-nums">{FIRM_CONFIG.contact.phoneDisplay}</span>

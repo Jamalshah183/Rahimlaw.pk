@@ -102,7 +102,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             ==================================================================== */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           {/* Centered Headline matching Hero typography */}
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#2A160E] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#452415] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
             Bringing Disciplined Advocacy &{' '}
             <span className="font-sans italic font-semibold text-[#612912]">
               Strategic Counsel
@@ -123,7 +123,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             - loading="eager", decoding="async", fetchPriority="high" for instant load
             ==================================================================== */}
         <div className="relative mb-6 sm:mb-8">
-          <div className="relative w-full aspect-[16/10] sm:aspect-[16/8.5] lg:aspect-[21/9] rounded-[24px] sm:rounded-[34px] lg:rounded-[42px] overflow-hidden shadow-xl border border-slate-200/90 bg-[#2A160E] group">
+          <div className="relative w-full aspect-[16/10] sm:aspect-[16/8.5] lg:aspect-[21/9] rounded-[24px] sm:rounded-[34px] lg:rounded-[42px] overflow-hidden shadow-xl border border-slate-200/90 bg-[#452415] group">
             {/* Instant 0ms Base64 Blur Background (396 bytes) */}
             <div
               className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 filter blur-md scale-105 pointer-events-none ${
@@ -174,7 +174,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   idx === 4 ? 'col-span-2 sm:col-span-1 pt-2.5 sm:pt-0' : idx > 1 ? 'pt-2.5 sm:pt-0' : ''
                 } ${idx > 0 ? 'sm:pl-3 lg:pl-5' : ''}`}
               >
-                <div className="font-sans text-xl sm:text-2xl lg:text-[1.65rem] font-bold text-[#2A160E] tracking-tight leading-none mb-1 [font-variant-numeric:lining-nums]">
+                <div className="font-sans text-xl sm:text-2xl lg:text-[1.65rem] font-bold text-[#452415] tracking-tight leading-none mb-1 [font-variant-numeric:lining-nums]">
                   {stat.value}
                 </div>
                 <div className="font-sans text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#612912] leading-tight">
@@ -218,7 +218,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               </div>
 
               {/* Title - Single Line, Center Aligned, matching Hero typography */}
-              <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#2A160E] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full mb-3">
+              <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#452415] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full mb-3">
                 <span className="inline font-sans">{activePillar.titleMain} </span>
                 <span className="font-sans italic font-semibold text-[#612912] inline">
                   {activePillar.titleAccent}
@@ -260,9 +260,9 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               <div className="h-[3px] bg-gradient-to-r from-[#612912] via-[#E5B842] to-[#612912] group-hover:h-[4px] transition-all shrink-0" aria-hidden="true" />
 
               {/* Royal copper & Radiant Gold Header Bar - Center Aligned */}
-              <div className="bg-gradient-to-r from-[#2A160E] via-[#850E24] to-[#612912] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
+              <div className="bg-gradient-to-r from-[#452415] via-[#850E24] to-[#612912] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
                 <div
-                  className="absolute inset-0 bg-gradient-to-r from-[#2A160E]/60 via-transparent to-[#2A160E]/30 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-r from-[#452415]/60 via-transparent to-[#452415]/30 pointer-events-none"
                   aria-hidden="true"
                 />
                 
@@ -276,7 +276,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               <div className="p-6 sm:p-7 flex-1 flex flex-col items-center justify-between text-center relative">
                 <div className="w-full flex flex-col items-center text-center">
                   {/* Card Title - Single Line, Center Aligned, matching Hero typography */}
-                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.35rem] font-bold text-[#2A160E] group-hover:text-[#612912] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full transition-colors mb-0">
+                  <h3 className="font-sans text-lg sm:text-xl lg:text-[1.35rem] font-bold text-[#452415] group-hover:text-[#612912] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full transition-colors mb-0">
                     <span className="inline font-sans">{pillar.titleMain} </span>
                     <span className="font-sans italic font-semibold text-[#612912] inline">
                       {pillar.titleAccent}

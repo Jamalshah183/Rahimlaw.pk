@@ -51,13 +51,13 @@ export const FIRM_CONFIG = {
   // Color System Constants (for direct reference where needed)
   colors: {
     copper: "#612912",
-    copperDeep: "#2A160E",
+    copperDeep: "#452415",
     copperVibrant: "#612912",
     cream: "#FFFFFF",
     creamSoft: "#F3F0E7",
     gold: "#E5B842",
     goldBright: "#F5D061",
-    darkText: "#2A160E",
+    darkText: "#452415",
     mutedText: "#475569",
   },
 

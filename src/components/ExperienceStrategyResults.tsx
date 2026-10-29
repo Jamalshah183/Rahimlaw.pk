@@ -50,7 +50,7 @@ export const ExperienceStrategyResults: React.FC = () => {
   return (
     <section
       id="approach"
-      className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#2A160E] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden font-sans"
+      className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden font-sans"
     >
       {/* ======================================================================
           BACKGROUND ACCENTS:
@@ -63,7 +63,7 @@ export const ExperienceStrategyResults: React.FC = () => {
         <svg viewBox="0 0 240 240" fill="none" className="w-full h-full">
           <path
             d="M0 0 L180 0 C180 85 95 180 0 180 Z"
-            fill="#2A160E"
+            fill="#452415"
           />
           <path
             d="M180 0 C180 85 95 180 0 180"
@@ -83,7 +83,7 @@ export const ExperienceStrategyResults: React.FC = () => {
         <svg viewBox="0 0 240 240" fill="none" className="w-full h-full">
           <path
             d="M240 240 L60 240 C60 155 145 60 240 60 Z"
-            fill="#2A160E"
+            fill="#452415"
           />
           <path
             d="M60 240 C60 155 145 60 240 60"
@@ -133,13 +133,13 @@ export const ExperienceStrategyResults: React.FC = () => {
           </div>
 
           {/* Main Headline matching Upper Sections */}
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#2A160E] leading-[1.08] tracking-[-0.02em] mb-3 sm:mb-4">
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em] mb-3 sm:mb-4">
             Qadeer Legal <span className="font-sans italic font-semibold text-[#612912]">Chambers</span>
           </h2>
 
           {/* Subtitle / Positioning Tagline */}
           <div className="mb-3.5 sm:mb-4">
-            <span className="font-sans text-[11px] sm:text-[12px] md:text-[12.5px] uppercase tracking-[0.22em] text-[#2A160E] font-bold">
+            <span className="font-sans text-[11px] sm:text-[12px] md:text-[12.5px] uppercase tracking-[0.22em] text-[#452415] font-bold">
               EXPERIENCE • STRATEGY • RESULTS
             </span>
           </div>
@@ -191,7 +191,7 @@ export const ExperienceStrategyResults: React.FC = () => {
                   {/* Circular Medallion with Outer Gold Ring & Deep copper Core */}
                   <div className="relative flex items-center justify-center mb-5 sm:mb-6">
                     <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-full border-2 border-[#C6A15B] p-1 bg-white shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-                      <div className="w-full h-full rounded-full bg-[#2A160E] flex items-center justify-center text-[#E5B842] shadow-inner">
+                      <div className="w-full h-full rounded-full bg-[#452415] flex items-center justify-center text-[#E5B842] shadow-inner">
                         <IconComp className="w-8 h-8 sm:w-9 sm:h-9 text-[#E5B842]" />
                       </div>
                     </div>

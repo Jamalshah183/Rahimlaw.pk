@@ -15,7 +15,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
   return (
     <section
       id="practice-areas"
-      className="relative z-[12] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-[#FFFFFF] text-[#2A160E] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
+      className="relative z-[12] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -29,7 +29,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
             <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2A160E] tracking-[-0.02em] leading-[1.08] mb-3.5 sm:mb-4">
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#452415] tracking-[-0.02em] leading-[1.08] mb-3.5 sm:mb-4">
             Our Practice <span className="font-sans italic font-semibold text-[#612912]">Areas</span>
           </h2>
 
@@ -59,7 +59,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
                 <span className="font-sans text-lg sm:text-xl font-bold text-[#E5B842] tabular-nums shrink-0 [font-variant-numeric:lining-nums]">
                   0{index + 1}.
                 </span>
-                <h3 className="font-sans text-2xl sm:text-[1.75rem] lg:text-[1.85rem] font-bold tracking-[-0.02em] leading-[1.15] text-[#2A160E] group-hover:text-[#612912] transition-colors">
+                <h3 className="font-sans text-2xl sm:text-[1.75rem] lg:text-[1.85rem] font-bold tracking-[-0.02em] leading-[1.15] text-[#452415] group-hover:text-[#612912] transition-colors">
                   {practice.title}
                 </h3>
               </div>
@@ -71,7 +71,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
 
               {/* Right Column: Minimalist Up-Right Arrow */}
               <div className="shrink-0 self-end md:self-center pl-2">
-                <span className="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-[#612912] text-[#2A160E] group-hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs">
+                <span className="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-[#612912] text-[#452415] group-hover:text-white flex items-center justify-center transition-all duration-200 shadow-xs">
                   <ArrowUpRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </div>

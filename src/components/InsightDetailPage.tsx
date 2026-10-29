@@ -47,11 +47,11 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#2A160E]">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#452415]">
       {/* ====================================================================
           1. VIBRANT RUBY copper EDITORIAL ARTICLE HEADER
           ==================================================================== */}
-      <div className="relative bg-gradient-to-b from-[#2A160E] via-[#2A160E] to-[#2A160E] text-white border-b-2 border-[#E5B842]/45 overflow-hidden">
+      <div className="relative bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] text-white border-b-2 border-[#E5B842]/45 overflow-hidden">
         {/* Background Legal Still Life */}
         <div
           className="absolute inset-0 bg-cover bg-center pointer-events-none scale-105"
@@ -140,7 +140,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
             <a
               href="/insights"
               onClick={handleAllClick}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[12px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-md"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans text-[12px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-md"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>All Blogs</span>
@@ -191,7 +191,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E5B842] hover:bg-[#d4a833] text-[#2A160E] font-sans text-[12px] font-bold uppercase tracking-[0.05em] transition-colors whitespace-nowrap shrink-0 shadow-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans text-[12px] font-bold uppercase tracking-[0.05em] transition-colors whitespace-nowrap shrink-0 shadow-sm"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>Inquire on Topic</span>
@@ -207,7 +207,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
       <article className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* Framed Editorial Feature Image */}
         <figure className="mb-12 sm:mb-16">
-          <div className="rounded-3xl overflow-hidden border-2 border-slate-200 shadow-2xl aspect-[16/8.5] bg-[#2A160E]">
+          <div className="rounded-3xl overflow-hidden border-2 border-slate-200 shadow-2xl aspect-[16/8.5] bg-[#452415]">
             <img
               src={post.image}
               alt={post.title}
@@ -262,7 +262,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
               <div className="font-sans text-[11.5px] uppercase tracking-[0.15em] font-bold text-[#612912] mb-2">
                 PRACTICAL SUMMARY
               </div>
-              <h3 className="font-serif text-2xl font-semibold text-[#2A160E] mb-5">
+              <h3 className="font-serif text-2xl font-semibold text-[#452415] mb-5">
                 Key Legal & Procedural Takeaways
               </h3>
 
@@ -280,7 +280,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
 
             {/* Formal Chamber Disclaimer */}
             <div className="pt-6 border-t border-slate-200 font-sans text-[12.5px] text-[#64748B] leading-[1.6]">
-              <strong className="text-[#2A160E] font-semibold">Chamber Notice:</strong> This publication is prepared by {FIRM_CONFIG.firmName} for general informational and educational reference regarding Pakistani law and procedure. It does not constitute a formal legal opinion or create an advocate-client relationship.
+              <strong className="text-[#452415] font-semibold">Chamber Notice:</strong> This publication is prepared by {FIRM_CONFIG.firmName} for general informational and educational reference regarding Pakistani law and procedure. It does not constitute a formal legal opinion or create an advocate-client relationship.
             </div>
           </div>
 
@@ -316,7 +316,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
               <div className="font-sans text-[11px] uppercase tracking-[0.16em] font-bold text-[#612912] mb-1.5">
                 CONTINUE READING
               </div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-[#2A160E]">
+              <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-[#452415]">
                 Related Chamber Insights
               </h2>
             </div>
@@ -324,7 +324,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
             <a
               href="/insights"
               onClick={handleAllClick}
-              className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold text-[#612912] hover:text-[#2A160E]"
+              className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold text-[#612912] hover:text-[#452415]"
             >
               <BookOpen className="w-4 h-4" />
               <span>View All {INSIGHTS_DATA.length} Blogs</span>
@@ -347,7 +347,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
                     <span className="text-[#64748B] font-normal">{related.readTime}</span>
                   </div>
 
-                  <h3 className="font-serif text-xl font-semibold text-[#2A160E] group-hover:text-[#612912] leading-snug mb-2">
+                  <h3 className="font-serif text-xl font-semibold text-[#452415] group-hover:text-[#612912] leading-snug mb-2">
                     {related.title}
                   </h3>
 
