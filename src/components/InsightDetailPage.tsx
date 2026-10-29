@@ -29,7 +29,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
 
   const relatedPosts = INSIGHTS_DATA.filter((item) => item.slug !== post.slug).slice(0, 3);
 
-  const whatsappText = `Assalam-o-Alaikum Qadeer Legal Chambers, I read your publication "${post.title}" and would like to request legal counsel regarding ${post.category}.`;
+  const whatsappText = `Assalam-o-Alaikum Rahim Law Associates, I read your publication "${post.title}" and would like to request legal counsel regarding ${post.category}.`;
   const whatsappHref = `https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
     whatsappText
   )}`;
@@ -82,11 +82,11 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
               onNavigateHome();
             }}
             className="inline-flex items-center whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842] rounded-lg"
-            aria-label="Qadeer Legal Chambers - Home"
+            aria-label="Rahim Law Associates - Home"
           >
             <img
               src={logoSrc}
-              alt="Qadeer Legal Chambers"
+              alt="Rahim Law Associates"
               className="h-16 sm:h-20 lg:h-24 w-auto object-contain shrink-0"
             />
           </a>

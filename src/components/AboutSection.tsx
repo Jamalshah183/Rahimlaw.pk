@@ -104,14 +104,14 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
           {/* Centered Headline matching Hero typography */}
           <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#452415] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
             Bringing Disciplined Advocacy &{' '}
-            <span className="font-sans italic font-semibold text-[#612912]">
+            <span className="font-sans italic font-semibold text-[#B37812]">
               Strategic Counsel
             </span>{' '}
             to Every Mandate
           </h2>
 
           {/* Centered Subtitle in Neue Haas Grotesk Display */}
-          <p className="font-sans text-[14.5px] sm:text-[16px] text-[#475569] leading-[1.65] font-normal max-w-2xl mx-auto">
+          <p className="font-sans text-[14.5px] sm:text-[16px] text-[#5A3322] leading-[1.65] font-medium max-w-2xl mx-auto">
             Established Pakistani legal practice operating from chambers in Sialkot and Lahore—serving domestic clients, commercial enterprises, overseas Pakistanis, and international law firms.
           </p>
         </div>
@@ -147,7 +147,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               />
               <img
                 src={neutralChambersLgWebp}
-                alt="Qadeer Legal Chambers conference room and judicial law library"
+                alt="Rahim Law Associates conference room and judicial law library"
                 className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-102 ${
                   imageLoaded ? 'opacity-100 scale-100' : 'opacity-90 scale-[1.01]'
                 }`}
@@ -220,7 +220,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               {/* Title - Single Line, Center Aligned, matching Hero typography */}
               <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#452415] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full mb-3">
                 <span className="inline font-sans">{activePillar.titleMain} </span>
-                <span className="font-sans italic font-semibold text-[#612912] inline">
+                <span className="font-sans italic font-semibold text-[#B37812] inline">
                   {activePillar.titleAccent}
                 </span>
               </h3>
@@ -235,8 +235,8 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     key={bIdx}
                     className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-50/70 border border-slate-100/80 text-slate-700 w-full overflow-hidden text-center"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#612912] shrink-0" />
-                    <span className="font-sans text-[12.5px] sm:text-[13px] font-medium whitespace-nowrap truncate text-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#B37812] shrink-0" />
+                    <span className="font-sans text-[12.5px] sm:text-[13px] font-medium whitespace-nowrap truncate text-center text-[#452415]">
                       {bullet}
                     </span>
                   </li>
@@ -259,8 +259,8 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               {/* Top Gilded Accent Filigree */}
               <div className="h-[3px] bg-gradient-to-r from-[#612912] via-[#E5B842] to-[#612912] group-hover:h-[4px] transition-all shrink-0" aria-hidden="true" />
 
-              {/* Royal copper & Radiant Gold Header Bar - Center Aligned */}
-              <div className="bg-gradient-to-r from-[#452415] via-[#850E24] to-[#612912] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
+              {/* Royal Brown & Radiant Gold Header Bar - Center Aligned */}
+              <div className="bg-gradient-to-r from-[#452415] via-[#522211] to-[#612912] px-5 py-3.5 border-b border-[#E5B842]/30 flex items-center justify-center text-center relative overflow-hidden shrink-0">
                 <div
                   className="absolute inset-0 bg-gradient-to-r from-[#452415]/60 via-transparent to-[#452415]/30 pointer-events-none"
                   aria-hidden="true"
@@ -278,7 +278,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   {/* Card Title - Single Line, Center Aligned, matching Hero typography */}
                   <h3 className="font-sans text-lg sm:text-xl lg:text-[1.35rem] font-bold text-[#452415] group-hover:text-[#612912] tracking-[-0.02em] leading-normal text-center whitespace-nowrap truncate w-full transition-colors mb-0">
                     <span className="inline font-sans">{pillar.titleMain} </span>
-                    <span className="font-sans italic font-semibold text-[#612912] inline">
+                    <span className="font-sans italic font-semibold text-[#B37812] inline">
                       {pillar.titleAccent}
                     </span>
                   </h3>
@@ -297,8 +297,8 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                         key={idx}
                         className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-50/80 border border-slate-100/90 group-hover:bg-white group-hover:border-[#E5B842]/30 transition-all duration-300 w-full overflow-hidden text-center"
                       >
-                        <span className="w-1.5 h-1.5 rotate-45 bg-[#612912] border border-[#E5B842] shrink-0 group-hover:bg-[#E5B842] group-hover:border-[#612912] transition-colors" />
-                        <span className="font-sans text-[12.5px] lg:text-[13px] font-medium text-[#1E293B] whitespace-nowrap truncate text-center">
+                        <span className="w-1.5 h-1.5 rotate-45 bg-[#B37812] border border-[#E5B842] shrink-0 group-hover:bg-[#E5B842] group-hover:border-[#B37812] transition-colors" />
+                        <span className="font-sans text-[12.5px] lg:text-[13px] font-medium text-[#452415] whitespace-nowrap truncate text-center">
                           {bullet}
                         </span>
                       </li>

@@ -4,7 +4,6 @@ import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
 import { PrincipalAdvocateSection } from './components/PrincipalAdvocateSection';
 import { PracticeAreasSection } from './components/PracticeAreasSection';
-import { InternationalCounsel } from './components/InternationalCounsel';
 import { ExperienceStrategyResults } from './components/ExperienceStrategyResults';
 import { Testimonials } from './components/Testimonials';
 import { InsightsSection } from './components/InsightsSection';
@@ -256,11 +255,11 @@ export default function App() {
 
   useEffect(() => {
     if (route.view === 'insight-detail' && activePost) {
-      document.title = `${activePost.title} | Qadeer Legal Chambers`;
+      document.title = `${activePost.title} | Rahim Law Associates`;
     } else if (route.view === 'insights-archive') {
-      document.title = 'Legal Insights & Publications | Qadeer Legal Chambers';
+      document.title = 'Legal Insights & Publications | Rahim Law Associates';
     } else {
-      document.title = 'Qadeer Legal Chambers | Advocates • Litigation • Legal Advisory';
+      document.title = 'Rahim Law Associates | Advocates • Litigation • Legal Advisory';
     }
   }, [route.view, activePost]);
 
@@ -287,13 +286,6 @@ export default function App() {
             {/* 4. Practice Areas Section */}
             <PracticeAreasSection
               onSelectPracticeForConsultation={handlePracticeSelectedForContact}
-            />
-
-            {/* 5. International Counsel — Pakistan Legal Partner Section */}
-            <InternationalCounsel
-              onOpenConsultation={() =>
-                handleOpenConsultation('International Counsel Services')
-              }
             />
 
             {/* 6. Why Choose Us — Experience / Strategy / Results Section */}

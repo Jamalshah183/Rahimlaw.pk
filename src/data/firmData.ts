@@ -41,7 +41,7 @@ export interface FAQItem {
 
 export const FIRM_CONFIG = {
   // Brand Identity
-  firmName: "Qadeer Legal Chambers",
+  firmName: "Rahim Law Associates",
   positioning: "ADVOCATES • LITIGATION • LEGAL ADVISORY",
   motto: "LOCAL EXPERTISE. GLOBAL COUNSEL.",
   tagline: "ADVOCATES • LITIGATION • LEGAL ADVISORY — LOCAL EXPERTISE. GLOBAL COUNSEL.",
@@ -67,14 +67,14 @@ export const FIRM_CONFIG = {
     phoneDisplay: "+92 300 6140042",
     whatsappNumber: "923006140042", // WhatsApp standard international format (no +, no dashes)
     whatsappDisplay: "+92 300 6140042",
-    email: "contact@qadeerlegalchambers.com",
+    email: "contact@rahimlawassociates.com",
     address: "Executive Suite 402, Judicial Heights, Sector F-7/2, Islamabad, Pakistan",
     officeHours: "Monday – Saturday: 9:00 AM – 6:00 PM (PKT)",
     emergencyNote: "Urgent bail and interim relief inquiries answered 24/7.",
   },
 
   // WhatsApp Pre-filled message
-  whatsappMessage: "Hello Qadeer Legal Chambers, I would like to schedule a consultation regarding a legal matter.",
+  whatsappMessage: "Hello Rahim Law Associates, I would like to schedule a consultation regarding a legal matter.",
 
   // Statistics (Real firm data)
   statistics: [
@@ -237,7 +237,7 @@ export const FIRM_CONFIG = {
   testimonials: [
     {
       id: "t1",
-      quote: "Qadeer Legal Chambers handled our company's SECP restructuring and shareholder dispute with remarkable precision. Their counsel protected our interests at every stage and resolved the matter smoothly.",
+      quote: "Rahim Law Associates handled our company's SECP restructuring and shareholder dispute with remarkable precision. Their counsel protected our interests at every stage and resolved the matter smoothly.",
       clientName: "Tariq Mahmood Butt",
       matterArea: "Corporate & Commercial Law",
       location: "Islamabad",
@@ -251,7 +251,7 @@ export const FIRM_CONFIG = {
     },
     {
       id: "t3",
-      quote: "As an overseas Pakistani managing family succession and estate transfers in Lahore, I relied entirely on Qadeer Legal Chambers. They obtained our succession certificates transparently and documented every step.",
+      quote: "As an overseas Pakistani managing family succession and estate transfers in Lahore, I relied entirely on Rahim Law Associates. They obtained our succession certificates transparently and documented every step.",
       clientName: "Dr. Ayesha Farooq",
       matterArea: "Family & Succession Matters",
       location: "Lahore",
@@ -269,8 +269,8 @@ export const FIRM_CONFIG = {
   faqs: [
     {
       id: "faq-1",
-      question: "What areas of law does Qadeer Legal Chambers handle?",
-      answer: "Qadeer Legal Chambers provides counsel, litigation, and legal advisory services across Litigation & Dispute Resolution, Corporate & Commercial Law, Property & Real Estate, Family & Private Client Matters, International & Cross-Border Counsel, and Legal Research & Advisory.",
+      question: "What areas of law does Rahim Law Associates handle?",
+      answer: "Rahim Law Associates provides counsel, litigation, and legal advisory services across Litigation & Dispute Resolution, Corporate & Commercial Law, Property & Real Estate, Family & Private Client Matters, International & Cross-Border Counsel, and Legal Research & Advisory.",
     },
     {
       id: "faq-2",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Quote } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { FIRM_CONFIG } from '../data/firmData';
 
 export const Testimonials: React.FC = () => {
@@ -19,7 +20,11 @@ export const Testimonials: React.FC = () => {
   const current = FIRM_CONFIG.testimonials[currentIndex];
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
       id="testimonials"
       className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-gradient-to-b from-[#612912] via-[#612912] to-[#452415] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.35)] overflow-hidden"
     >
@@ -58,19 +63,21 @@ export const Testimonials: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2.5 mb-3">
-            <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
-            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
+            <span className="h-[1px] w-7 bg-[#F5D061]" aria-hidden="true" />
+            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#F5D061]">
               CLIENT TESTIMONIALS
             </span>
-            <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
+            <span className="h-[1px] w-7 bg-[#F5D061]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-white leading-[1.08] tracking-[-0.02em] mb-4">
-            Trusted by Those We{' '}
-            <span className="font-sans italic font-semibold text-[#E5B842]">Represent</span>
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold !text-white text-white leading-[1.08] tracking-[-0.02em] mb-4">
+            <span className="!text-white text-white" style={{ color: '#FFFFFF' }}>
+              Trusted by Those We
+            </span>{' '}
+            <span className="font-sans italic font-semibold text-[#F5D061]">Represent</span>
           </h2>
 
-          <p className="font-sans text-[15.5px] sm:text-[17px] text-white/85 leading-[1.65] font-normal">
+          <p className="font-sans text-[15.5px] sm:text-[17px] text-[#F3F0E7] leading-[1.65] font-normal">
             Reflections from clients regarding our strategic representation, discretion, and courtroom advocacy.
           </p>
         </div>
@@ -80,7 +87,7 @@ export const Testimonials: React.FC = () => {
           <div className="relative bg-[#452415]/75 backdrop-blur-xs rounded-2xl p-8 sm:p-12 md:p-16 border border-[#E5B842]/35 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
             {/* Gold Quotation Mark Icon */}
             <div className="absolute top-6 left-8 sm:top-10 sm:left-12">
-              <Quote className="w-12 h-12 sm:w-16 sm:h-16 text-[#E5B842]/20 -scale-x-100" />
+              <Quote className="w-12 h-12 sm:w-16 sm:h-16 text-[#F5D061]/25 -scale-x-100" />
             </div>
 
             <div className="relative z-10 pt-4 sm:pt-6">
@@ -108,10 +115,10 @@ export const Testimonials: React.FC = () => {
 
               {/* Client Info Lockup */}
               <div className="pt-6 border-t border-[#E5B842]/25">
-                <div className="font-sans text-base sm:text-lg font-bold tracking-[-0.01em] text-[#E5B842]">
+                <div className="font-sans text-base sm:text-lg font-bold tracking-[-0.01em] text-[#F5D061]">
                   {current.clientName}
                 </div>
-                <div className="font-sans text-[12px] font-medium text-white/80 tracking-[0.03em] mt-0.5">
+                <div className="font-sans text-[12px] font-medium text-[#F3F0E7] tracking-[0.03em] mt-0.5">
                   {current.matterArea} {current.location ? `· ${current.location}` : ''}
                 </div>
               </div>
@@ -134,6 +141,6 @@ export const Testimonials: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

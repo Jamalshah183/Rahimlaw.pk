@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { User, MessagesSquare, Landmark } from 'lucide-react';
 import marbleColumnImg from '../assets/images/classical_marble_column_1792242281393.jpg';
 
@@ -48,7 +49,11 @@ const PILLARS = [
 
 export const ExperienceStrategyResults: React.FC = () => {
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
       id="approach"
       className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden font-sans"
     >
@@ -125,16 +130,16 @@ export const ExperienceStrategyResults: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18 md:mb-20">
           {/* Eyebrow with flanking gold rules */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-            <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#C6A15B]" aria-hidden="true" />
+            <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#E5B842]" aria-hidden="true" />
             <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-[#612912] font-bold">
               WHY CHOOSE
             </span>
-            <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#C6A15B]" aria-hidden="true" />
+            <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
           {/* Main Headline matching Upper Sections */}
           <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em] mb-3 sm:mb-4">
-            Qadeer Legal <span className="font-sans italic font-semibold text-[#612912]">Chambers</span>
+            Rahim Law <span className="font-sans italic font-semibold text-[#E5B842]">Associates</span>
           </h2>
 
           {/* Subtitle / Positioning Tagline */}
@@ -156,7 +161,7 @@ export const ExperienceStrategyResults: React.FC = () => {
         <div className="relative">
           {/* Desktop Connecting Gold Line (Spanning from Col 1 center 12.5% to Col 4 center 87.5%) */}
           <div
-            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-10 sm:top-11 -translate-y-1/2 h-[1.5px] bg-[#C6A15B] z-0 pointer-events-none"
+            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-10 sm:top-11 -translate-y-1/2 h-[2px] bg-[#E5B842] z-0 pointer-events-none shadow-[0_0_8px_rgba(229,184,66,0.35)]"
             aria-hidden="true"
           />
 
@@ -165,17 +170,17 @@ export const ExperienceStrategyResults: React.FC = () => {
             className="hidden lg:block absolute inset-x-0 top-10 sm:top-11 -translate-y-1/2 pointer-events-none z-[1]"
             aria-hidden="true"
           >
-            <div className="absolute left-[25%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#C6A15B] rotate-45 border border-white shadow-xs" />
-            <div className="absolute left-[50%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#C6A15B] rotate-45 border border-white shadow-xs" />
-            <div className="absolute left-[75%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#C6A15B] rotate-45 border border-white shadow-xs" />
+            <div className="absolute left-[25%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
+            <div className="absolute left-[50%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
+            <div className="absolute left-[75%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
           </div>
 
           {/* Tablet (sm screens) Connecting Lines between paired nodes */}
           <div
-            className="hidden sm:block lg:hidden absolute left-[25%] right-[25%] top-10 sm:top-11 -translate-y-1/2 h-[1.5px] bg-[#C6A15B] z-0 pointer-events-none"
+            className="hidden sm:block lg:hidden absolute left-[25%] right-[25%] top-10 sm:top-11 -translate-y-1/2 h-[2px] bg-[#E5B842] z-0 pointer-events-none shadow-[0_0_8px_rgba(229,184,66,0.35)]"
             aria-hidden="true"
           >
-            <div className="absolute left-[50%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#C6A15B] rotate-45 border border-white shadow-xs" />
+            <div className="absolute left-[50%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
           </div>
 
           {/* 4 Pillar Items Grid (Centered layout matching timeline nodes) */}
@@ -190,7 +195,7 @@ export const ExperienceStrategyResults: React.FC = () => {
                 >
                   {/* Circular Medallion with Outer Gold Ring & Deep copper Core */}
                   <div className="relative flex items-center justify-center mb-5 sm:mb-6">
-                    <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-full border-2 border-[#C6A15B] p-1 bg-white shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-full border-2 border-[#E5B842] p-1 bg-white shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                       <div className="w-full h-full rounded-full bg-[#452415] flex items-center justify-center text-[#E5B842] shadow-inner">
                         <IconComp className="w-8 h-8 sm:w-9 sm:h-9 text-[#E5B842]" />
                       </div>
@@ -198,7 +203,7 @@ export const ExperienceStrategyResults: React.FC = () => {
                   </div>
 
                   {/* Golden Editorial Numerals */}
-                  <div className="font-sans text-xl sm:text-2xl font-bold text-[#C6A15B] mb-2 leading-none tabular-nums">
+                  <div className="font-sans text-xl sm:text-2xl font-bold text-[#E5B842] mb-2 leading-none tabular-nums">
                     {pillar.number}
                   </div>
 
@@ -214,6 +219,6 @@ export const ExperienceStrategyResults: React.FC = () => {
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 };

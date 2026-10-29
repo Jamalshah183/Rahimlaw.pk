@@ -102,16 +102,12 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--text);
+  color: inherit;
 }
 
 a, button {
-  color: var(--text);
+  color: inherit;
   transition: all 0.2s ease-in-out;
-}
-
-a:hover, button:hover {
-  color: var(--accent);
 }
 
 .text-muted {

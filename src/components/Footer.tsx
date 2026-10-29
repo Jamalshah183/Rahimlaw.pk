@@ -100,12 +100,12 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="flex items-center">
             <a
               href="#hero"
-              aria-label="Qadeer Legal Chambers - Home"
+              aria-label="Rahim Legal Chambers - Home"
               className="inline-flex items-center transition-transform duration-200 hover:scale-[1.03] shrink-0"
             >
               <img
                 src={logoSrc}
-                alt="Qadeer Legal Chambers Logo"
+                alt="Rahim Legal Chambers Logo"
                 className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-md"
               />
             </a>
@@ -186,7 +186,7 @@ export const Footer: React.FC<FooterProps> = ({
           </nav>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-[12.5px] sm:text-[13.5px] text-white/80">
-            <span>© {new Date().getFullYear()} Qadeer Legal Chambers. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Rahim Legal Chambers. All rights reserved.</span>
             <span className="text-[#E5B842]/50" aria-hidden="true">·</span>
             <button
               type="button"

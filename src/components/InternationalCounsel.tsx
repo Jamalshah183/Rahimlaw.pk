@@ -38,7 +38,7 @@ export const InternationalCounsel: React.FC<InternationalCounselProps> = ({
   onOpenConsultation,
 }) => {
   const whatsappBaseText =
-    'Assalam-o-Alaikum Qadeer Legal Chambers, I am inquiring regarding your International Counsel Services in Pakistan.';
+    'Assalam-o-Alaikum Rahim Law Associates, I am inquiring regarding your International Counsel Services in Pakistan.';
   const whatsappHref = `https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
     whatsappBaseText
   )}`;

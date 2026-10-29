@@ -17,8 +17,10 @@ export interface HeroConfig {
 
   // 2. Color System
   colors: {
-    primaryBurgundy: string;
-    deepBurgundy: string;
+    primaryBrown: string;
+    deepBrown: string;
+    primaryBurgundy?: string;
+    deepBurgundy?: string;
     primaryCream: string;
     softCream: string;
     warmGold: string;
@@ -60,19 +62,19 @@ export const heroConfig: HeroConfig = {
   // Two completely separate background environments + foreground lawyer cutout
   leftBackground: heroLeftBg,
   rightBackground: heroRightBg,
-  lawyerImage: heroLawyerCutout,
-  logo: "https://i.ibb.co/6cjxyQnF/logo.png",
+  lawyerImage: "https://i.ibb.co/Rpr9wxkr/hero-statue-justice-cutout-D5-0yv-P0.png",
+  logo: "https://i.ibb.co/xS4KS0LC/Untitled-design-2.png",
 
   // Brand Palette
   colors: {
-    primaryBurgundy: "#9B112C",
-    deepBurgundy: "#6A0C1E",
+    primaryBrown: "#612912",
+    deepBrown: "#452415",
     primaryCream: "#FFFFFF",
     softCream: "#F8FAFC",
     warmGold: "#E5B842",
     darkText: "#0F172A",
     mutedText: "#475569",
-    leftOverlayOpacity: 0.90, // Rich, vibrant royal ruby burgundy overlay
+    leftOverlayOpacity: 0.90, // Rich, warm dark brown overlay
   },
 
   // Eyebrow badge

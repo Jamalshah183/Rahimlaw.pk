@@ -107,11 +107,11 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
               onNavigateHome();
             }}
             className="inline-flex items-center whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842] rounded-lg"
-            aria-label="Qadeer Legal Chambers - Home"
+            aria-label="Rahim Law Associates - Home"
           >
             <img
               src={logoSrc}
-              alt="Qadeer Legal Chambers"
+              alt="Rahim Law Associates"
               className="h-16 sm:h-20 lg:h-24 w-auto object-contain shrink-0"
             />
           </a>

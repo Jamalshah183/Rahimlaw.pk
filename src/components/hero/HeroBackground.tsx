@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { heroConfig } from '../../data/heroConfig';
 
 export const HeroBackground: React.FC = () => {
@@ -49,12 +50,14 @@ export const HeroBackground: React.FC = () => {
         IMAGE 1 — LEFT BACKGROUND (Desk, Paperwork, Signing) + copper OVERLAY
         Desktop: ~58% width.
         Mobile: Tall enough (h-[65%] min-h-[545px]) to fully contain all HeroContent.
-        z-index: 2 (renders ON TOP of IMAGE 2).
-        Right side on desktop / bottom on mobile has rounded corners (50px) and NO shadow.
+        Revealing from left to right with cinematic smooth curve.
         ========================================================================
       */}
-      <div
-        className="absolute top-0 left-0 w-full md:w-[58%] h-[65%] min-h-[545px] sm:h-[63%] md:min-h-0 md:h-full md:bottom-0 rounded-b-[50px] md:rounded-b-none md:rounded-r-[50px] overflow-hidden z-[2] transition-all duration-300"
+      <motion.div
+        initial={{ x: '-100%', opacity: 0.2 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute top-0 left-0 w-full md:w-[58%] h-[65%] min-h-[545px] sm:h-[63%] md:min-h-0 md:h-full md:bottom-0 rounded-b-[50px] md:rounded-b-none md:rounded-r-[50px] overflow-hidden z-[2]"
         style={{
           boxShadow: 'none',
         }}
@@ -68,11 +71,11 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Independent Primary copper Color Overlay (#5B1111 at 88% opacity) */}
+        {/* Layer 2: Independent Primary Brown Color Overlay (#452415 at 90% opacity) */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundColor: heroConfig.colors.primarycopper,
+            backgroundColor: heroConfig.colors.deepBrown || '#452415',
             opacity: heroConfig.colors.leftOverlayOpacity,
           }}
           aria-hidden="true"
@@ -83,7 +86,7 @@ export const HeroBackground: React.FC = () => {
           className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/25 via-transparent to-transparent pointer-events-none"
           aria-hidden="true"
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

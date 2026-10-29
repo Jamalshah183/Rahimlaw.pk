@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
 import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
-import qadeerCeoImg from '../assets/images/principal_advocate_studio_opt.webp';
-import arfanImg from '../assets/images/arfan_shahzad.png';
+import rahimMemberImg from '../assets/images/rahim_nawaz_khan_abbasi.png';
+import hasanImg from '../assets/images/hasan_rashid_qamar.png';
+import mehakImg from '../assets/images/mehak_ali.png';
+import khadijaImg from '../assets/images/khadija_sharafat_khan.png';
 
 interface TeamMember {
   id: string;
@@ -20,43 +23,83 @@ interface TeamMember {
 
 const TEAM_MEMBERS: TeamMember[] = [
   {
-    id: 'qadeer-hussain',
-    name: 'Qadeer Hussain',
-    fullName: 'Mian Qadeer Hussain',
-    designation: 'CEO',
-    credentials: 'Founder & Principal · Advocate High Court',
-    pillarWatermark: 'CEO',
-    image: qadeerCeoImg,
+    id: 'rahim-abbasi',
+    name: 'Mr. Rahim Nawaz Khan Abbasi',
+    fullName: 'Mr. Rahim Nawaz Khan Abbasi',
+    designation: 'Senior Counsel (Founding Member)',
+    credentials: 'Advocate High Court · Founding Member',
+    pillarWatermark: 'FOUNDER',
+    image: rahimMemberImg,
     maxAspectRatio: 1.08,
     bioParagraphs: [
-      'As Founder and Principal of Qadeer Legal Chambers, Mian Qadeer Hussain practices as an Advocate of the High Court in Pakistan, bringing extensive command across contentious litigation, precision legal drafting, dispute resolution, and high-level advisory mandates.',
-      'Guided by a commitment to professional integrity and meticulous case preparation, his practice bridges classical courtroom advocacy with modern legal research, transparent client communication, and seamless cross-border legal cooperation.',
+      'Mr. Rahim is the Senior Counsel overseeing the matters pertaining to Taxation, Corporate and Company Laws, Intellectual Property, Banking and NBFCs. Mr. Rahim has vast experience in dealing tax and corporate cases with individuals, AOPs, and companies.',
+      'He is a law graduate and also holds the degree of M.Phil (Finance) and MBA. He is also Fellow Member of Institute of Corporate Secretaries of Pakistan (ICSP), Member of Institute of Bankers of Pakistan and Registered Tax Practitioner with FBR.',
     ],
     specializations: [
-      'High Court Litigation & Dispute Resolution',
-      'Precision Legal Drafting & Opinions',
-      'Strategic Corporate & Civil Advisory',
-      'Cross-Border Legal Cooperation',
+      'Taxation, Corporate & Company Laws',
+      'Banking, NBFCs & Financial Advisory',
+      'Intellectual Property & Corporate Structuring',
+      'High Court Litigation & Regulatory Disputes',
     ],
   },
   {
-    id: 'arfan-shahzad',
-    name: 'Arfan Shahzad',
-    fullName: 'Arfan Shahzad',
-    designation: 'Advocate',
-    credentials: 'Associate Advocate · Immigration & International Law',
-    pillarWatermark: 'Advocate',
-    image: arfanImg,
-    maxAspectRatio: 1.04,
+    id: 'hasan-qamar',
+    name: 'Mr. Hasan Rashid Qamar',
+    fullName: 'Mr. Hasan Rashid Qamar',
+    designation: 'Advocate Supreme Court (Founding Member)',
+    credentials: 'Advocate Supreme Court · CIArb Accredited Mediator',
+    pillarWatermark: 'FOUNDER',
+    image: hasanImg,
+    maxAspectRatio: 1.08,
     bioParagraphs: [
-      'Arfan Shahzad is an experienced Associate Advocate at Qadeer Legal Chambers specializing in Immigration Law, Study & Student Visas, and International Law, delivering dedicated legal counsel for local and overseas clients.',
-      'With a strong commitment to protecting client interests, he combines thorough documentation strategy with responsive representation to achieve dependable, outcome-focused legal solutions across international and immigration matters.',
+      'Mr. Hasan completed his education from Army Burn Hall College, Abbottabad and thereafter went to Warwick University, UK and completed his LLB (Hons.) from University of London. He also obtained Post Graduate Diploma in Law & Legal practice from Oxford University, UK as well as Oxford Brookes University, UK.',
+      'Mr. Hasan is enrolled as an Advocate of the Supreme Court since 2020. Mr. Hasan successfully completed and passed Mediation Training & Assessment from Chartered Institute of Arbitrators (UK) and is certified as CIArb Accredited Mediator.',
     ],
     specializations: [
-      'Immigration Law & Regulatory Counsel',
-      'Study & Student Visa Advisory',
-      'International & Cross-Border Law',
-      'Dedicated Client Representation',
+      'Supreme Court Litigation & Appellate Advocacy',
+      'CIArb Accredited Mediation & Dispute Resolution',
+      'UK & International Legal Practice (Oxford & Warwick)',
+      'Constitutional & Commercial Litigation',
+    ],
+  },
+  {
+    id: 'mehak-ali',
+    name: 'Ms. Mehak Ali',
+    fullName: 'Ms. Mehak Ali',
+    designation: 'Advocate High Court',
+    credentials: 'Advocate High Court · LL.M.',
+    pillarWatermark: 'ADVOCATE',
+    image: mehakImg,
+    maxAspectRatio: 1.08,
+    bioParagraphs: [
+      'She obtained her law degree from Punjab University and completed her LLM from the University of Lahore.',
+      'She has been associated with several renowned law firms and has been actively practicing in the areas of corporate and tax law, with a specialization in matters before the SECP, FBR, and the High Court.',
+    ],
+    specializations: [
+      'SECP Corporate Compliance & Structuring',
+      'FBR Tax Litigation & Statutory Advisory',
+      'High Court Practice & Legal Drafting',
+      'Commercial Contracts & Corporate Law',
+    ],
+  },
+  {
+    id: 'khadija-sharafat-khan',
+    name: 'Barrister Khadija Sharafat Khan',
+    fullName: 'Barrister Khadija Sharafat Khan',
+    designation: 'Advocate High Court',
+    credentials: 'Advocate High Court · Bar-at-Law',
+    pillarWatermark: 'BARRISTER',
+    image: khadijaImg,
+    maxAspectRatio: 1.08,
+    bioParagraphs: [
+      'She holds an LL.B. from Brunel University London, an LL.M., and a Bar-at-Law qualification from the University of Law, London.',
+      'Her practice covers litigation, family and property law, intellectual property, cybercrime, banking law, and NAB-related matters. She also specializes in mediation and Alternative Dispute Resolution (ADR), adopting an empathetic yet assertive approach to resolving disputes with professionalism, integrity, and discretion.',
+    ],
+    specializations: [
+      'Litigation, Family & Property Law',
+      'Intellectual Property & Cybercrime',
+      'Banking Law & NAB-Related Matters',
+      'Mediation & Alternative Dispute Resolution (ADR)',
     ],
   },
 ];
@@ -347,10 +390,16 @@ const TeamMemberCard: React.FC<{
 
       <div className="absolute bottom-3.5 left-4 right-3.5 z-[4] flex items-end justify-between gap-2 text-left">
         <div>
-          <h3 className="font-sans font-bold text-[18px] sm:text-[19px] text-white tracking-[-0.01em] leading-tight">
+          <h3
+            className="font-sans font-bold text-[18px] sm:text-[19px] !text-white leading-tight tracking-[-0.01em]"
+            style={{ color: '#FFFFFF' }}
+          >
             {member.name}
           </h3>
-          <p className="font-sans font-normal text-[12px] sm:text-[12.5px] text-white/90 tracking-[0.02em] mt-0.5">
+          <p
+            className="font-sans font-semibold text-[12px] sm:text-[12.5px] !text-[#E5B842] tracking-[0.02em] mt-0.5"
+            style={{ color: '#E5B842' }}
+          >
             {member.designation}
           </p>
         </div>
@@ -387,7 +436,11 @@ export const TeamSection: React.FC = () => {
   }, [selectedProfile]);
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 1.2, ease: 'easeInOut' }}
       id="team"
       className="relative z-[18] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-24 md:pb-32 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] rounded-b-[50px] sm:rounded-b-[65px] lg:rounded-b-[80px] border-t-2 border-b-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10),0_30px_60px_-15px_rgba(15,23,42,0.12)] overflow-hidden"
     >
@@ -396,19 +449,19 @@ export const TeamSection: React.FC = () => {
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
-            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#612912]">
+            <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
               LEADERSHIP & PARTNERS
             </span>
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
-            Board Of <span className="font-sans italic font-semibold text-[#612912]">Directors</span>
+          <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2C1309] leading-[1.08] tracking-[-0.02em]">
+            Our <span className="font-sans italic font-semibold text-[#E5B842]">Team</span>
           </h2>
         </div>
 
-        {/* 2 Team Member Cards */}
-        <div className="max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 items-end justify-center">
+        {/* Board of Directors / Team Member Cards */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 items-end justify-center">
           {TEAM_MEMBERS.map((member) => (
             <TeamMemberCard
               key={member.id}
@@ -442,7 +495,7 @@ export const TeamSection: React.FC = () => {
             />
 
             {/* Executive Profile Dossier Card */}
-            <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[90dvh] flex flex-col border-2 border-[#E5B842]/50 shadow-[0_30px_80px_-15px_rgba(15,23,42,0.6)] overflow-hidden z-10">
+            <div className="relative bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[96dvh] flex flex-col border-2 border-[#E5B842]/50 shadow-[0_30px_80px_-15px_rgba(15,23,42,0.6)] overflow-hidden z-10">
               {/* Top Gold Accent Bar */}
               <div
                 className="h-1.5 w-full shrink-0 bg-gradient-to-r from-[#612912] via-[#E5B842] to-[#612912]"
@@ -453,17 +506,17 @@ export const TeamSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedProfile(null)}
-                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-9 h-9 rounded-full bg-[#612912] text-white hover:bg-[#452415] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
+                className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 w-8 h-8 rounded-full bg-[#612912] text-white hover:bg-[#452415] border border-[#E5B842]/50 flex items-center justify-center transition-colors shadow-md cursor-pointer"
                 aria-label="Close profile modal"
               >
-                <X className="w-4.5 h-4.5" />
+                <X className="w-4.5 h-4.5 !text-white" />
               </button>
 
               <div className="flex flex-col md:grid md:grid-cols-12 flex-1 min-h-0 overflow-y-auto overscroll-contain">
                 {/* 
                   Left Column (4 Cols): Tailored Executive Portrait Frame & Chamber Seal
                 */}
-                <div className="md:col-span-5 bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] pt-10 pb-6 px-5 sm:p-8 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
+                <div className="md:col-span-5 bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] pt-8 pb-4 px-4 sm:p-6 flex flex-col items-center justify-between relative shrink-0 border-b md:border-b-0 md:border-r border-[#E5B842]/30 text-white">
                   {/* Subtle radial ambient glow */}
                   <div
                     className="absolute inset-0 bg-radial from-[#E5B842]/15 via-transparent to-black/30 pointer-events-none"
@@ -531,7 +584,7 @@ export const TeamSection: React.FC = () => {
 
                     <a
                       href={`https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
-                        `Assalam-o-Alaikum Qadeer Legal Chambers, I would like to schedule a consultation with ${selectedProfile.member.fullName} (${selectedProfile.member.designation}).`
+                        `Assalam-o-Alaikum Rahim Law Associates, I would like to schedule a consultation with ${selectedProfile.member.fullName} (${selectedProfile.member.designation}).`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -618,6 +671,6 @@ export const TeamSection: React.FC = () => {
           </div>,
           document.body
         )}
-    </section>
+    </motion.section>
   );
 };

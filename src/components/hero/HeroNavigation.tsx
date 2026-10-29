@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { heroConfig } from '../../data/heroConfig';
 import { useTransparentLogo } from '../../utils/useTransparentLogo';
@@ -21,20 +22,26 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
           {/* 
             ====================================================================
             LEFT CONTAINER SECTION (Aligned directly with where HeroContent writing starts)
+            Revealing logo from its actual position
             ====================================================================
           */}
-          <div className="w-full lg:w-[53%] xl:w-[52%] px-6 sm:px-10 lg:pl-12 lg:pr-2 xl:pr-4 flex justify-center lg:justify-end">
-            <div className="w-full max-w-[580px] xl:max-w-[620px] flex items-center justify-between">
-              {/* Qadeer Legal Chambers Logo aligned with HeroContent start */}
+          <div className="w-full lg:w-[54%] xl:w-[53%] px-6 sm:px-10 lg:pl-12 xl:pl-16 pr-3 lg:pr-4 flex justify-center lg:justify-end">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.0, delay: 0.35, ease: 'easeOut' }}
+              className="w-full max-w-[540px] xl:max-w-[580px] flex items-center justify-between"
+            >
+              {/* Rahim Law Associates Logo aligned with HeroContent start */}
               <a
                 href="#hero"
-                className="inline-flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] rounded-lg transition-transform duration-200 hover:scale-[1.02]"
-                aria-label="Qadeer Legal Chambers - Home"
+                className="inline-flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842] rounded-lg transition-transform duration-200 hover:scale-[1.02]"
+                aria-label="Rahim Law Associates - Home"
               >
                 <img
                   src={logoSrc}
-                  alt="Qadeer Legal Chambers Logo"
-                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain object-left drop-shadow-md shrink-0"
+                  alt="Rahim Law Associates Logo"
+                  className="h-20 sm:h-24 lg:h-28 w-auto object-contain object-left drop-shadow-md shrink-0"
                 />
               </a>
 
@@ -49,27 +56,33 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                   <Menu className="w-6 h-6" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* 
             ====================================================================
             RIGHT SECTION: Starts where the left side container ends (at 58%)
+            Revealing navbar links from their actual position
             ====================================================================
           */}
-          <div className="hidden lg:flex items-center lg:ml-[5%] xl:ml-[6%] pl-8 xl:pl-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.0, delay: 0.45, ease: 'easeOut' }}
+            className="hidden lg:flex items-center lg:ml-[5%] xl:ml-[6%] pl-8 xl:pl-12"
+          >
             <div className="flex items-center gap-7 xl:gap-9 font-sans text-[14.5px] font-semibold tracking-[0.03em] text-[#0F172A]">
               {heroConfig.navigation.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="hover:text-[#9B112C] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#9B112C] hover:after:w-full after:transition-all whitespace-nowrap"
+                  className="hover:text-[#612912] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#612912] hover:after:w-full after:transition-all whitespace-nowrap"
                 >
                   {item.label}
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </nav>
 
@@ -86,11 +99,11 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
             <div className="space-y-6 pt-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 px-3 rounded-lg bg-[#6A0C1E] border border-[#E5B842]/30 flex items-center shrink-0">
+                  <div className="p-1.5 px-3 rounded-lg bg-[#452415] border border-[#E5B842]/30 flex items-center shrink-0">
                     <img
                       src={logoSrc}
                       alt="Qadeer Legal Chambers"
-                      className="h-12 w-auto object-contain shrink-0"
+                      className="h-16 w-auto object-contain shrink-0"
                     />
                   </div>
                 </div>
@@ -110,7 +123,7 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                     key={item.label}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="font-sans text-[15px] font-semibold tracking-[0.03em] text-[#0F172A] hover:text-[#9B112C] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
+                    className="font-sans text-[15px] font-semibold tracking-[0.03em] text-[#0F172A] hover:text-[#612912] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
                   >
                     <span>{item.label}</span>
                     <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
@@ -126,7 +139,7 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-3 bg-[#9B112C] hover:bg-[#800C22] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                className="w-full py-3 bg-[#612912] hover:bg-[#452415] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
               >
                 Free Consultation
               </button>

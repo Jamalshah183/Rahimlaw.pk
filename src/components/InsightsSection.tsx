@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowUpRight,
   BookOpen,
@@ -81,7 +82,11 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
   };
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
       id="insights"
       className="relative z-[16] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-22 lg:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
     >
@@ -102,21 +107,21 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center gap-2 mb-2.5">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
-            <Scale className="w-3.5 h-3.5 text-[#612912]" aria-hidden="true" />
-            <span className="font-sans text-[10.5px] uppercase tracking-[0.16em] font-bold text-[#612912]">
+            <Scale className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
+            <span className="font-sans text-[10.5px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
               LEGAL INSIGHTS & BLOGS
             </span>
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>
 
-          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-[#2C1309] leading-[1.08] tracking-[-0.02em]">
             Chamber Briefings &{' '}
-            <span className="font-sans italic font-semibold text-[#612912]">
+            <span className="font-sans italic font-semibold text-[#E5B842]">
               Legal Perspectives.
             </span>
           </h2>
 
-          <p className="font-sans text-[13.5px] sm:text-[14.5px] text-[#475569] leading-[1.5] mt-2 max-w-md mx-auto">
+          <p className="font-sans text-[13.5px] sm:text-[14.5px] text-[#1E293B] leading-[1.5] mt-2 max-w-md mx-auto">
             Pakistani-law commentary, statutory guides, and cross-border legal analysis by our advocates.
           </p>
         </div>
@@ -143,9 +148,10 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                   isAllTab ? 'col-span-2' : 'col-span-1'
                 } min-h-[42px] px-3 py-2 rounded-xl font-sans text-[11.5px] sm:text-[12px] font-semibold tracking-[0.01em] transition-all duration-150 flex items-center justify-between gap-1.5 cursor-pointer border ${
                   isActive
-                    ? 'bg-[#612912] text-white border-[#E5B842]/60 shadow-md'
-                    : 'bg-slate-50 text-[#334155] border-slate-200/80 active:bg-slate-100'
+                    ? 'bg-[#612912] !text-white text-white border-[#E5B842]/70 shadow-md'
+                    : 'bg-white text-[#452415] hover:bg-[#612912] hover:!text-white border-slate-200/90 active:bg-slate-100'
                 }`}
+                style={isActive ? { color: '#FFFFFF' } : undefined}
               >
                 <span className="truncate">{label}</span>
                 <span
@@ -167,7 +173,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         {/* 3. Interactive Deep Ruby copper & Gold Spotlight Briefing Card */}
         <div className="rounded-3xl bg-gradient-to-b from-[#452415] via-[#452415] to-[#452415] text-white border-2 border-[#E5B842]/50 shadow-2xl overflow-hidden mb-5">
           {/* Top Switcher Bar inside Spotlight Card */}
-          <div className="px-4 py-2.5 bg-[#4A0713]/90 border-b border-[#E5B842]/25 flex items-center justify-between gap-2">
+          <div className="px-4 py-2.5 bg-[#452415]/95 border-b border-[#E5B842]/25 flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
               <span className="font-sans text-[10.5px] uppercase tracking-[0.14em] font-bold text-[#E5B842]">
@@ -205,13 +211,13 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           <a
             href={`/insights/${mobileSpotlightPost.slug}`}
             onClick={(e) => handlePostClick(e, mobileSpotlightPost.slug)}
-            className="block relative aspect-[16/9] w-full overflow-hidden bg-[#4A0713]"
+            className="block relative aspect-[16/9] w-full overflow-hidden bg-[#452415]"
           >
             <img
               src={mobileSpotlightPost.image}
               alt={mobileSpotlightPost.title}
-              loading="lazy"
-              referrerPolicy="no-referrer"
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div
@@ -221,15 +227,15 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
 
             {/* Editorial Number Badge & Unboxed Metadata */}
             <div className="absolute bottom-2.5 left-4 right-4 flex items-end justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5 font-sans text-[11px] text-[#E5B842] font-semibold">
+              <div className="flex flex-wrap items-center gap-1.5 font-sans text-[11px] text-[#F5D061] font-semibold">
                 <span>{mobileSpotlightPost.category}</span>
                 <span aria-hidden="true">·</span>
-                <span className="text-white/85 font-normal">
+                <span className="text-[#F3F0E7] font-normal">
                   {mobileSpotlightPost.readTime}
                 </span>
               </div>
 
-              <span className="font-sans text-3xl font-bold text-[#E5B842] leading-none drop-shadow">
+              <span className="font-sans text-3xl font-bold text-[#F5D061] leading-none drop-shadow">
                 {mobileSpotlightPost.number}
               </span>
             </div>
@@ -242,21 +248,30 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               onClick={(e) => handlePostClick(e, mobileSpotlightPost.slug)}
               className="block focus:outline-none"
             >
-              <h3 className="font-sans text-[1.25rem] sm:text-xl font-bold text-white leading-[1.2] tracking-[-0.01em] mb-2">
+              <h3
+                className="font-sans text-[1.25rem] sm:text-xl font-bold !text-white leading-[1.2] tracking-[-0.01em] mb-2"
+                style={{ color: '#FFFFFF' }}
+              >
                 {mobileSpotlightPost.title}
               </h3>
 
-              <p className="font-sans text-[13px] text-white/80 leading-[1.55] line-clamp-2 mb-4">
+              <p
+                className="font-sans text-[13px] !text-[#F3F0E7] leading-[1.55] line-clamp-2 mb-4"
+                style={{ color: '#F3F0E7' }}
+              >
                 {mobileSpotlightPost.excerpt}
               </p>
             </a>
 
             <div className="pt-3.5 border-t border-[#E5B842]/25 flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <div className="font-sans text-[11.5px] font-semibold text-white truncate">
+                <div
+                  className="font-sans text-[11.5px] font-semibold !text-white truncate"
+                  style={{ color: '#FFFFFF' }}
+                >
                   {mobileSpotlightPost.author.name}
                 </div>
-                <div className="font-sans text-[10.5px] text-[#E5B842] truncate">
+                <div className="font-sans text-[10.5px] text-[#F5D061] truncate">
                   {mobileSpotlightPost.publishedDate}
                 </div>
               </div>
@@ -388,22 +403,22 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2.5 mb-3">
               <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
-              <Scale className="w-3.5 h-3.5 text-[#612912]" aria-hidden="true" />
-              <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#612912]">
+              <Scale className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
+              <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
                 LEGAL INSIGHTS & PUBLICATIONS
               </span>
               <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
             </div>
 
-            <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#452415] leading-[1.08] tracking-[-0.02em]">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2C1309] leading-[1.08] tracking-[-0.02em]">
               Chamber Briefings &{' '}
-              <span className="font-sans italic font-semibold text-[#612912]">
+              <span className="font-sans italic font-semibold text-[#E5B842]">
                 Legal Perspectives.
               </span>
             </h2>
 
-            <p className="font-sans text-[15.5px] sm:text-[17px] text-[#475569] leading-[1.65] font-normal mt-3">
-              Authoritative commentary, procedural guides, and statutory analysis on Pakistani law prepared by the advocates of Qadeer Legal Chambers.
+            <p className="font-sans text-[15.5px] sm:text-[17px] text-[#1E293B] leading-[1.65] font-normal mt-3">
+              Authoritative commentary, procedural guides, and statutory analysis on Pakistani law prepared by the advocates of Rahim Law Associates.
             </p>
           </div>
 
@@ -412,11 +427,12 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             <a
               href="/insights"
               onClick={handleAllClick}
-              className="group inline-flex items-center justify-between gap-3.5 pl-6 pr-2.5 h-[52px] rounded-full bg-[#612912] hover:bg-[#452415] text-white font-sans font-bold text-[12.5px] uppercase tracking-[0.06em] shadow-lg hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap shrink-0"
+              className="group inline-flex items-center justify-between gap-3.5 pl-6 pr-2.5 h-[52px] rounded-full bg-[#612912] hover:bg-[#452415] !text-white text-white font-sans font-bold text-[12.5px] uppercase tracking-[0.06em] shadow-lg hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap shrink-0 border border-[#E5B842]/40"
+              style={{ color: '#FFFFFF' }}
             >
-              <span>View All Publications</span>
+              <span className="!text-white text-white group-hover:!text-white" style={{ color: '#FFFFFF' }}>View All Publications</span>
               <span className="w-9 h-9 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">
-                <ArrowUpRight className="w-4 h-4" />
+                <ArrowUpRight className="w-4 h-4 text-[#452415]" />
               </span>
             </a>
           </div>
@@ -439,11 +455,14 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 onClick={() => handleCategoryChange(category)}
                 className={`px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg font-sans text-[12px] sm:text-[13px] leading-snug font-semibold tracking-[0.02em] transition-all duration-150 text-center cursor-pointer ${
                   isActive
-                    ? 'bg-[#612912] text-white shadow-xs'
-                    : 'bg-slate-50 text-[#334155] hover:bg-[#612912]/10 hover:text-[#612912] border border-slate-200/90'
+                    ? 'bg-[#612912] !text-white text-white border border-[#E5B842]/70 shadow-xs'
+                    : 'bg-white text-[#452415] hover:bg-[#612912] hover:!text-white border border-slate-200/90 shadow-2xs'
                 }`}
+                style={isActive ? { color: '#FFFFFF' } : undefined}
               >
-                {category}
+                <span className={isActive ? '!text-white text-white' : ''} style={isActive ? { color: '#FFFFFF' } : undefined}>
+                  {category}
+                </span>
               </button>
             );
           })}
@@ -462,15 +481,15 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 <img
                   src={leadPost.image}
                   alt={leadPost.title}
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div
                   className="absolute inset-0 bg-gradient-to-t from-[#452415]/85 via-[#452415]/25 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-[#452415]/20 lg:to-[#452415]/90 pointer-events-none"
                   aria-hidden="true"
                 />
-                <div className="absolute top-5 left-5 font-sans text-3xl sm:text-4xl font-bold text-[#E5B842] drop-shadow-md tabular-nums">
+                <div className="absolute top-5 left-5 font-sans text-3xl sm:text-4xl font-bold text-[#F5D061] drop-shadow-md tabular-nums">
                   {leadPost.number}
                 </div>
               </div>
@@ -479,33 +498,39 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               <div className="lg:col-span-7 p-6 sm:p-8 lg:p-11 flex flex-col justify-between relative">
                 <div>
                   {/* Clean Unboxed Metadata */}
-                  <div className="flex flex-wrap items-center gap-2 font-sans text-[12px] sm:text-[12.5px] text-[#E5B842] font-semibold tracking-[0.04em] mb-3">
+                  <div className="flex flex-wrap items-center gap-2 font-sans text-[12px] sm:text-[12.5px] text-[#F5D061] font-semibold tracking-[0.04em] mb-3">
                     <span>Featured Briefing</span>
                     <span aria-hidden="true">·</span>
                     <span>{leadPost.category}</span>
                     <span aria-hidden="true">·</span>
-                    <span className="text-white/80 font-normal">{leadPost.publishedDate}</span>
+                    <span className="text-[#F3F0E7] font-normal">{leadPost.publishedDate}</span>
                     <span aria-hidden="true">·</span>
-                    <span className="text-white/80 font-normal">{leadPost.readTime}</span>
+                    <span className="text-[#F3F0E7] font-normal">{leadPost.readTime}</span>
                   </div>
 
-                  <h3 className="font-sans text-2xl sm:text-3xl lg:text-[2rem] font-bold text-white group-hover:text-[#E5B842] leading-[1.15] tracking-[-0.015em] transition-colors mb-3.5">
+                  <h3
+                    className="font-sans text-2xl sm:text-3xl lg:text-[2rem] font-bold !text-white group-hover:!text-[#F5D061] leading-[1.15] tracking-[-0.015em] transition-colors mb-3.5"
+                    style={{ color: '#FFFFFF' }}
+                  >
                     {leadPost.title}
                   </h3>
 
-                  <p className="font-sans text-[14.5px] sm:text-[15.5px] text-white/85 leading-[1.65] font-normal max-w-2xl">
+                  <p
+                    className="font-sans text-[14.5px] sm:text-[15.5px] !text-[#F3F0E7] leading-[1.65] font-normal max-w-2xl"
+                    style={{ color: '#F3F0E7' }}
+                  >
                     {leadPost.excerpt}
                   </p>
                 </div>
 
                 <div className="mt-7 pt-5 border-t border-[#E5B842]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="font-sans text-[13px] text-white/90">
-                    <span className="font-semibold text-white">{leadPost.author.name}</span>
-                    <span className="mx-2 text-[#E5B842]" aria-hidden="true">·</span>
-                    <span className="text-white/75">{leadPost.author.role}</span>
+                    <span className="font-semibold !text-white" style={{ color: '#FFFFFF' }}>{leadPost.author.name}</span>
+                    <span className="mx-2 text-[#F5D061]" aria-hidden="true">·</span>
+                    <span className="text-[#F3F0E7]">{leadPost.author.role}</span>
                   </div>
 
-                  <span className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.08em] font-bold text-[#E5B842] group-hover:text-white transition-colors whitespace-nowrap shrink-0">
+                  <span className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.08em] font-bold text-[#F5D061] group-hover:text-white transition-colors whitespace-nowrap shrink-0">
                     <span>Read Full Article</span>
                     <span className="w-7 h-7 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5">
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -532,15 +557,15 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                   <img
                     src={post.image}
                     alt={post.title}
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div
                     className="absolute inset-0 bg-gradient-to-t from-[#452415]/75 via-transparent to-transparent pointer-events-none"
                     aria-hidden="true"
                   />
-                  <span className="absolute bottom-3 left-4 font-sans text-2xl font-bold text-white drop-shadow tabular-nums">
+                  <span className="absolute bottom-3 left-4 font-sans text-2xl font-bold text-[#F5D061] drop-shadow tabular-nums">
                     {post.number}
                   </span>
                 </div>
@@ -548,7 +573,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 {/* Card Copy */}
                 <div className="p-6 pb-4">
                   {/* Unboxed Clean Metadata */}
-                  <div className="flex flex-wrap items-center gap-1.5 font-sans text-[12px] text-[#612912] font-semibold mb-2.5">
+                  <div className="flex flex-wrap items-center gap-1.5 font-sans text-[12px] text-[#E5B842] font-semibold mb-2.5">
                     <span>{post.category}</span>
                     <span className="text-[#64748B]" aria-hidden="true">·</span>
                     <span className="text-[#64748B] font-normal">{post.publishedDate}</span>
@@ -556,11 +581,14 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                     <span className="text-[#64748B] font-normal">{post.readTime}</span>
                   </div>
 
-                  <h3 className="font-sans text-xl sm:text-[1.35rem] font-bold text-[#452415] group-hover:text-[#612912] leading-[1.22] tracking-[-0.01em] transition-colors mb-2.5">
+                  <h3
+                    className="font-sans text-xl sm:text-[1.35rem] font-bold text-[#2C1309] group-hover:text-[#612912] leading-[1.22] tracking-[-0.01em] transition-colors mb-2.5"
+                    style={{ color: '#2C1309' }}
+                  >
                     {post.title}
                   </h3>
 
-                  <p className="font-sans text-[14px] sm:text-[14.5px] text-[#64748B] leading-[1.6] font-normal line-clamp-3">
+                  <p className="font-sans text-[14px] sm:text-[14.5px] text-[#334155] leading-[1.6] font-normal line-clamp-3">
                     {post.excerpt}
                   </p>
                 </div>
@@ -569,7 +597,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               {/* Card Footer with Direct Link Affordance */}
               <div className="px-6 pb-5 pt-3.5 border-t border-slate-200 flex items-center justify-between gap-2">
                 <div className="font-sans text-[12px] text-[#475569] truncate">
-                  By <span className="font-semibold text-[#452415]">{post.author.name}</span>
+                  By <span className="font-semibold text-[#2C1309]">{post.author.name}</span>
                 </div>
 
                 <span className="inline-flex items-center gap-1.5 font-sans text-[12px] font-bold uppercase tracking-[0.06em] text-[#612912] group-hover:text-[#452415] whitespace-nowrap shrink-0">
@@ -591,7 +619,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             </div>
             <div>
               <div className="font-sans text-base sm:text-lg font-bold text-[#452415]">
-                Explore the Complete Qadeer Legal Chambers Publication Archive
+                Explore the Complete Rahim Law Associates Publication Archive
               </div>
               <div className="font-sans text-[13px] text-[#64748B]">
                 Browse all {INSIGHTS_DATA.length} in-depth legal blogs, statutory guides, and cross-border commentaries on a dedicated page.
@@ -602,13 +630,14 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           <a
             href="/insights"
             onClick={handleAllClick}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#612912] hover:bg-[#452415] text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-sm"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#612912] hover:bg-[#452415] !text-white text-white font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-sm border border-[#E5B842]/30"
+            style={{ color: '#FFFFFF' }}
           >
-            <span>Open All Blogs Page</span>
+            <span className="!text-white text-white group-hover:!text-white" style={{ color: '#FFFFFF' }}>Open All Blogs Page</span>
             <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
           </a>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
