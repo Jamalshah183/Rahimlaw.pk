@@ -112,9 +112,10 @@ export const PracticeModal: React.FC<PracticeModalProps> = ({
                 onClose();
                 onConsult(practice.title);
               }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#612912] hover:bg-[#452415] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#612912] hover:bg-[#452415] !text-white text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full transition-colors shadow-md cursor-pointer"
+              style={{ color: '#FFFFFF' }}
             >
-              <span>Consult on {practice.title}</span>
+              <span className="!text-white text-white font-bold" style={{ color: '#FFFFFF' }}>Consult on {practice.title}</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#E5B842]" />
             </button>
           </div>

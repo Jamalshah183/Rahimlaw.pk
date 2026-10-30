@@ -14,17 +14,19 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
   const [selectedPractice, setSelectedPractice] = useState<PracticeArea | null>(null);
 
   return (
-    <motion.section
-      initial={{ scale: 0.8, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+    <section
       id="practice-areas"
       className="relative z-[12] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-28 md:pb-36 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        {/* Section Header with Fade & Slide Down */}
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+        >
           <div className="inline-flex items-center gap-2.5 mb-3">
             <span className="h-[1px] w-7 bg-[#E5B842]" style={{ backgroundColor: '#E5B842' }} aria-hidden="true" />
             <Scale className="w-3.5 h-3.5 !text-[#E5B842]" style={{ color: '#E5B842' }} aria-hidden="true" />
@@ -44,13 +46,17 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
           <p className="font-sans text-[15px] sm:text-[16.5px] text-[#1E293B] leading-[1.65] font-normal">
             Comprehensive litigation, transactional counsel, and Pakistani-law advisory tailored for domestic clients, commercial enterprises, overseas Pakistanis, and instructing foreign firms.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Editorial Numbered Practice List */}
+        {/* Editorial Numbered Practice List with Staggered Slide In */}
         <div className="divide-y divide-slate-200 border-t border-b border-slate-200">
           {FIRM_CONFIG.practiceAreas.map((practice, index) => (
-            <div
+            <motion.div
               key={practice.id}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: 'easeOut' }}
               role="button"
               tabIndex={0}
               onClick={() => setSelectedPractice(practice)}
@@ -86,7 +92,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
                   <ArrowUpRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -100,6 +106,6 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
           onSelectPracticeForConsultation(title);
         }}
       />
-    </motion.section>
+    </section>
   );
 };

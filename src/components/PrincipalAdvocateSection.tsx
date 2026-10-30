@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   Scale,
   Award,
@@ -62,7 +63,13 @@ export const PrincipalAdvocateSection: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Artistic Poster Masthead / Top Register */}
-        <div className="hidden sm:flex flex-wrap items-center justify-between gap-3 border-b border-[#E5B842]/25 pb-3 sm:pb-3.5 mb-3 sm:mb-5 lg:mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6 }}
+          className="hidden sm:flex flex-wrap items-center justify-between gap-3 border-b border-[#E5B842]/25 pb-3 sm:pb-3.5 mb-3 sm:mb-5 lg:mb-6"
+        >
           <div className="flex items-center gap-2">
             <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E5B842]" aria-hidden="true" />
             <span className="font-sans text-[10.5px] sm:text-[12px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#E5B842]">
@@ -75,14 +82,20 @@ export const PrincipalAdvocateSection: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-1.5 font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.12em] sm:tracking-[0.16em] text-[#E5B842] font-semibold">
-            <span>SIALKOT & LAHORE</span>
+            <span>ISLAMABAD · NATIONWIDE & GLOBAL</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Poster Composition */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-end -mt-2 sm:-mt-5 lg:-mt-7">
           {/* Left Column: Typography */}
-          <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-center items-center text-center sm:items-start sm:text-left self-center order-1 pt-14 pb-2 sm:pt-4 sm:pb-4 lg:pt-6 lg:pb-8 z-20">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
+            className="md:col-span-6 lg:col-span-5 flex flex-col justify-center items-center text-center sm:items-start sm:text-left self-center order-1 pt-24 sm:pt-4 lg:pt-6 pb-2 sm:pb-4 lg:pb-8 z-25 mt-8 sm:mt-0"
+          >
             {/* Poster Title */}
             <h2 className="font-sans font-bold text-[2.1rem] sm:text-4xl md:text-[2.9rem] lg:text-[3.3rem] xl:text-[3.8rem] text-white leading-[1.05] sm:leading-[1.02] tracking-[-0.02em] mb-3.5 sm:mb-4 drop-shadow-sm text-center sm:text-left">
               <span className="block whitespace-nowrap !text-white text-white">Mr. Rahim</span>
@@ -155,10 +168,16 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#452415] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Image */}
-          <div className="md:col-span-6 lg:col-span-7 order-2 relative flex items-end justify-center md:justify-end self-end h-[560px] sm:h-[640px] md:h-[780px] lg:h-[1020px] xl:h-[1120px] -mx-4 sm:mx-0 w-[calc(100%+2rem)] sm:w-full z-10 pointer-events-none select-none mb-0">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.85, ease: 'easeOut' }}
+            className="md:col-span-6 lg:col-span-7 order-2 relative flex items-end justify-center md:justify-end self-end h-[560px] sm:h-[640px] md:h-[780px] lg:h-[1020px] xl:h-[1120px] -mx-4 sm:mx-0 w-[calc(100%+2rem)] sm:w-full z-10 pointer-events-none select-none mb-0"
+          >
             <div className="w-full h-full flex items-end justify-center md:justify-end">
               <img
                 src={REMOTE_STUDIO_IMG}
@@ -168,7 +187,7 @@ export const PrincipalAdvocateSection: React.FC = () => {
                 className="w-auto h-full max-h-[1180px] object-contain object-bottom drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)] scale-140 sm:scale-125 lg:scale-135 xl:scale-140 origin-bottom translate-y-0.5 sm:translate-y-1 lg:translate-y-1.5"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

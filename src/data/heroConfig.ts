@@ -1,11 +1,11 @@
 /**
- * Qadeer Legal Chambers - Hero Section Configuration
+ * Rahim Law Associates - Hero Section Configuration
  * Centralized, independently replaceable configuration for all hero imagery,
  * branding, navigation, copy, and visual parameters.
  */
 
-import heroLeftBg from '../assets/reference/hero_bg_left.avif';
-import heroRightBg from '../assets/reference/hero_bg_scales.avif';
+import heroLeftBg from '../assets/images/hero_bg_left_1793233852825.jpg';
+import heroRightBg from '../assets/images/classical_marble_column_1792242281393.jpg';
 import heroLawyerCutout from '../assets/images/hero_statue_justice_cutout.png';
 
 export interface HeroConfig {
@@ -68,18 +68,18 @@ export const heroConfig: HeroConfig = {
   // Brand Palette
   colors: {
     primaryBrown: "#612912",
-    deepBrown: "#452415",
+    deepBrown: "#612912",
     primaryCream: "#FFFFFF",
     softCream: "#F8FAFC",
     warmGold: "#E5B842",
     darkText: "#0F172A",
     mutedText: "#475569",
-    leftOverlayOpacity: 0.90, // Rich, warm dark brown overlay
+    leftOverlayOpacity: 0.88, // Rich, warm copper matching the CEO section
   },
 
   // Eyebrow badge
   eyebrow: {
-    text: "QADEER LEGAL CHAMBERS",
+    text: "RAHIM LAW ASSOCIATES",
     icon: "Scale",
   },
 
@@ -96,18 +96,19 @@ export const heroConfig: HeroConfig = {
 
   // CTAs
   primaryCTA: {
-    label: "OUR PRACTICE AREAS",
-    href: "#practice-areas",
+    label: "CONTACT US",
+    href: "#contact",
   },
   secondaryCTA: {
-    label: "INTERNATIONAL COUNSEL",
-    action: "#international-counsel",
+    label: "OUR PRACTICE AREAS",
+    action: "#practice-areas",
   },
 
   // Navigation (top-right)
   navigation: [
     { label: "About", href: "#about" },
     { label: "Principal", href: "#principal-advocate" },
+    { label: "Our Team", href: "#team" },
     { label: "Practice Areas", href: "#practice-areas" },
     { label: "Insights", href: "#insights" },
     { label: "Contact", href: "#contact" },

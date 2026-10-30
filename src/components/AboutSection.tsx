@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import neutralChambersSmWebp from '../assets/images/chambers_architecture_neutral_sm.webp';
 import neutralChambersMdWebp from '../assets/images/chambers_architecture_neutral_md.webp';
 import neutralChambersLgWebp from '../assets/images/chambers_architecture_neutral_lg.webp';
@@ -15,13 +16,73 @@ interface AboutSectionProps {
   onSelectPracticeForConsultation?: (practiceTitle: string) => void;
 }
 
-const STATS_DATA = [
-  { value: '18+', label: 'Years Experience' },
-  { value: '1,250+', label: 'Cases Handled' },
-  { value: '340+', label: 'Corporate Matters' },
-  { value: '30+', label: 'Courts & Tribunals' },
-  { value: '98%', label: 'Client Satisfaction' },
+interface StatItem {
+  numericValue: number;
+  suffix: string;
+  hasComma?: boolean;
+  value: string;
+  label: string;
+}
+
+const STATS_DATA: StatItem[] = [
+  { numericValue: 18, suffix: '+', value: '18+', label: 'Years Experience' },
+  { numericValue: 1250, suffix: '+', hasComma: true, value: '1,250+', label: 'Cases Handled' },
+  { numericValue: 340, suffix: '+', value: '340+', label: 'Corporate Matters' },
+  { numericValue: 30, suffix: '+', value: '30+', label: 'Courts & Tribunals' },
+  { numericValue: 98, suffix: '%', value: '98%', label: 'Client Satisfaction' },
 ];
+
+const StatsBarCounter: React.FC<{
+  target: number;
+  suffix?: string;
+  hasComma?: boolean;
+  active: boolean;
+  duration?: number;
+}> = ({ target, suffix = '', hasComma = false, active, duration = 1.8 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let startTimestamp: number | null = null;
+
+    if (active) {
+      const step = (timestamp: number) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const elapsed = (timestamp - startTimestamp) / 1000;
+        const progress = Math.min(elapsed / duration, 1);
+        // Easing: cubic ease-out for a smooth finish
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentVal = Math.round(easeOut * target);
+
+        setCount(currentVal);
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(step);
+        } else {
+          setCount(target);
+        }
+      };
+
+      animationFrameId = requestAnimationFrame(step);
+    } else {
+      setCount(0);
+    }
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [active, target, duration]);
+
+  const formatted = hasComma ? count.toLocaleString('en-US') : count.toString();
+
+  return (
+    <span className="tabular-nums">
+      {formatted}{suffix}
+    </span>
+  );
+};
 
 const CREDIBILITY_PILLARS = [
   {
@@ -31,7 +92,7 @@ const CREDIBILITY_PILLARS = [
     titleMain: 'Established',
     titleAccent: 'Legal Practice',
     bullets: [
-      'Dual chambers in Sialkot & Lahore',
+      'Headquartered in Islamabad, serving all Pakistan',
       'High Courts & appellate bench counsel',
       'Direct senior partner advocacy',
     ],
@@ -65,6 +126,8 @@ const CREDIBILITY_PILLARS = [
 export const AboutSection: React.FC<AboutSectionProps> = () => {
   const [activePillarIndex, setActivePillarIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const isStatsInView = useInView(statsRef, { once: false, amount: 0.25 });
 
   // Automated continuous hands-free card progression (4.5s cycle per pillar - never pauses on hover)
   useEffect(() => {
@@ -100,7 +163,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
         {/* ====================================================================
             1. INSPIRATION-ALIGNED CENTERED HEADER
             ==================================================================== */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
+        >
           {/* Centered Headline matching Hero typography */}
           <h2 className="font-sans text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#452415] tracking-[-0.02em] leading-[1.12] mb-3.5 sm:mb-4">
             Bringing Disciplined Advocacy &{' '}
@@ -112,9 +181,9 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
 
           {/* Centered Subtitle in Neue Haas Grotesk Display */}
           <p className="font-sans text-[14.5px] sm:text-[16px] text-[#5A3322] leading-[1.65] font-medium max-w-2xl mx-auto">
-            Established Pakistani legal practice operating from chambers in Sialkot and Lahore—serving domestic clients, commercial enterprises, overseas Pakistanis, and international law firms.
+            Established Pakistani legal practice based in Islamabad—serving clients across the entire country, overseas Pakistanis, and international commercial enterprises.
           </p>
-        </div>
+        </motion.div>
 
         {/* ====================================================================
             2. HERO FEATURED IMAGE (Gender-Neutral & Area-Neutral Law Chambers)
@@ -122,7 +191,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             - 0ms LQIP blur placeholder prevents blank boxes and layout shifts
             - loading="eager", decoding="async", fetchPriority="high" for instant load
             ==================================================================== */}
-        <div className="relative mb-6 sm:mb-8">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="relative mb-6 sm:mb-8"
+        >
           <div className="relative w-full aspect-[16/10] sm:aspect-[16/8.5] lg:aspect-[21/9] rounded-[24px] sm:rounded-[34px] lg:rounded-[42px] overflow-hidden shadow-xl border border-slate-200/90 bg-[#452415] group">
             {/* Instant 0ms Base64 Blur Background (396 bytes) */}
             <div
@@ -160,12 +235,19 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               />
             </picture>
           </div>
-        </div>
+        </motion.div>
 
         {/* ====================================================================
             3. REFINED STATS BAR (Compact, premium, uniform Neue Haas numerals)
             ==================================================================== */}
-        <div className="bg-white border border-slate-200/90 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-6 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.06)] mb-8 sm:mb-10">
+        <motion.div
+          ref={statsRef}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, delay: 0.1 }}
+          className="bg-white border border-slate-200/90 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-6 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.06)] mb-8 sm:mb-10"
+        >
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-3 gap-x-2 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             {STATS_DATA.map((stat, idx) => (
               <div
@@ -175,7 +257,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                 } ${idx > 0 ? 'sm:pl-3 lg:pl-5' : ''}`}
               >
                 <div className="font-sans text-xl sm:text-2xl lg:text-[1.65rem] font-bold text-[#452415] tracking-tight leading-none mb-1 [font-variant-numeric:lining-nums]">
-                  {stat.value}
+                  <StatsBarCounter
+                    target={stat.numericValue}
+                    suffix={stat.suffix}
+                    hasComma={stat.hasComma}
+                    active={isStatsInView}
+                    duration={1.8}
+                  />
                 </div>
                 <div className="font-sans text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#612912] leading-tight">
                   {stat.label}
@@ -183,7 +271,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* ====================================================================
             4. MOBILE INTERACTIVE PILLAR SWITCHER (Eliminates long scrolling!)
@@ -251,9 +339,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
             5. DESKTOP 3-COLUMN CREDIBILITY GRID (For tablet & desktop screens)
             ==================================================================== */}
         <div className="hidden md:grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {CREDIBILITY_PILLARS.map((pillar) => (
-            <div
+          {CREDIBILITY_PILLARS.map((pillar, idx) => (
+            <motion.div
               key={pillar.number}
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.65, delay: idx * 0.12, ease: 'easeOut' }}
               className="group relative h-full rounded-2xl bg-gradient-to-b from-white via-[#FDFCFA] to-[#FAF8F5] border border-slate-200/90 hover:border-[#E5B842]/80 shadow-[0_4px_20px_-4px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_45px_-12px_rgba(148, 84, 45,0.18),0_0_0_1px_rgba(229,184,66,0.35)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col justify-between"
             >
               {/* Top Gilded Accent Filigree */}
@@ -292,9 +384,9 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
 
                   {/* Focused Practice Points - Single Line per item, Center Aligned, Font Matching Hero */}
                   <ul className="space-y-2.5 w-full text-center">
-                    {pillar.bullets.map((bullet, idx) => (
+                    {pillar.bullets.map((bullet, bIdx) => (
                       <li
-                        key={idx}
+                        key={bIdx}
                         className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-50/80 border border-slate-100/90 group-hover:bg-white group-hover:border-[#E5B842]/30 transition-all duration-300 w-full overflow-hidden text-center"
                       >
                         <span className="w-1.5 h-1.5 rotate-45 bg-[#B37812] border border-[#E5B842] shrink-0 group-hover:bg-[#E5B842] group-hover:border-[#B37812] transition-colors" />
@@ -306,7 +398,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 

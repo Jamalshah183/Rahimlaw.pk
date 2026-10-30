@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronDown, HelpCircle, PhoneCall } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
 
@@ -16,7 +17,13 @@ export const FAQ: React.FC = () => {
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: 'easeOut' }}
+          className="text-center mb-16"
+        >
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
             <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
@@ -32,15 +39,19 @@ export const FAQ: React.FC = () => {
           <p className="font-sans text-[16px] sm:text-[17px] text-white/90 leading-[1.65] font-normal">
             Essential information regarding our consultation procedures, case intake, and representation guidelines.
           </p>
-        </div>
+        </motion.div>
 
         {/* Accordions */}
         <div className="space-y-4">
-          {FIRM_CONFIG.faqs.map((faq) => {
+          {FIRM_CONFIG.faqs.map((faq, idx) => {
             const isOpen = openId === faq.id;
             return (
-              <div
+              <motion.div
                 key={faq.id}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.55, delay: idx * 0.08, ease: 'easeOut' }}
                 className="bg-[#452415]/75 rounded-xl border border-[#E5B842]/35 overflow-hidden transition-colors"
               >
                 <button
@@ -68,13 +79,19 @@ export const FAQ: React.FC = () => {
                     <p>{faq.answer}</p>
                   </div>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
         {/* Still have questions prompt */}
-        <div className="mt-12 p-6 rounded-xl bg-[#452415]/90 border border-[#E5B842]/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, delay: 0.2 }}
+          className="mt-12 p-6 rounded-xl bg-[#452415]/90 border border-[#E5B842]/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#E5B842]/20 flex items-center justify-center shrink-0">
               <HelpCircle className="w-5 h-5 text-[#E5B842]" />
@@ -100,7 +117,7 @@ export const FAQ: React.FC = () => {
             <PhoneCall className="w-3.5 h-3.5 text-[#452415]" />
             <span>Inquire on WhatsApp</span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

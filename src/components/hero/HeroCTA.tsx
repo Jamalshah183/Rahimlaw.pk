@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight, Scale } from 'lucide-react';
 import { heroConfig } from '../../data/heroConfig';
 
 interface HeroCTAProps {
@@ -10,7 +10,7 @@ export const HeroCTA: React.FC<HeroCTAProps> = () => {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 pt-1 sm:pt-3">
       {/* 
-        Primary CTA Button: OUR PRACTICE AREAS -> #practice-areas
+        Primary CTA Button: CONTACT US -> #contact
       */}
       <a
         href={heroConfig.primaryCTA.href}
@@ -23,7 +23,7 @@ export const HeroCTA: React.FC<HeroCTAProps> = () => {
       </a>
 
       {/* 
-        Secondary CTA Button: INTERNATIONAL COUNSEL -> #international-counsel
+        Secondary CTA Button: OUR PRACTICE AREAS -> #practice-areas
       */}
       <a
         href={heroConfig.secondaryCTA.action}
@@ -31,7 +31,7 @@ export const HeroCTA: React.FC<HeroCTAProps> = () => {
       >
         <span className="tracking-[0.05em] uppercase">{heroConfig.secondaryCTA.label}</span>
         <span className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full bg-[#612912] text-white flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs shrink-0">
-          <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </span>
       </a>
     </div>

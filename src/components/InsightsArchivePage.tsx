@@ -189,7 +189,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
             <div className="inline-flex items-center gap-2 mb-3">
               <Scale className="w-4 h-4 text-[#E5B842]" aria-hidden="true" />
               <span className="font-sans text-[10.5px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
-                QADEER LEGAL CHAMBERS · KNOWLEDGE ARCHIVE
+                RAHIM LAW ASSOCIATES · KNOWLEDGE ARCHIVE
               </span>
             </div>
 

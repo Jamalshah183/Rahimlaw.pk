@@ -436,17 +436,19 @@ export const TeamSection: React.FC = () => {
   }, [selectedProfile]);
 
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 1.2, ease: 'easeInOut' }}
+    <section
       id="team"
       className="relative z-[18] -mt-10 sm:-mt-12 lg:-mt-14 pt-20 sm:pt-24 md:pt-28 pb-24 md:pb-32 bg-[#FFFFFF] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] rounded-b-[50px] sm:rounded-b-[65px] lg:rounded-b-[80px] border-t-2 border-b-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10),0_30px_60px_-15px_rgba(15,23,42,0.12)] overflow-hidden"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Centered Heading */}
-        <div className="text-center mb-12 sm:mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center mb-12 sm:mb-16"
+        >
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
             <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
@@ -458,23 +460,36 @@ export const TeamSection: React.FC = () => {
           <h2 className="font-sans text-3xl sm:text-4xl lg:text-[3.15rem] xl:text-[3.4rem] font-bold text-[#2C1309] leading-[1.08] tracking-[-0.02em]">
             Our <span className="font-sans italic font-semibold text-[#E5B842]">Team</span>
           </h2>
-        </div>
+        </motion.div>
 
         {/* Board of Directors / Team Member Cards */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 items-end justify-center">
-          {TEAM_MEMBERS.map((member) => (
-            <TeamMemberCard
+          {TEAM_MEMBERS.map((member, idx) => (
+            <motion.div
               key={member.id}
-              member={member}
-              onSelect={(m, src) => setSelectedProfile({ member: m, cutoutSrc: src })}
-            />
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.65, delay: idx * 0.12, ease: 'easeOut' }}
+            >
+              <TeamMemberCard
+                member={member}
+                onSelect={(m, src) => setSelectedProfile({ member: m, cutoutSrc: src })}
+              />
+            </motion.div>
           ))}
         </div>
 
         {/* Bottom Centered Description Text matching the reference layout */}
-        <p className="mt-10 sm:mt-12 max-w-4xl mx-auto text-center font-sans text-[15px] sm:text-[16px] text-[#475569] leading-[1.65] font-normal">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.65, delay: 0.3 }}
+          className="mt-10 sm:mt-12 max-w-4xl mx-auto text-center font-sans text-[15px] sm:text-[16px] text-[#475569] leading-[1.65] font-normal"
+        >
           Our chambers are led by seasoned partners and senior advocates bringing decades of courtroom trial experience, corporate governance advisory, and constitutional advocacy to every client mandate.
-        </p>
+        </motion.p>
       </div>
 
       {/* Interactive Executive Advocate Profile Modal */}
@@ -671,6 +686,6 @@ export const TeamSection: React.FC = () => {
           </div>,
           document.body
         )}
-    </motion.section>
+    </section>
   );
 };

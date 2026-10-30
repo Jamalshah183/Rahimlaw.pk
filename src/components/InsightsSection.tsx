@@ -82,11 +82,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, x: -50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+    <section
       id="insights"
       className="relative z-[16] -mt-10 sm:-mt-12 lg:-mt-14 pt-16 sm:pt-22 lg:pt-28 pb-24 sm:pb-28 lg:pb-36 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden"
     >
@@ -398,8 +394,14 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           DESKTOP EDITORIAL SHOWCASE & 3-COLUMN GRID (hidden lg:block)
           ====================================================================== */}
       <div className="hidden lg:block relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Section Header Lockup */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-12">
+        {/* Top Section Header Lockup with Slide & Fade Down */}
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-12"
+        >
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2.5 mb-3">
               <span className="h-[1px] w-7 bg-[#E5B842]" aria-hidden="true" />
@@ -436,7 +438,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
               </span>
             </a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Interactive Category Filter Controls (Functional Filter Buttons) */}
         <div
@@ -470,9 +472,13 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
 
         {/* Tier 1: Featured Lead Publication Showcase (Shown on "All Publications") */}
         {activeCategory === 'All Publications' && (
-          <a
+          <motion.a
             href={`/insights/${leadPost.slug}`}
             onClick={(e) => handlePostClick(e, leadPost.slug)}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
             className="group block mb-10 sm:mb-12 rounded-3xl bg-gradient-to-r from-[#452415] via-[#452415] to-[#452415] text-white border-2 border-[#E5B842]/45 shadow-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B842]"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
@@ -539,16 +545,20 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 </div>
               </div>
             </div>
-          </a>
+          </motion.a>
         )}
 
         {/* Tier 2: Curated Chamber Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {displayedGridPosts.map((post) => (
-            <a
+          {displayedGridPosts.map((post, idx) => (
+            <motion.a
               key={post.id}
               href={`/insights/${post.slug}`}
               onClick={(e) => handlePostClick(e, post.slug)}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
               className="group bg-white rounded-2xl border border-slate-200/90 hover:border-[#612912]/50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-[#612912]"
             >
               <div>
@@ -607,12 +617,18 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                   </span>
                 </span>
               </div>
-            </a>
+            </motion.a>
           ))}
         </div>
 
         {/* Bottom Archive Bar — Direct Entry to the Separate All-Blogs Page */}
-        <div className="mt-10 sm:mt-12 p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6 }}
+          className="mt-10 sm:mt-12 p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm"
+        >
           <div className="flex items-center gap-3.5 text-center sm:text-left">
             <div className="w-10 h-10 rounded-full bg-[#612912] text-[#E5B842] flex items-center justify-center shrink-0">
               <BookOpen className="w-4.5 h-4.5" aria-hidden="true" />
@@ -636,8 +652,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             <span className="!text-white text-white group-hover:!text-white" style={{ color: '#FFFFFF' }}>Open All Blogs Page</span>
             <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
           </a>
-        </div>
+        </motion.div>
       </div>
-    </motion.section>
+    </section>
   );
 };

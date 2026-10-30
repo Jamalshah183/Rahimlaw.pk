@@ -19,7 +19,7 @@ export const Footer: React.FC<FooterProps> = ({
   const { logoSrc, isProcessed } = useTransparentLogo(heroConfig.logo);
 
   const whatsappText = selectedPracticeArea
-    ? `Assalam-o-Alaikum Qadeer Legal Chambers, I would like to request a legal consultation regarding ${selectedPracticeArea}.`
+    ? `Assalam-o-Alaikum Rahim Law Associates, I would like to request a legal consultation regarding ${selectedPracticeArea}.`
     : FIRM_CONFIG.whatsappMessage;
 
   const whatsappHref = `https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
@@ -29,7 +29,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer
       id="contact"
-      className="sticky bottom-0 z-[1] w-full bg-[#452415] text-white -mt-12 sm:-mt-16 lg:-mt-20 pt-24 sm:pt-32 lg:pt-36 pb-8 sm:pb-10 overflow-hidden select-none transform-gpu will-change-transform"
+      className="sticky bottom-0 z-[1] w-full bg-[#612912] text-white -mt-12 sm:-mt-16 lg:-mt-20 pt-24 sm:pt-32 lg:pt-36 pb-8 sm:pb-10 overflow-hidden select-none transform-gpu will-change-transform"
     >
       {/* Background Legal Desk & Gavel Photograph (Person-Free Still Life) */}
       <div
@@ -40,12 +40,12 @@ export const Footer: React.FC<FooterProps> = ({
         aria-hidden="true"
       />
 
-      {/* Rich Vibrant copper Atmospheric Overlay matching the bright website vibe */}
+      {/* Atmospheric Color Overlay matching CEO Section background color (#612912) */}
       <div
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{
           background:
-            'linear-gradient(180deg, rgba(71, 51, 42, 0.92) 0%, rgba(71, 51, 42, 0.90) 50%, rgba(44, 24, 17, 0.96) 100%)',
+            'linear-gradient(180deg, rgba(97, 41, 18, 0.94) 0%, rgba(97, 41, 18, 0.91) 50%, rgba(69, 36, 21, 0.96) 100%)',
         }}
         aria-hidden="true"
       />
@@ -100,12 +100,12 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="flex items-center">
             <a
               href="#hero"
-              aria-label="Rahim Legal Chambers - Home"
+              aria-label="Rahim Law Associates - Home"
               className="inline-flex items-center transition-transform duration-200 hover:scale-[1.03] shrink-0"
             >
               <img
                 src={logoSrc}
-                alt="Rahim Legal Chambers Logo"
+                alt="Rahim Law Associates Logo"
                 className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-md"
               />
             </a>
@@ -119,9 +119,9 @@ export const Footer: React.FC<FooterProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] text-[#612912] hover:text-[#452415] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105"
+              className="group w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105 border border-[#E5B842]/40"
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-4 h-4 text-[#612912] fill-[#612912] group-hover:text-white group-hover:fill-white transition-colors" style={{ fill: '#612912' }} viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z" />
               </svg>
             </a>
@@ -132,9 +132,9 @@ export const Footer: React.FC<FooterProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] text-[#612912] hover:text-[#452415] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105"
+              className="group w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105 border border-[#E5B842]/40"
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-4 h-4 text-[#612912] fill-[#612912] group-hover:text-white group-hover:fill-white transition-colors" style={{ fill: '#612912' }} viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
               </svg>
             </a>
@@ -145,9 +145,9 @@ export const Footer: React.FC<FooterProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] text-[#612912] hover:text-[#452415] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105"
+              className="group w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-[#E5B842] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-105 border border-[#E5B842]/40"
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-4 h-4 text-[#612912] fill-[#612912] group-hover:text-white group-hover:fill-white transition-colors" style={{ fill: '#612912' }} viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z" />
               </svg>
             </a>
@@ -165,6 +165,12 @@ export const Footer: React.FC<FooterProps> = ({
             </a>
             <a href="#about" className="hover:text-[#E5B842] transition-colors">
               About
+            </a>
+            <a href="#principal-advocate" className="hover:text-[#E5B842] transition-colors">
+              Principal
+            </a>
+            <a href="#team" className="hover:text-[#E5B842] transition-colors">
+              Our Team
             </a>
             <a href="#practice-areas" className="hover:text-[#E5B842] transition-colors">
               Service
@@ -186,7 +192,7 @@ export const Footer: React.FC<FooterProps> = ({
           </nav>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-[12.5px] sm:text-[13.5px] text-white/80">
-            <span>© {new Date().getFullYear()} Rahim Legal Chambers. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} Rahim Law Associates. All rights reserved.</span>
             <span className="text-[#E5B842]/50" aria-hidden="true">·</span>
             <button
               type="button"

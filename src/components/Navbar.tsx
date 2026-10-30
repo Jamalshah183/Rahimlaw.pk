@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Phone } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
+import { heroConfig } from '../data/heroConfig';
+import { useTransparentLogo } from '../utils/useTransparentLogo';
 
 interface NavbarProps {
   onOpenConsultation: () => void;
@@ -9,6 +11,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { logoSrc } = useTransparentLogo(heroConfig.logo);
 
   useEffect(() => {
     let ticking = false;
@@ -62,12 +65,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             {/* 
               Navigation Links
             */}
-            <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-[#452415]">
+            <nav className="hidden lg:flex items-center gap-7 xl:gap-8 text-[15px] font-semibold text-[#452415]">
               <a
                 href="#about"
                 className="hover:text-[#612912] transition-colors relative py-1"
               >
                 About
+              </a>
+              <a
+                href="#principal-advocate"
+                className="hover:text-[#612912] transition-colors relative py-1"
+              >
+                Principal
+              </a>
+              <a
+                href="#team"
+                className="hover:text-[#612912] transition-colors relative py-1"
+              >
+                Our Team
               </a>
               <a
                 href="#practice-areas"
@@ -131,30 +146,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
 
           {/* Drawer content */}
           <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
-            <div className="space-y-6 pt-16">
-              <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-[#E5B842] font-semibold block mb-0.5">
-                    Advocates • Litigation • Legal Advisory
-                  </span>
-                  <span className="text-lg font-serif font-bold text-[#612912]">
-                    Rahim Law Associates
-                  </span>
-                </div>
-                <button
-                  type="button"
+            <div className="space-y-6 pt-2 relative">
+              {/* Close Button at top-right */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="absolute top-0 right-0 p-2 rounded-full text-[#452415] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Big, centered logo without background */}
+              <div className="flex flex-col items-center justify-center pt-3 pb-4 border-b border-slate-100">
+                <a
+                  href="#hero"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-full text-[#452415] hover:bg-slate-100"
+                  className="flex items-center justify-center focus:outline-none"
+                  aria-label="Rahim Law Associates - Home"
                 >
-                  <X className="w-5 h-5" />
-                </button>
+                  <img
+                    src={logoSrc}
+                    alt="Rahim Law Associates"
+                    className="h-24 sm:h-28 w-auto object-contain mx-auto drop-shadow-sm"
+                  />
+                </a>
               </div>
 
               <nav className="flex flex-col space-y-3">
                 {[
                   { label: 'About', href: '#about' },
-                  { label: 'Service', href: '#practice-areas' },
-                  { label: 'Testimonial', href: '#testimonials' },
+                  { label: 'Principal', href: '#principal-advocate' },
+                  { label: 'Our Team', href: '#team' },
+                  { label: 'Practice Areas', href: '#practice-areas' },
+                  { label: 'Testimonials', href: '#testimonials' },
                   { label: 'FAQ', href: '#faq' },
                   { label: 'Contact', href: '#contact' },
                 ].map((item) => (
@@ -178,9 +203,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-3 bg-[#612912] text-white text-xs uppercase tracking-wider font-semibold rounded-full text-center block shadow-md hover:bg-[#800C22] transition-colors cursor-pointer"
+                className="w-full py-3.5 bg-[#612912] hover:bg-[#800C22] !text-white text-xs uppercase tracking-wider font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                style={{ color: '#FFFFFF' }}
               >
-                Free Consultation
+                <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
+                  Free Consultation
+                </span>
               </button>
 
               <a

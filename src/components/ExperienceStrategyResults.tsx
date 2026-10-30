@@ -49,11 +49,7 @@ const PILLARS = [
 
 export const ExperienceStrategyResults: React.FC = () => {
   return (
-    <motion.section
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+    <section
       id="approach"
       className="relative z-[14] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-[#FFFFFF] text-[#452415] rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#612912]/20 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.10)] overflow-hidden font-sans"
     >
@@ -126,8 +122,14 @@ export const ExperienceStrategyResults: React.FC = () => {
           ====================================================================== */}
       <div id="why-choose-us" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         
-        {/* Centered Section Header (Matching Upper Sections Sans Typography) */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18 md:mb-20">
+        {/* Centered Section Header with Fade & Slide Down */}
+        <motion.div
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center max-w-3xl mx-auto mb-14 sm:mb-18 md:mb-20"
+        >
           {/* Eyebrow with flanking gold rules */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
             <span className="h-[1px] w-8 sm:w-12 md:w-16 bg-[#E5B842]" aria-hidden="true" />
@@ -153,27 +155,35 @@ export const ExperienceStrategyResults: React.FC = () => {
           <p className="font-sans text-[14.5px] sm:text-[16px] text-[#475569] leading-[1.65] font-normal max-w-2xl mx-auto">
             Why Pakistani clients, commercial enterprises, overseas Pakistanis, and international law firms instruct our chambers for contentious and advisory mandates.
           </p>
-        </div>
+        </motion.div>
 
         {/* ======================================================================
             4 CONNECTED PILLAR NODES (Timeline with Exact Geometric Positioning)
             ====================================================================== */}
         <div className="relative">
           {/* Desktop Connecting Gold Line (Spanning from Col 1 center 12.5% to Col 4 center 87.5%) */}
-          <div
-            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-10 sm:top-11 -translate-y-1/2 h-[2px] bg-[#E5B842] z-0 pointer-events-none shadow-[0_0_8px_rgba(229,184,66,0.35)]"
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-10 sm:top-11 -translate-y-1/2 h-[2px] bg-[#E5B842] z-0 pointer-events-none shadow-[0_0_8px_rgba(229,184,66,0.35)] origin-center"
             aria-hidden="true"
           />
 
           {/* The 3 Centered Gold Diamonds at Exact Column Midpoints: 25%, 50%, 75% */}
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             className="hidden lg:block absolute inset-x-0 top-10 sm:top-11 -translate-y-1/2 pointer-events-none z-[1]"
             aria-hidden="true"
           >
             <div className="absolute left-[25%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
             <div className="absolute left-[50%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
             <div className="absolute left-[75%] -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#E5B842] rotate-45 border border-white shadow-xs" />
-          </div>
+          </motion.div>
 
           {/* Tablet (sm screens) Connecting Lines between paired nodes */}
           <div
@@ -185,12 +195,16 @@ export const ExperienceStrategyResults: React.FC = () => {
 
           {/* 4 Pillar Items Grid (Centered layout matching timeline nodes) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-y-12 sm:gap-x-8 lg:gap-6 relative z-10">
-            {PILLARS.map((pillar) => {
+            {PILLARS.map((pillar, idx) => {
               const IconComp = pillar.Icon;
 
               return (
-                <div
+                <motion.div
                   key={pillar.number}
+                  initial={{ opacity: 0, y: 40, scale: 0.92 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.6, delay: idx * 0.12, ease: 'easeOut' }}
                   className="flex flex-col items-center text-center group"
                 >
                   {/* Circular Medallion with Outer Gold Ring & Deep copper Core */}
@@ -212,13 +226,13 @@ export const ExperienceStrategyResults: React.FC = () => {
                     <span className="block">{pillar.titleLine1}</span>
                     <span className="block">{pillar.titleLine2}</span>
                   </h3>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
 
       </div>
-    </motion.section>
+    </section>
   );
 };

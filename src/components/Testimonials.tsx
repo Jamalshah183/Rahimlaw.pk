@@ -20,11 +20,7 @@ export const Testimonials: React.FC = () => {
   const current = FIRM_CONFIG.testimonials[currentIndex];
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+    <section
       id="testimonials"
       className="relative z-[15] -mt-10 sm:-mt-12 lg:-mt-14 min-h-screen lg:min-h-[105vh] xl:min-h-[112vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 xl:pt-40 pb-24 sm:pb-28 md:pb-32 lg:pb-36 xl:pb-40 bg-gradient-to-b from-[#612912] via-[#612912] to-[#452415] text-white rounded-t-[50px] sm:rounded-t-[65px] lg:rounded-t-[80px] border-t-2 border-[#E5B842]/40 shadow-[0_-25px_50px_-15px_rgba(148, 84, 45,0.35)] overflow-hidden"
     >
@@ -60,8 +56,14 @@ export const Testimonials: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        {/* Header with Fade & Slide Down */}
+        <motion.div
+          initial={{ opacity: 0, y: -22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-center max-w-3xl mx-auto mb-14 sm:mb-16"
+        >
           <div className="inline-flex items-center gap-2.5 mb-3">
             <span className="h-[1px] w-7 bg-[#F5D061]" aria-hidden="true" />
             <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#F5D061]">
@@ -80,11 +82,17 @@ export const Testimonials: React.FC = () => {
           <p className="font-sans text-[15.5px] sm:text-[17px] text-[#F3F0E7] leading-[1.65] font-normal">
             Reflections from clients regarding our strategic representation, discretion, and courtroom advocacy.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Carousel Container */}
+        {/* Carousel Container with Scale & Floating Elevation Reveal */}
         <div className="max-w-4xl mx-auto w-full">
-          <div className="relative bg-[#452415]/75 backdrop-blur-xs rounded-2xl p-8 sm:p-12 md:p-16 border border-[#E5B842]/35 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
+            className="relative bg-[#452415]/75 backdrop-blur-xs rounded-2xl p-8 sm:p-12 md:p-16 border border-[#E5B842]/35 shadow-[0_20px_50px_rgba(0,0,0,0.30)]"
+          >
             {/* Gold Quotation Mark Icon */}
             <div className="absolute top-6 left-8 sm:top-10 sm:left-12">
               <Quote className="w-12 h-12 sm:w-16 sm:h-16 text-[#F5D061]/25 -scale-x-100" />
@@ -123,10 +131,16 @@ export const Testimonials: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center gap-2 mt-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex justify-center gap-2 mt-6"
+          >
             {FIRM_CONFIG.testimonials.map((_, i) => (
               <button
                 key={i}
@@ -138,9 +152,9 @@ export const Testimonials: React.FC = () => {
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };

@@ -1,5 +1,5 @@
 /**
- * Qadeer Legal Chambers - Centralized Configuration & Content
+ * Rahim Law Associates - Centralized Configuration & Content
  * All firm details, practice areas, statistics, testimonials, and contact info are defined here.
  * Client or developers can easily edit this single file to update website content.
  */
@@ -63,10 +63,10 @@ export const FIRM_CONFIG = {
 
   // Contact Information (Easily editable placeholders)
   contact: {
-    phone: "+923006140042",
-    phoneDisplay: "+92 300 6140042",
-    whatsappNumber: "923006140042", // WhatsApp standard international format (no +, no dashes)
-    whatsappDisplay: "+92 300 6140042",
+    phone: "+923455061906",
+    phoneDisplay: "+92 345 5061906",
+    whatsappNumber: "923455061906", // WhatsApp standard international format (no +, no dashes)
+    whatsappDisplay: "+92 345 5061906",
     email: "contact@rahimlawassociates.com",
     address: "Executive Suite 402, Judicial Heights, Sector F-7/2, Islamabad, Pakistan",
     officeHours: "Monday – Saturday: 9:00 AM – 6:00 PM (PKT)",

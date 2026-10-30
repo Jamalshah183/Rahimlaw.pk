@@ -96,25 +96,31 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
           />
 
           <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
-            <div className="space-y-6 pt-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 px-3 rounded-lg bg-[#452415] border border-[#E5B842]/30 flex items-center shrink-0">
-                    <img
-                      src={logoSrc}
-                      alt="Qadeer Legal Chambers"
-                      className="h-16 w-auto object-contain shrink-0"
-                    />
-                  </div>
-                </div>
-                <button
-                  type="button"
+            <div className="space-y-6 pt-2 relative">
+              {/* Close Button at top-right */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="absolute top-0 right-0 p-2 rounded-full text-[#0F172A] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Big, centered logo without background */}
+              <div className="flex flex-col items-center justify-center pt-3 pb-4 border-b border-slate-100">
+                <a
+                  href="#hero"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-full text-[#0F172A] hover:bg-slate-100 transition-colors"
-                  aria-label="Close menu"
+                  className="flex items-center justify-center focus:outline-none"
+                  aria-label="Rahim Law Associates - Home"
                 >
-                  <X className="w-5 h-5" />
-                </button>
+                  <img
+                    src={logoSrc}
+                    alt="Rahim Law Associates"
+                    className="h-24 sm:h-28 w-auto object-contain mx-auto drop-shadow-sm"
+                  />
+                </a>
               </div>
 
               <div className="flex flex-col space-y-3">
@@ -139,9 +145,12 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-3 bg-[#612912] hover:bg-[#452415] text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                className="w-full py-3.5 bg-[#612912] hover:bg-[#452415] !text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                style={{ color: '#FFFFFF' }}
               >
-                Free Consultation
+                <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
+                  Free Consultation
+                </span>
               </button>
             </div>
           </div>

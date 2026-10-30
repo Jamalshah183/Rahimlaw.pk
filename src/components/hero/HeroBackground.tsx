@@ -71,12 +71,12 @@ export const HeroBackground: React.FC = () => {
           aria-hidden="true"
         />
 
-        {/* Layer 2: Independent Primary Brown Color Overlay (#452415 at 90% opacity) */}
+        {/* Layer 2: Warm copper overlay matching CEO section (#612912) */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundColor: heroConfig.colors.deepBrown || '#452415',
-            opacity: heroConfig.colors.leftOverlayOpacity,
+            background: 'linear-gradient(180deg, #612912 0%, #612912 65%, #452415 100%)',
+            opacity: 0.88,
           }}
           aria-hidden="true"
         />
