@@ -179,7 +179,7 @@ export const Footer: React.FC<FooterProps> = ({
               Insights
             </a>
             <a href="#faq" className="hover:text-[#E5B842] transition-colors">
-              Faq
+              FAQ<span className="text-[0.7em] font-normal">s</span>
             </a>
             <a
               href={whatsappHref}

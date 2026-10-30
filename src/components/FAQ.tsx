@@ -27,7 +27,7 @@ export const FAQ: React.FC = () => {
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
             <span className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.16em] font-bold text-[#E5B842]">
-              FAQ
+              FAQ<span className="text-[0.7em] font-normal">s</span>
             </span>
             <span className="h-[1px] w-6 bg-[#E5B842]" aria-hidden="true" />
           </div>

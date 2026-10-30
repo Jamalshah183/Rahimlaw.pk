@@ -4,9 +4,9 @@
  * branding, navigation, copy, and visual parameters.
  */
 
-import heroLeftBg from '../assets/images/hero_bg_left_1793233852825.jpg';
+import heroLeftBg from '../assets/images/law_chambers_bg_1793401272469.jpg';
 import heroRightBg from '../assets/images/classical_marble_column_1792242281393.jpg';
-import heroLawyerCutout from '../assets/images/hero_statue_justice_cutout.png';
+import heroLawyerCutout from '../assets/images/hero_statue_clean.png';
 
 export interface HeroConfig {
   // 1. Separate Image Layers (Independently controllable & replaceable)
@@ -62,7 +62,7 @@ export const heroConfig: HeroConfig = {
   // Two completely separate background environments + foreground lawyer cutout
   leftBackground: heroLeftBg,
   rightBackground: heroRightBg,
-  lawyerImage: "https://i.ibb.co/Rpr9wxkr/hero-statue-justice-cutout-D5-0yv-P0.png",
+  lawyerImage: heroLawyerCutout,
   logo: "https://i.ibb.co/xS4KS0LC/Untitled-design-2.png",
 
   // Brand Palette
@@ -111,6 +111,7 @@ export const heroConfig: HeroConfig = {
     { label: "Our Team", href: "#team" },
     { label: "Practice Areas", href: "#practice-areas" },
     { label: "Insights", href: "#insights" },
+    { label: "FAQs", href: "#faq" },
     { label: "Contact", href: "#contact" },
   ],
 };

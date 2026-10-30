@@ -11,23 +11,25 @@ export const HeroCTA: React.FC<HeroCTAProps> = () => {
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 pt-1 sm:pt-3">
       {/* 
         Primary CTA Button: CONTACT US -> #contact
+        Solid copper (#612912) with white text and gold arrow badge for strong focal presence
       */}
       <a
         href={heroConfig.primaryCTA.href}
-        className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-5 sm:pl-6 pr-2 sm:pr-2.5 h-[46px] sm:h-[58px] w-full max-w-[260px] sm:w-auto sm:max-w-none rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+        className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-5 sm:pl-6 pr-2 sm:pr-2.5 h-[46px] sm:h-[58px] w-full max-w-[260px] sm:w-auto sm:max-w-none rounded-full bg-[#612912] hover:bg-[#452415] text-white font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
       >
         <span className="tracking-[0.05em] uppercase">{heroConfig.primaryCTA.label}</span>
-        <span className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full bg-white text-[#452415] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
+        <span className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 shadow-xs shrink-0">
           <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
         </span>
       </a>
 
       {/* 
         Secondary CTA Button: OUR PRACTICE AREAS -> #practice-areas
+        Crisp white with copper border, text and icon
       */}
       <a
         href={heroConfig.secondaryCTA.action}
-        className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-5 sm:pl-6 pr-2 sm:pr-2.5 h-[46px] sm:h-[58px] w-full max-w-[260px] sm:w-auto sm:max-w-none rounded-full bg-white hover:bg-[#F3F0E7] text-[#612912] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap border border-white/50 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+        className="group inline-flex items-center justify-between sm:justify-center gap-2.5 sm:gap-3.5 pl-5 sm:pl-6 pr-2 sm:pr-2.5 h-[46px] sm:h-[58px] w-full max-w-[260px] sm:w-auto sm:max-w-none rounded-full bg-white hover:bg-slate-50 text-[#612912] font-sans font-bold text-[12px] sm:text-[13px] whitespace-nowrap border-2 border-[#612912]/25 hover:border-[#612912] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
       >
         <span className="tracking-[0.05em] uppercase">{heroConfig.secondaryCTA.label}</span>
         <span className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full bg-[#612912] text-white flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs shrink-0">

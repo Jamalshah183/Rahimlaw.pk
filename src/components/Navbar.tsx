@@ -97,6 +97,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 Testimonials
               </a>
               <a
+                href="#faq"
+                className="hover:text-[#612912] transition-colors relative py-1"
+              >
+                FAQ<span className="text-[0.7em] font-normal">s</span>
+              </a>
+              <a
                 href="#contact"
                 className="hover:text-[#612912] transition-colors relative py-1"
               >
@@ -145,8 +151,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
           />
 
           {/* Drawer content */}
-          <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
-            <div className="space-y-6 pt-2 relative">
+          <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="space-y-3 sm:space-y-4 pt-1 relative">
               {/* Close Button at top-right */}
               <button
                 type="button"
@@ -158,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               </button>
 
               {/* Big, centered logo without background */}
-              <div className="flex flex-col items-center justify-center pt-3 pb-4 border-b border-slate-100">
+              <div className="flex flex-col items-center justify-center pt-2 pb-3 border-b border-slate-100">
                 <a
                   href="#hero"
                   onClick={() => setMobileMenuOpen(false)}
@@ -168,12 +174,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                   <img
                     src={logoSrc}
                     alt="Rahim Law Associates"
-                    className="h-24 sm:h-28 w-auto object-contain mx-auto drop-shadow-sm"
+                    className="h-20 sm:h-24 w-auto object-contain mx-auto drop-shadow-sm"
                   />
                 </a>
               </div>
 
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-1.5 sm:space-y-2">
                 {[
                   { label: 'About', href: '#about' },
                   { label: 'Principal', href: '#principal-advocate' },
@@ -187,9 +193,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-base font-sans font-medium text-[#452415] hover:text-[#612912] py-2 transition-colors border-b border-slate-100 flex items-center justify-between"
+                    className="text-sm font-sans font-medium text-[#452415] hover:text-[#612912] py-1.5 transition-colors border-b border-slate-100/80 flex items-center justify-between"
                   >
-                    <span>{item.label}</span>
+                    <span>
+                      {item.label === 'FAQ' ? (
+                        <>FAQ<span className="text-[0.7em] font-normal">s</span></>
+                      ) : (
+                        item.label
+                      )}
+                    </span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
                   </a>
                 ))}
