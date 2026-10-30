@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { heroConfig } from '../../data/heroConfig';
 
 export const HeroBackground: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none">
       {/* 
@@ -45,20 +58,16 @@ export const HeroBackground: React.FC = () => {
       {/* 
         ========================================================================
         IMAGE 1 — LEFT BACKGROUND + LIGHT / WHITE / CREAM OVERLAY
-        Desktop: ~58% width.
-        Mobile: Tall enough (h-[65%] min-h-[545px]) to fully contain all HeroContent.
-        NOW LIGHT / WHITE / CREAM - switched with the right side so the logo pops out!
-        Animation preserved exactly as it is (cinematic smooth reveal).
+        Mobile: Animates from top to bottom (upward to downward).
+        Desktop: Animates from left to right.
         ========================================================================
       */}
       <motion.div
-        initial={{ x: '-100%', opacity: 0.2 }}
-        animate={{ x: 0, opacity: 1 }}
+        key={isMobile ? 'hero-bg-mobile' : 'hero-bg-desktop'}
+        initial={isMobile ? { y: '-100%', x: 0, opacity: 0.2 } : { x: '-100%', y: 0, opacity: 0.2 }}
+        animate={{ x: 0, y: 0, opacity: 1 }}
         transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-0 left-0 w-full md:w-[58%] h-[65%] min-h-[545px] sm:h-[63%] md:min-h-0 md:h-full md:bottom-0 rounded-b-[50px] md:rounded-b-none md:rounded-r-[50px] overflow-hidden z-[2] shadow-[0_10px_30px_rgba(0,0,0,0.08)] md:shadow-[14px_0_36px_rgba(0,0,0,0.18)] border-b md:border-b-0 md:border-r border-slate-200/60"
-        style={{
-          boxShadow: 'none',
-        }}
+        className="absolute top-0 left-0 w-full md:w-[58%] h-[65%] min-h-[545px] sm:h-[63%] md:min-h-0 md:h-full md:bottom-0 rounded-b-[50px] md:rounded-b-none md:rounded-r-[50px] overflow-hidden z-[2] shadow-[0_15px_35px_rgba(0,0,0,0.3)] md:shadow-[20px_0_45px_rgba(0,0,0,0.4),8px_0_16px_rgba(0,0,0,0.25)] border-b md:border-b-0 md:border-r border-slate-200/60"
       >
         {/* Layer 1: Left high-end law chambers background image with rich visibility */}
         <div

@@ -11,7 +11,7 @@ export const WhyChooseUs: React.FC = () => {
   };
 
   return (
-    <section id="approach" className="py-20 md:py-28 bg-[#FFF9EC] rounded-[32px] sm:rounded-[40px] mx-2 sm:mx-4 md:mx-6 my-6 border border-[#5B1111]/10 relative overflow-hidden shadow-xs">
+    <section className="py-20 md:py-28 bg-[#FFF9EC] rounded-[32px] sm:rounded-[40px] mx-2 sm:mx-4 md:mx-6 my-6 border border-[#5B1111]/10 relative overflow-hidden shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">

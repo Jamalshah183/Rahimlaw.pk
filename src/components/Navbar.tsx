@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight, Phone } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
 import { heroConfig } from '../data/heroConfig';
@@ -140,100 +141,112 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
         </div>
       </header>
 
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
+      {/* Mobile Drawer Navigation with Right Slide-in Animation */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
 
-          {/* Drawer content */}
-          <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <div className="space-y-3 sm:space-y-4 pt-1 relative">
-              {/* Close Button at top-right */}
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="absolute top-0 right-0 p-2 rounded-full text-[#452415] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Big, centered logo without background */}
-              <div className="flex flex-col items-center justify-center pt-2 pb-3 border-b border-slate-100">
-                <a
-                  href="#hero"
+            {/* Drawer content sliding in from right */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              <div className="space-y-3 sm:space-y-4 pt-1 relative">
+                {/* Close Button at top-right */}
+                <button
+                  type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center focus:outline-none"
-                  aria-label="Rahim Law Associates - Home"
+                  className="absolute top-0 right-0 p-2 rounded-full text-[#452415] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
+                  aria-label="Close menu"
                 >
-                  <img
-                    src={logoSrc}
-                    alt="Rahim Law Associates"
-                    className="h-20 sm:h-24 w-auto object-contain mx-auto drop-shadow-sm"
-                  />
-                </a>
+                  <X className="w-5 h-5" />
+                </button>
+
+                {/* Big, centered logo without background */}
+                <div className="flex flex-col items-center justify-center pt-2 pb-3 border-b border-slate-100">
+                  <a
+                    href="#hero"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center focus:outline-none"
+                    aria-label="Rahim Law Associates - Home"
+                  >
+                    <img
+                      src={logoSrc}
+                      alt="Rahim Law Associates"
+                      className="h-20 sm:h-24 w-auto object-contain mx-auto drop-shadow-sm"
+                    />
+                  </a>
+                </div>
+
+                <nav className="flex flex-col space-y-1.5 sm:space-y-2">
+                  {[
+                    { label: 'About', href: '#about' },
+                    { label: 'Principal', href: '#principal-advocate' },
+                    { label: 'Our Team', href: '#team' },
+                    { label: 'Practice Areas', href: '#practice-areas' },
+                    { label: 'Testimonials', href: '#testimonials' },
+                    { label: 'FAQ', href: '#faq' },
+                    { label: 'Contact', href: '#contact' },
+                  ].map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm font-sans font-medium text-[#452415] hover:text-[#612912] py-1.5 transition-colors border-b border-slate-100/80 flex items-center justify-between"
+                    >
+                      <span>
+                        {item.label === 'FAQ' ? (
+                          <>FAQ<span className="text-[0.7em] font-normal">s</span></>
+                        ) : (
+                          item.label
+                        )}
+                      </span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
+                    </a>
+                  ))}
+                </nav>
               </div>
 
-              <nav className="flex flex-col space-y-1.5 sm:space-y-2">
-                {[
-                  { label: 'About', href: '#about' },
-                  { label: 'Principal', href: '#principal-advocate' },
-                  { label: 'Our Team', href: '#team' },
-                  { label: 'Practice Areas', href: '#practice-areas' },
-                  { label: 'Testimonials', href: '#testimonials' },
-                  { label: 'FAQ', href: '#faq' },
-                  { label: 'Contact', href: '#contact' },
-                ].map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-sm font-sans font-medium text-[#452415] hover:text-[#612912] py-1.5 transition-colors border-b border-slate-100/80 flex items-center justify-between"
-                  >
-                    <span>
-                      {item.label === 'FAQ' ? (
-                        <>FAQ<span className="text-[0.7em] font-normal">s</span></>
-                      ) : (
-                        item.label
-                      )}
-                    </span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-[#E5B842]" />
-                  </a>
-                ))}
-              </nav>
-            </div>
+              <div className="pt-6 space-y-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenConsultation();
+                  }}
+                  className="w-full py-3.5 bg-[#612912] hover:bg-[#800C22] !text-white text-xs uppercase tracking-wider font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
+                    Free Consultation
+                  </span>
+                </button>
 
-            <div className="pt-6 space-y-3 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenConsultation();
-                }}
-                className="w-full py-3.5 bg-[#612912] hover:bg-[#800C22] !text-white text-xs uppercase tracking-wider font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
-                style={{ color: '#FFFFFF' }}
-              >
-                <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
-                  Free Consultation
-                </span>
-              </button>
-
-              <a
-                href={`tel:${FIRM_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`}
-                className="w-full py-2.5 bg-transparent border border-slate-200 text-[#452415] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
-              >
-                <Phone className="w-3.5 h-3.5 text-[#E5B842]" />
-                <span className="tabular-nums">{FIRM_CONFIG.contact.phoneDisplay}</span>
-              </a>
-            </div>
+                <a
+                  href={`tel:${FIRM_CONFIG.contact.phone.replace(/[^0-9+]/g, '')}`}
+                  className="w-full py-2.5 bg-transparent border border-slate-200 text-[#452415] text-xs uppercase tracking-wider font-semibold rounded-full text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#E5B842]" />
+                  <span className="tabular-nums">{FIRM_CONFIG.contact.phoneDisplay}</span>
+                </a>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };

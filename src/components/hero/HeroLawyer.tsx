@@ -8,9 +8,9 @@ export const HeroLawyer: React.FC = () => {
       className="relative lg:absolute lg:bottom-0 lg:left-[61.5%] xl:left-[62%] lg:-translate-x-1/2 lg:translate-y-[15%] xl:translate-y-[16%] w-full lg:w-auto flex items-end justify-center z-[5] pointer-events-none select-none mt-6 lg:mt-0 -mb-16 sm:-mb-20 lg:mb-0"
     >
       <motion.div
-        initial={{ opacity: 0, y: 160 }}
+        initial={{ opacity: 0, y: 180 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.25, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.25, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="relative flex items-end justify-center"
       >
         {/* 
@@ -28,7 +28,7 @@ export const HeroLawyer: React.FC = () => {
           src={heroConfig.lawyerImage}
           alt="Statue of Lady Justice - Rahim Law Associates"
           referrerPolicy="no-referrer"
-          className="h-[62vh] sm:h-[74vh] lg:h-[86vh] xl:h-[89vh] max-h-[815px] min-h-[470px] lg:min-h-[630px] w-auto max-w-[85vw] sm:max-w-[80vw] lg:max-w-none object-contain object-bottom drop-shadow-[0_24px_42px_rgba(0,0,0,0.45)] pointer-events-auto transition-transform duration-300"
+          className="h-[62vh] sm:h-[74vh] lg:h-[86vh] xl:h-[89vh] max-h-[815px] min-h-[470px] lg:min-h-[630px] w-auto max-w-[85vw] sm:max-w-[80vw] lg:max-w-none object-contain object-bottom drop-shadow-[-12px_18px_25px_rgba(0,0,0,0.55)] drop-shadow-[0_30px_45px_rgba(0,0,0,0.5)] pointer-events-auto transition-transform duration-300"
           loading="eager"
         />
       </motion.div>

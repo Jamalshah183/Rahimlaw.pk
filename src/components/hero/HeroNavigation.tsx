@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { heroConfig } from '../../data/heroConfig';
 import { useTransparentLogo } from '../../utils/useTransparentLogo';
@@ -86,76 +86,96 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
-          <div
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
+      {/* Mobile Drawer with Right Slide-In Animation */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+            {/* Fade Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
 
-          <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <div className="space-y-3 sm:space-y-4 pt-1 relative">
-              {/* Close Button at top-right */}
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="absolute top-0 right-0 p-2 rounded-full text-[#0F172A] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Big, centered logo without background */}
-              <div className="flex flex-col items-center justify-center pt-2 pb-3 border-b border-slate-100">
-                <a
-                  href="#hero"
+            {/* Slide-in Drawer from Right */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-y-0 right-0 max-w-xs w-full bg-white border-l border-slate-200 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              <div className="space-y-3 sm:space-y-4 pt-1 relative">
+                {/* Close Button at top-right */}
+                <button
+                  type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center focus:outline-none"
-                  aria-label="Rahim Law Associates - Home"
+                  className="absolute top-0 right-0 p-2 rounded-full text-[#0F172A] hover:bg-slate-100 transition-colors z-10 cursor-pointer"
+                  aria-label="Close menu"
                 >
-                  <img
-                    src={logoSrc}
-                    alt="Rahim Law Associates"
-                    className="h-20 sm:h-24 w-auto object-contain mx-auto drop-shadow-sm"
-                  />
-                </a>
-              </div>
+                  <X className="w-5 h-5" />
+                </button>
 
-              <div className="flex flex-col space-y-1.5 sm:space-y-2">
-                {heroConfig.navigation.map((item) => (
+                {/* Big, centered logo without background */}
+                <div className="flex flex-col items-center justify-center pt-2 pb-3 border-b border-slate-100">
                   <a
-                    key={item.label}
-                    href={item.href}
+                    href="#hero"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="font-sans text-[14px] sm:text-[15px] font-semibold tracking-[0.03em] text-[#0F172A] hover:text-[#612912] py-1.5 sm:py-2 transition-colors border-b border-slate-100/80 flex items-center justify-between"
+                    className="flex items-center justify-center focus:outline-none"
+                    aria-label="Rahim Law Associates - Home"
                   >
-                    <span>{item.label}</span>
-                    <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
+                    <img
+                      src={logoSrc}
+                      alt="Rahim Law Associates"
+                      className="h-20 sm:h-24 w-auto object-contain mx-auto drop-shadow-sm"
+                    />
                   </a>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <div className="pt-6 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenConsultation();
-                }}
-                className="w-full py-3.5 bg-[#612912] hover:bg-[#452415] !text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
-                style={{ color: '#FFFFFF' }}
-              >
-                <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
-                  Free Consultation
-                </span>
-              </button>
-            </div>
+                <div className="flex flex-col space-y-1.5 sm:space-y-2">
+                  {heroConfig.navigation.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-sans text-[14px] sm:text-[15px] font-semibold tracking-[0.03em] text-[#0F172A] hover:text-[#612912] py-1.5 sm:py-2 transition-colors border-b border-slate-100/80 flex items-center justify-between"
+                    >
+                      <span>
+                        {item.label === 'FAQs' ? (
+                          <>FAQ<span className="text-[0.7em] font-normal">s</span></>
+                        ) : (
+                          item.label
+                        )}
+                      </span>
+                      <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenConsultation();
+                  }}
+                  className="w-full py-3.5 bg-[#612912] hover:bg-[#452415] !text-white font-sans text-[13px] uppercase tracking-[0.06em] font-bold rounded-full text-center block shadow-md transition-colors cursor-pointer"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  <span className="!text-white font-bold tracking-wider" style={{ color: '#FFFFFF' }}>
+                    Free Consultation
+                  </span>
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };
