@@ -60,7 +60,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({ onOpenConsultation }) 
           - First icon aligns with upper border of right content (top-0)
           - Last icon sits below bottom border of right content (lg:-bottom-8 xl:-bottom-10)
         */}
-        <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-[#612912]/15 lg:border-t-0 lg:pt-0 lg:mt-0 lg:absolute lg:left-6 xl:left-8 2xl:left-12 lg:-top-8 xl:-top-10 lg:bottom-6 xl:bottom-6 grid grid-cols-3 gap-2 lg:flex lg:flex-col lg:justify-between items-center z-20">
+        <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-[#612912]/15 lg:border-t-0 lg:pt-0 lg:mt-0 lg:absolute lg:left-6 xl:left-8 2xl:left-12 lg:-top-5 xl:-top-6 lg:bottom-6 xl:bottom-6 grid grid-cols-3 gap-2 lg:flex lg:flex-col lg:justify-between items-center z-20">
           {/* Item 1 - Aligns with upper border */}
           <div className="relative z-10 flex flex-col items-center text-center group">
             <span className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#612912] text-[#E5B842] flex items-center justify-center shadow-md border-2 border-[#E5B842]/45 group-hover:scale-108 transition-transform duration-200 shrink-0">
