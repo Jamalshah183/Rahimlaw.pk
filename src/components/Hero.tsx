@@ -25,7 +25,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
       <HeroNavigation onOpenConsultation={onOpenConsultation} />
 
       {/* Main Hero Content: Left-aligned writing safely on the left of the statue */}
-      <div className="w-full flex-1 flex flex-col justify-center items-center relative my-auto mt-6 sm:mt-8 lg:-mt-16">
+      <div className="w-full flex-1 flex flex-col justify-center items-center relative my-auto mt-6 sm:mt-8 lg:-mt-6">
         <div className="w-full relative flex flex-col lg:flex-row items-center justify-start my-auto">
           <HeroContent onOpenConsultation={onOpenConsultation} />
         </div>

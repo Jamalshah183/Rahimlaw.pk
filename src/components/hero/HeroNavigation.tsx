@@ -25,12 +25,12 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
             Revealing logo from its actual position
             ====================================================================
           */}
-          <div className="w-full lg:w-[54%] xl:w-[53%] px-6 sm:px-10 lg:pl-12 xl:pl-16 pr-3 lg:pr-4 flex justify-center lg:justify-end">
+          <div className="w-full lg:w-[54%] xl:w-[53%] px-4 sm:px-6 lg:pl-[125px] xl:pl-[135px] 2xl:pl-[145px] lg:pr-6 xl:pr-8 flex justify-center lg:justify-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.0, delay: 0.35, ease: 'easeOut' }}
-              className="w-full max-w-[540px] xl:max-w-[580px] flex items-center justify-between"
+              className="w-full max-w-[490px] xl:max-w-[530px] 2xl:max-w-[560px] flex items-center justify-between"
             >
               {/* Rahim Law Associates Logo aligned with HeroContent start */}
               <a
