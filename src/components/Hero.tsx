@@ -6,9 +6,11 @@ import { HeroLawyer } from './hero/HeroLawyer';
 
 interface HeroProps {
   onOpenConsultation: () => void;
+  onNavigateAdmin: () => void;
+  onNavigateClient: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenConsultation, onNavigateAdmin, onNavigateClient }) => {
   return (
     <section
       id="hero"
@@ -22,7 +24,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
       <HeroBackground />
 
       {/* Top Header & Navigation: Logo at top-left, Navigation links at top-right */}
-      <HeroNavigation onOpenConsultation={onOpenConsultation} />
+      <HeroNavigation 
+        onOpenConsultation={onOpenConsultation} 
+        onNavigateAdmin={onNavigateAdmin}
+        onNavigateClient={onNavigateClient}
+      />
 
       {/* Main Hero Content: Left-aligned writing safely on the left of the statue */}
       <div className="w-full flex-1 flex flex-col justify-center items-center relative my-auto mt-6 sm:mt-8 lg:-mt-6">

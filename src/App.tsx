@@ -15,14 +15,24 @@ import { Footer } from './components/Footer';
 import { ConsultationModal } from './components/ConsultationModal';
 import { LegalModal } from './components/LegalModals';
 import { INSIGHTS_DATA } from './data/insightsData';
+import { AdminPortal } from './components/portal/AdminPortal';
+import { ClientPortal } from './components/portal/ClientPortal';
 
 type RouteState =
   | { view: 'home' }
   | { view: 'insights-archive' }
-  | { view: 'insight-detail'; slug: string };
+  | { view: 'insight-detail'; slug: string }
+  | { view: 'admin-portal' }
+  | { view: 'client-portal' };
 
 function parseLocationRoute(pathname: string): RouteState {
   const clean = pathname.replace(/\/+$/, '') || '/';
+  if (clean === '/admin') {
+    return { view: 'admin-portal' };
+  }
+  if (clean === '/client') {
+    return { view: 'client-portal' };
+  }
   if (clean === '/insights') {
     return { view: 'insights-archive' };
   }
@@ -107,6 +117,22 @@ export default function App() {
     });
   }, [scrollToTopImmediate]);
 
+  const navigateAdmin = useCallback(() => {
+    window.history.pushState({}, '', '/admin');
+    setRoute({ view: 'admin-portal' });
+    window.requestAnimationFrame(() => {
+      scrollToTopImmediate();
+    });
+  }, [scrollToTopImmediate]);
+
+  const navigateClient = useCallback(() => {
+    window.history.pushState({}, '', '/client');
+    setRoute({ view: 'client-portal' });
+    window.requestAnimationFrame(() => {
+      scrollToTopImmediate();
+    });
+  }, [scrollToTopImmediate]);
+
   const navigateToPost = useCallback(
     (slug: string) => {
       window.history.pushState({}, '', `/insights/${slug}`);
@@ -158,8 +184,18 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, [scrollToSectionHash, scrollToTopImmediate]);
 
-  // Ultra-smooth, jitter-free scrolling engine with VSync synchronization
+  const isPortal = route.view === 'admin-portal' || route.view === 'client-portal';
+
+  // Ultra-smooth scrolling engine for website, disabled on portals for a straight static page
   useEffect(() => {
+    if (isPortal) {
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -234,7 +270,7 @@ export default function App() {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, [navigateHome, navigateToAllInsights, navigateToPost, scrollToSectionHash]);
+  }, [isPortal, navigateHome, navigateToAllInsights, navigateToPost, scrollToSectionHash]);
 
   const handleOpenConsultation = (practiceTitle?: string) => {
     if (practiceTitle) {
@@ -263,6 +299,50 @@ export default function App() {
     }
   }, [route.view, activePost]);
 
+  // Dedicated straight static page for Admin Portal (no scrolling animation, no footer)
+  if (route.view === 'admin-portal') {
+    return (
+      <div className="min-h-screen bg-[#FAF8F5] text-[#461C0C] font-sans">
+        <div className="bg-[#452415] text-white py-2.5 px-4 text-xs font-semibold flex items-center justify-between border-b border-[#612912]/50 shadow-xs sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+            <button
+              onClick={() => navigateHome()}
+              className="text-[#E5B842] hover:text-white transition-colors flex items-center gap-1.5 font-sans font-medium cursor-pointer bg-transparent border-0"
+            >
+              ← Back to Main Law Firm Website
+            </button>
+            <span className="text-[#E5B842]/90 hidden sm:inline font-medium">
+              Admin Portal · Rahim Law Associates
+            </span>
+          </div>
+        </div>
+        <AdminPortal />
+      </div>
+    );
+  }
+
+  // Dedicated straight static page for Client Portal (no scrolling animation, no footer)
+  if (route.view === 'client-portal') {
+    return (
+      <div className="min-h-screen bg-[#FAF8F5] text-[#461C0C] font-sans">
+        <div className="bg-[#452415] text-white py-2.5 px-4 text-xs font-semibold flex items-center justify-between border-b border-[#612912]/50 shadow-xs sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+            <button
+              onClick={() => navigateHome()}
+              className="text-[#E5B842] hover:text-white transition-colors flex items-center gap-1.5 font-sans font-medium cursor-pointer bg-transparent border-0"
+            >
+              ← Back to Main Law Firm Website
+            </button>
+            <span className="text-[#E5B842]/90 hidden sm:inline font-medium">
+              Client Portal · Rahim Law Associates
+            </span>
+          </div>
+        </div>
+        <ClientPortal selectedClientId="cli-101" setSelectedClientId={() => {}} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#452415] text-[#452415] selection:bg-[#E5B842] selection:text-[#2C1309] font-sans">
       <main
@@ -272,7 +352,11 @@ export default function App() {
         {route.view === 'home' && (
           <>
             {/* 1. Hero Section with Top Navigation in its actual position */}
-            <Hero onOpenConsultation={() => handleOpenConsultation()} />
+            <Hero 
+              onOpenConsultation={() => handleOpenConsultation()} 
+              onNavigateAdmin={navigateAdmin}
+              onNavigateClient={navigateClient}
+            />
 
             {/* 2. About & Credibility Section */}
             <AboutSection

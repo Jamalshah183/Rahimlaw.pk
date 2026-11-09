@@ -1,0 +1,370 @@
+{
+  "entities": {
+    "Client": {
+      "title": "Client",
+      "description": "Corporate or individual client record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "businessName": { "type": "string" },
+        "cnic": { "type": "string" },
+        "ntn": { "type": "string" },
+        "category": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "city": { "type": "string" },
+        "registeredAddress": { "type": "string" },
+        "activeCasesCount": { "type": "number" },
+        "totalTaxSaved": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "phone"]
+    },
+    "CaseFile": {
+      "title": "CaseFile",
+      "description": "Legal case file record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "caseTitle": { "type": "string" },
+        "clientName": { "type": "string" },
+        "clientNtn": { "type": "string" },
+        "caseRef": { "type": "string" },
+        "assignedCounsel": { "type": "string" },
+        "assignedCounselTitle": { "type": "string" },
+        "forum": { "type": "string" },
+        "taxYear": { "type": "string" },
+        "status": { "type": "string" },
+        "riskLevel": { "type": "string" },
+        "demandAmountPkr": { "type": "number" },
+        "savedAmountPkr": { "type": "number" },
+        "auditStage": { "type": "number" },
+        "summary": { "type": "string" },
+        "nextHearingDate": { "type": "string" },
+        "nextHearingPurpose": { "type": "string" },
+        "clientLoginEmail": { "type": "string" },
+        "clientLoginPassword": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "clientId", "caseTitle", "forum", "status"]
+    },
+    "FBRNotice": {
+      "title": "FBRNotice",
+      "description": "Statutory FBR tax and audit notice record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "cnoNumber": { "type": "string" },
+        "caseId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "sectionCode": { "type": "string" },
+        "noticeTitle": { "type": "string" },
+        "issuingOfficer": { "type": "string" },
+        "taxYear": { "type": "string" },
+        "dateReceived": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "disputedAmountPkr": { "type": "number" },
+        "status": { "type": "string" },
+        "summary": { "type": "string" },
+        "noticePdfUrl": { "type": "string" }
+      },
+      "required": ["id", "caseId", "clientId", "noticeTitle"]
+    },
+    "DocumentItem": {
+      "title": "DocumentItem",
+      "description": "Legal brief, stay order or petition document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "fileSize": { "type": "string" },
+        "uploadedBy": { "type": "string" },
+        "uploadedAt": { "type": "string" },
+        "fileType": { "type": "string" },
+        "downloadUrl": { "type": "string" },
+        "isClientVisible": { "type": "boolean" }
+      },
+      "required": ["id", "caseId", "clientId", "title"]
+    },
+    "InternalTask": {
+      "title": "InternalTask",
+      "description": "Internal law firm task or deadline",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "title": { "type": "string" },
+        "assignedTo": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "priority": { "type": "string" },
+        "isCompleted": { "type": "boolean" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "caseId", "title"]
+    },
+    "InternalNote": {
+      "title": "InternalNote",
+      "description": "Confidential attorney case note",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "author": { "type": "string" },
+        "date": { "type": "string" },
+        "text": { "type": "string" },
+        "isPrivileged": { "type": "boolean" }
+      },
+      "required": ["id", "caseId", "text"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Legal fee invoice and retainer record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "invoiceNumber": { "type": "string" },
+        "caseId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "clientNtn": { "type": "string" },
+        "serviceDescription": { "type": "string" },
+        "issueDate": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "retainerFeePkr": { "type": "number" },
+        "hearingFeePkr": { "type": "number" },
+        "salesTaxPkr": { "type": "number" },
+        "totalAmountPkr": { "type": "number" },
+        "paidAmountPkr": { "type": "number" },
+        "status": { "type": "string" },
+        "paymentMethod": { "type": "string" }
+      },
+      "required": ["id", "caseId", "clientId", "invoiceNumber", "totalAmountPkr"]
+    },
+    "HearingEvent": {
+      "title": "HearingEvent",
+      "description": "Court appearance and cause list event",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "caseId": { "type": "string" },
+        "caseTitle": { "type": "string" },
+        "clientName": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "forum": { "type": "string" },
+        "bench": { "type": "string" },
+        "counselAssigned": { "type": "string" },
+        "purpose": { "type": "string" },
+        "priority": { "type": "string" },
+        "previousHearingDate": { "type": "string" },
+        "previousHearingOutcome": { "type": "string" }
+      },
+      "required": ["id", "caseId", "date", "purpose"]
+    },
+    "NotificationLog": {
+      "title": "NotificationLog",
+      "description": "Client alert and dispatch record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "caseId": { "type": "string" },
+        "type": { "type": "string" },
+        "recipientPhoneOrEmail": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "sentAt": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "clientId", "message"]
+    },
+    "ClientCredential": {
+      "title": "ClientCredential",
+      "description": "Client portal credential store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "clientId", "email", "password"]
+    },
+    "PracticeArea": {
+      "title": "PracticeArea",
+      "description": "Legal practice area services",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "shortDesc": { "type": "string" },
+        "fullDesc": { "type": "string" },
+        "iconName": { "type": "string" },
+        "badge": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "title"]
+    },
+    "TeamMember": {
+      "title": "TeamMember",
+      "description": "Firm advocate or senior counsel profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "experienceYears": { "type": "number" },
+        "specialty": { "type": "string" },
+        "bio": { "type": "string" },
+        "image": { "type": "string" },
+        "keyWin": { "type": "string" },
+        "isCeo": { "type": "boolean" },
+        "stickToLeft": { "type": "boolean" },
+        "order": { "type": "number" }
+      },
+      "required": ["id", "name", "title"]
+    },
+    "ReviewItem": {
+      "title": "ReviewItem",
+      "description": "Client feedback and testimonial",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientInitials": { "type": "string" },
+        "clientRole": { "type": "string" },
+        "location": { "type": "string" },
+        "caseType": { "type": "string" },
+        "dollarSaved": { "type": "string" },
+        "rating": { "type": "number" },
+        "reviewText": { "type": "string" },
+        "verifiedBadge": { "type": "boolean" },
+        "date": { "type": "string" },
+        "status": { "type": "string" },
+        "featured": { "type": "boolean" }
+      },
+      "required": ["id", "clientRole", "reviewText"]
+    },
+    "LegalInsightItem": {
+      "title": "LegalInsightItem",
+      "description": "Law firm legal commentary and tax blog post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string" },
+        "readTime": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "featured": { "type": "boolean" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "title", "slug"]
+    },
+    "PartnerItem": {
+      "title": "PartnerItem",
+      "description": "Corporate bar association and chambers partner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "websiteUrl": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "order": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "name", "logoUrl"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized partner admin user",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "addedAt": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/clients/{clientId}": {
+      "schema": "Client",
+      "description": "Firm clients and corporate accounts"
+    },
+    "/cases/{caseId}": {
+      "schema": "CaseFile",
+      "description": "Litigation case files and tax appeals"
+    },
+    "/notices/{noticeId}": {
+      "schema": "FBRNotice",
+      "description": "FBR tax audit notices"
+    },
+    "/documents/{docId}": {
+      "schema": "DocumentItem",
+      "description": "Case documents and filings"
+    },
+    "/tasks/{taskId}": {
+      "schema": "InternalTask",
+      "description": "Lawyer tasks and court deadlines"
+    },
+    "/notes/{noteId}": {
+      "schema": "InternalNote",
+      "description": "Internal case notes"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": "Invoice",
+      "description": "Retainer and hearing fee invoices"
+    },
+    "/hearings/{hearingId}": {
+      "schema": "HearingEvent",
+      "description": "Court hearing calendar entries"
+    },
+    "/notifications/{notifId}": {
+      "schema": "NotificationLog",
+      "description": "Client alert dispatch history"
+    },
+    "/clientCredentials/{credId}": {
+      "schema": "ClientCredential",
+      "description": "Client login credentials"
+    },
+    "/practice_areas/{areaId}": {
+      "schema": "PracticeArea",
+      "description": "Legal practice areas shown on website"
+    },
+    "/team_members/{memberId}": {
+      "schema": "TeamMember",
+      "description": "Advocates and partners shown on website"
+    },
+    "/client_reviews/{reviewId}": {
+      "schema": "ReviewItem",
+      "description": "Client reviews and feedback"
+    },
+    "/legal_insights/{insightId}": {
+      "schema": "LegalInsightItem",
+      "description": "Legal articles and publications"
+    },
+    "/membership_partners/{partnerId}": {
+      "schema": "PartnerItem",
+      "description": "Partner logos and chambers"
+    },
+    "/admins/{adminUid}": {
+      "schema": "AdminUser",
+      "description": "Designated administrator records"
+    }
+  }
+}

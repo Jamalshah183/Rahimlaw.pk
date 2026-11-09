@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all unknown collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Health check endpoint for connection verification
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Global helper primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email.lower() == 'virtualassistant183@gmail.com' ||
+        request.auth.token.email.lower() == 'contact@rahimlawassociates.com' ||
+        request.auth.token.email.lower() == 'info@rahimlawassociates.com' ||
+        request.auth.token.email.lower() == 'rahim.nawaz@i-con.pk' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Public Bar Association, Insights, Team, and Practice Areas content (Public Read, Admin Write)
+    match /practice_areas/{areaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /team_members/{memberId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /client_reviews/{reviewId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /legal_insights/{insightId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /membership_partners/{partnerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admins registry
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Core Legal Practice Management Collections
+    match /clients/{clientId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.email.lower() == request.auth.token.email.lower());
+      allow write: if isAdmin();
+    }
+
+    match /cases/{caseId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.clientLoginEmail.lower() == request.auth.token.email.lower());
+      allow write: if isAdmin();
+    }
+
+    match /notices/{noticeId} {
+      allow read: if isAdmin() || isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /documents/{docId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.isClientVisible == true);
+      allow create: if isAdmin() || isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /tasks/{taskId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /notes/{noteId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /invoices/{invoiceId} {
+      allow read: if isAdmin() || isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /hearings/{hearingId} {
+      allow read: if isAdmin() || isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /notifications/{notifId} {
+      allow read: if isAdmin() || isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /clientCredentials/{credId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}

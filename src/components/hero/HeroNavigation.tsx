@@ -6,9 +6,11 @@ import { useTransparentLogo } from '../../utils/useTransparentLogo';
 
 interface HeroNavigationProps {
   onOpenConsultation: () => void;
+  onNavigateAdmin: () => void;
+  onNavigateClient: () => void;
 }
 
-export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultation }) => {
+export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultation, onNavigateAdmin, onNavigateClient }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { logoSrc, isProcessed } = useTransparentLogo(heroConfig.logo);
 
@@ -45,16 +47,37 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                 />
               </a>
 
-              {/* Mobile Hamburger Button */}
-              <div className="lg:hidden flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(true)}
-                  className="p-2.5 rounded-xl bg-slate-100 text-[#452415] hover:bg-slate-200 border border-slate-200/80 focus:outline-none focus:ring-2 focus:ring-[#612912] transition-colors cursor-pointer shadow-xs"
-                  aria-label="Open mobile menu"
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
+              {/* Right side of white container: Portal links & mobile menu button */}
+              <div className="flex items-center gap-4 sm:gap-6">
+                {/* Portal links styled exactly like navbar items, in firm's brown */}
+                <div className="hidden sm:flex items-center gap-6 xl:gap-7 font-sans text-[14.5px] font-semibold tracking-[0.03em] text-[#612912]">
+                  <button
+                    type="button"
+                    onClick={onNavigateClient}
+                    className="text-[#612912] hover:text-[#452415] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#612912] hover:after:w-full after:transition-all whitespace-nowrap cursor-pointer bg-transparent border-0 font-sans text-[14.5px] font-semibold tracking-[0.03em]"
+                  >
+                    Client Portal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onNavigateAdmin}
+                    className="text-[#612912] hover:text-[#452415] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#612912] hover:after:w-full after:transition-all whitespace-nowrap cursor-pointer bg-transparent border-0 font-sans text-[14.5px] font-semibold tracking-[0.03em]"
+                  >
+                    Admin Portal
+                  </button>
+                </div>
+
+                {/* Mobile Hamburger Button */}
+                <div className="lg:hidden flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(true)}
+                    className="p-2.5 rounded-xl bg-slate-100 text-[#452415] hover:bg-slate-200 border border-slate-200/80 focus:outline-none focus:ring-2 focus:ring-[#612912] transition-colors cursor-pointer shadow-xs"
+                    aria-label="Open mobile menu"
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -154,6 +177,30 @@ export const HeroNavigation: React.FC<HeroNavigationProps> = ({ onOpenConsultati
                       <ArrowUpRight className="w-4 h-4 text-[#E5B842]" />
                     </a>
                   ))}
+
+                  {/* Portal options in mobile navigation */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigateClient();
+                    }}
+                    className="font-sans text-[14px] sm:text-[15px] font-semibold tracking-[0.03em] text-[#612912] hover:text-[#452415] py-1.5 sm:py-2 transition-colors border-b border-slate-100/80 flex items-center justify-between text-left cursor-pointer bg-transparent border-0"
+                  >
+                    <span>Client Portal</span>
+                    <ArrowUpRight className="w-4 h-4 text-[#612912]" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigateAdmin();
+                    }}
+                    className="font-sans text-[14px] sm:text-[15px] font-semibold tracking-[0.03em] text-[#612912] hover:text-[#452415] py-1.5 sm:py-2 transition-colors border-b border-slate-100/80 flex items-center justify-between text-left cursor-pointer bg-transparent border-0"
+                  >
+                    <span>Admin Portal</span>
+                    <ArrowUpRight className="w-4 h-4 text-[#612912]" />
+                  </button>
                 </div>
               </div>
 
