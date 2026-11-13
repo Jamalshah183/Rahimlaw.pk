@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-import { auth, googleProvider } from '../../lib/firebase';
+import { auth, db, googleProvider } from '../../lib/firebase';
 import {
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
   User as FirebaseUser,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { checkRateLimit, recordAttempt, resetRateLimit } from '../../lib/rateLimiter';
 import { useInactivityTimeout } from '../../lib/useInactivityTimeout';
 import {
@@ -275,22 +276,64 @@ export const AdminPortal: React.FC = () => {
     setAdminAuthLoading(true);
 
     // Direct authorization check for pre-configured credentials
-    if (AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] && AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] === adminPasswordInput) {
+    const expectedConfiguredPassword = AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail];
+    const isConfiguredMatch =
+      !!expectedConfiguredPassword &&
+      (adminPasswordInput === expectedConfiguredPassword ||
+        adminPasswordInput.trim() === expectedConfiguredPassword);
+
+    if (isConfiguredMatch) {
       resetRateLimit('admin_login');
       const resolvedDisplayName =
         AUTHORIZED_ADMIN_DISPLAY_NAMES[cleanEmail] || `${cleanEmail.split('@')[0]} (Admin)`;
-      const sessionUser = {
+      let activeUser: FirebaseUser = {
         email: cleanEmail,
         displayName: resolvedDisplayName,
         uid: 'admin-partner-' + cleanEmail.replace(/[^a-zA-Z0-9]/g, '_'),
       } as unknown as FirebaseUser;
+
+      // Sync real Firebase Auth session so Firestore admin rules apply immediately
+      try {
+        const fbCred = await signInWithEmailAndPassword(auth, cleanEmail, expectedConfiguredPassword);
+        activeUser = fbCred.user;
+      } catch (signInErr: any) {
+        if (
+          signInErr?.code === 'auth/user-not-found' ||
+          signInErr?.code === 'auth/invalid-credential'
+        ) {
+          try {
+            const createdCred = await createUserWithEmailAndPassword(
+              auth,
+              cleanEmail,
+              expectedConfiguredPassword
+            );
+            activeUser = createdCred.user;
+          } catch (createErr) {
+            console.warn('Firebase admin sync note:', createErr);
+          }
+        } else {
+          console.warn('Firebase admin sign-in sync note:', signInErr);
+        }
+      }
+
+      if (auth.currentUser) {
+        setDoc(
+          doc(db, 'admins', auth.currentUser.uid),
+          {
+            email: cleanEmail,
+            role: 'admin',
+            addedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        ).catch(() => {});
+      }
 
       try {
         localStorage.setItem(
           'rla_admin_auth_user',
           JSON.stringify({
             email: cleanEmail,
-            displayName: resolvedDisplayName,
+            displayName: activeUser.displayName || resolvedDisplayName,
             loggedInAt: Date.now(),
           })
         );
@@ -298,19 +341,14 @@ export const AdminPortal: React.FC = () => {
         console.warn('Storage save error:', e);
       }
 
-      setAdminUser(sessionUser);
+      setAdminUser(activeUser);
       setAdminAuthSuccessMessage(`Authorized successfully as ${resolvedDisplayName}. Access granted!`);
       setAdminAuthLoading(false);
-
-      // Attempt background Firebase Auth sync/creation
-      signInWithEmailAndPassword(auth, cleanEmail, adminPasswordInput).catch(() => {
-        createUserWithEmailAndPassword(auth, cleanEmail, adminPasswordInput).catch(() => {});
-      });
       return;
     }
 
     // If entered incorrect password for pre-configured credentials
-    if (AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] && AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] !== adminPasswordInput) {
+    if (expectedConfiguredPassword && !isConfiguredMatch) {
       setAdminAuthError('Invalid password for this authorized administrator account.');
       setAdminAuthLoading(false);
       return;
