@@ -448,9 +448,11 @@ export function usePortalStore() {
       totalTaxSaved: 'Rs. 0',
       createdAt: getTodayDateString()
     };
-    const updated = [newClient, ...clients];
-    setClients(updated);
-    saveToStorage(STORAGE_KEYS.CLIENTS, updated);
+    setClients((prev) => {
+      const updated = [newClient, ...prev];
+      saveToStorage(STORAGE_KEYS.CLIENTS, updated);
+      return updated;
+    });
     saveToFirestoreDoc('clients', newClient.id, newClient);
 
     // Save client login credential if provided
@@ -472,14 +474,16 @@ export function usePortalStore() {
       id: createUniqueId('cred'),
       createdAt: getTodayDateString()
     };
-    const updated = [
-      newCred,
-      ...clientCredentials.filter(
-        (c) => c.email.toLowerCase() !== cred.email.toLowerCase() && c.clientId !== cred.clientId
-      )
-    ];
-    setClientCredentials(updated);
-    saveToStorage(STORAGE_KEYS.CLIENT_CREDENTIALS, updated);
+    setClientCredentials((prev) => {
+      const updated = [
+        newCred,
+        ...prev.filter(
+          (c) => c.email.toLowerCase() !== cred.email.toLowerCase() && c.clientId !== cred.clientId
+        )
+      ];
+      saveToStorage(STORAGE_KEYS.CLIENT_CREDENTIALS, updated);
+      return updated;
+    });
     saveToFirestoreDoc('clientCredentials', newCred.id, newCred);
     return newCred;
   };
@@ -488,6 +492,7 @@ export function usePortalStore() {
   const addCase = (caseData: {
     title: string;
     clientId: string;
+    clientRecord?: Client;
     assignedCounsel: string;
     forum: LegalForum;
     taxYear: string;
@@ -500,7 +505,7 @@ export function usePortalStore() {
     clientLoginEmail?: string;
     clientLoginPassword?: string;
   }) => {
-    const client = clients.find((c) => c.id === caseData.clientId);
+    const client = caseData.clientRecord || clients.find((c) => c.id === caseData.clientId);
     const newCase: CaseFile = {
       id: `case-${getCurrentYearNumber()}-${getRandom3DigitNum()}`,
       caseRef: `RLA-${caseData.forum.split(' ')[0]}-${createUniqueId('')}`,
@@ -520,6 +525,8 @@ export function usePortalStore() {
       summary: caseData.summary,
       nextHearingDate: caseData.nextHearingDate,
       nextHearingPurpose: caseData.nextHearingPurpose,
+      ...(caseData.clientLoginEmail ? { clientLoginEmail: caseData.clientLoginEmail } : {}),
+      ...(caseData.clientLoginPassword ? { clientLoginPassword: caseData.clientLoginPassword } : {}),
       createdAt: getTodayDateString(),
       timeline: [
         {
@@ -571,15 +578,19 @@ export function usePortalStore() {
 
     // Update active case count for client
     if (client) {
-      const updatedClients = clients.map((c) =>
-        c.id === client.id ? { ...c, activeCasesCount: c.activeCasesCount + 1 } : c
-      );
-      setClients(updatedClients);
-      saveToStorage(STORAGE_KEYS.CLIENTS, updatedClients);
-      const updatedClient = updatedClients.find((c) => c.id === client.id);
-      if (updatedClient) {
-        saveToFirestoreDoc('clients', updatedClient.id, updatedClient);
-      }
+      setClients((prev) => {
+        const exists = prev.some((c) => c.id === client.id);
+        const baseList = exists ? prev : [client, ...prev];
+        const updatedClients = baseList.map((c) =>
+          c.id === client.id ? { ...c, activeCasesCount: c.activeCasesCount + 1 } : c
+        );
+        saveToStorage(STORAGE_KEYS.CLIENTS, updatedClients);
+        const updatedClient = updatedClients.find((c) => c.id === client.id);
+        if (updatedClient) {
+          saveToFirestoreDoc('clients', updatedClient.id, updatedClient);
+        }
+        return updatedClients;
+      });
     }
 
     return newCase;
@@ -805,10 +816,13 @@ export function usePortalStore() {
     let updatedDoc: Invoice | null = null;
     const updated = invoices.map((inv) => {
       if (inv.id === invId) {
+        const netTotal = inv.retainerFeePkr + inv.hearingFeePkr;
         const obj: Invoice = {
           ...inv,
+          salesTaxPkr: 0,
+          totalAmountPkr: netTotal,
           status: 'Paid' as const,
-          paidAmountPkr: inv.totalAmountPkr,
+          paidAmountPkr: netTotal,
           paymentMethod
         };
         updatedDoc = obj;

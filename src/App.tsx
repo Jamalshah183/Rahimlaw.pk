@@ -324,16 +324,16 @@ export default function App() {
   // Dedicated straight static page for Client Portal (no scrolling animation, no footer)
   if (route.view === 'client-portal') {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] text-[#461C0C] font-sans">
-        <div className="bg-[#452415] text-white py-2.5 px-4 text-xs font-semibold flex items-center justify-between border-b border-[#612912]/50 shadow-xs sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+      <div className="min-h-screen w-full max-w-full overflow-x-clip bg-[#FAF8F5] text-[#461C0C] font-sans">
+        <div className="bg-[#452415] text-white py-2.5 px-3 sm:px-4 text-xs font-semibold flex items-center justify-between border-b border-[#612912]/50 shadow-xs sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-2 min-w-0">
             <button
               onClick={() => navigateHome()}
-              className="text-[#E5B842] hover:text-white transition-colors flex items-center gap-1.5 font-sans font-medium cursor-pointer bg-transparent border-0"
+              className="text-[#E5B842] hover:text-white transition-colors flex items-center gap-1.5 font-sans font-medium cursor-pointer bg-transparent border-0 whitespace-nowrap shrink-0"
             >
               ← Back to Main Law Firm Website
             </button>
-            <span className="text-[#E5B842]/90 hidden sm:inline font-medium">
+            <span className="text-[#E5B842]/90 hidden sm:inline font-medium truncate">
               Client Portal · Rahim Law Associates
             </span>
           </div>

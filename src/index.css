@@ -1,11 +1,29 @@
 @import "tailwindcss";
+@import url('https://fonts.cdnfonts.com/css/nexa-bold');
 
 /* =========================================================================
-   STRICT 2-FONT DESIGN SYSTEM:
-   1. Header Font: "Feature Display"
-   2. Body Font:   "Neue Haas Grotesk Display"
-   Strictly no 3rd font anywhere in the project.
+   NEXA FONT FAMILY SYSTEM FOR ADMIN PORTAL
    ========================================================================= */
+
+@font-face {
+  font-family: "Nexa";
+  font-style: normal;
+  font-weight: 300 400;
+  src: local("Nexa Regular"), local("Nexa Light"), local("NexaText-Regular"), url("https://fonts.cdnfonts.com/s/17226/Nexa-Regular.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nexa";
+  font-style: normal;
+  font-weight: 700 800 900;
+  src: local("Nexa Bold"), local("NexaHeavy"), local("NexaText-Bold"), url("https://fonts.cdnfonts.com/s/17226/Nexa-Bold.woff") format("woff");
+  font-display: swap;
+}
+
+.admin-portal-root, .admin-portal-root * {
+  font-family: "Nexa", "Nexa Bold", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
 
 @font-face {
   font-family: "Feature Display";

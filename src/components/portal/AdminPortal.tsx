@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { auth, googleProvider } from '../../lib/firebase';
 import {
@@ -77,7 +77,8 @@ import {
   MessageSquareQuote,
   BookOpen,
   Newspaper,
-  Pin
+  Pin,
+  Menu
 } from 'lucide-react';
 import { usePortalStore } from '../../lib/portalStore';
 import { InvoicePdfModal } from './InvoicePdfModal';
@@ -463,6 +464,9 @@ export const AdminPortal: React.FC = () => {
     'dashboard' | 'cases' | 'calendar' | 'documents' | 'tasks' | 'billing' | 'notifications' | 'practiceAreas' | 'team' | 'reviews' | 'insights' | 'partners'
   >('dashboard');
 
+  // Mobile App Navigation Drawer State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
   // Calendar Month Navigation State
   const [calendarCurrentDate, setCalendarCurrentDate] = useState<Date>(() => new Date(2026, 7, 1));
   const [showClientPassword, setShowClientPassword] = useState(false);
@@ -584,6 +588,10 @@ export const AdminPortal: React.FC = () => {
   const [notifSearchTerm, setNotifSearchTerm] = useState('');
   const [notifTypeFilter, setNotifTypeFilter] = useState('All');
   const [notifStatusFilter, setNotifStatusFilter] = useState('All');
+
+  // Dashboard Cases Quick Search & Filter
+  const [dashSearch, setDashSearch] = useState('');
+  const [dashFilter, setDashFilter] = useState('All');
 
   // Dynamic Unique Options for Filters
   const docCategories = Array.from(new Set(documents.map((d) => d.category)));
@@ -1462,8 +1470,16 @@ export const AdminPortal: React.FC = () => {
     }
   };
 
-  // Calendar State
+  // Calendar State & Smooth Scroll Ref
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<string | null>(null);
+  const calendarHearingsListRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectCalendarDate = (dateStr: string) => {
+    setSelectedCalendarDate(dateStr);
+    setTimeout(() => {
+      calendarHearingsListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  };
 
   // Modal States
   const [showAddCaseModal, setShowAddCaseModal] = useState(false);
@@ -1480,6 +1496,18 @@ export const AdminPortal: React.FC = () => {
   // Selected Case Detail Drawer & Sub-tab
   const [selectedCase, setSelectedCase] = useState<CaseFile | null>(null);
   const [caseDetailTab, setCaseDetailTab] = useState<'overview' | 'notices' | 'tasks' | 'notes' | 'documents' | 'billing' | 'whatsapp'>('overview');
+
+  // Lock background window scroll when Case Details drawer is open
+  useEffect(() => {
+    if (selectedCase) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedCase]);
 
   // Edit Case Details State
   const [isEditingCase, setIsEditingCase] = useState(false);
@@ -1682,7 +1710,7 @@ export const AdminPortal: React.FC = () => {
     serviceDescription: 'Legal Retainer & High Court Case Representation',
     retainerFeePkr: 250000,
     hearingFeePkr: 50000,
-    salesTaxPkr: 48000,
+    salesTaxPkr: 0,
     dueDate: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0]
   }));
 
@@ -1709,6 +1737,18 @@ export const AdminPortal: React.FC = () => {
     clientLoginEmail: '',
     clientLoginPassword: ''
   }));
+
+  const [isAddingNewClientInCase, setIsAddingNewClientInCase] = useState(false);
+  const [newCaseClientDraft, setNewCaseClientDraft] = useState({
+    name: '',
+    businessName: '',
+    ntn: '',
+    cnic: '',
+    phone: '',
+    email: '',
+    category: 'Corporate' as const,
+    city: 'Islamabad'
+  });
 
   const [newClientData, setNewClientData] = useState({
     name: '',
@@ -1761,8 +1801,8 @@ export const AdminPortal: React.FC = () => {
     dueDate: new Date(Date.now() + 86400000 * 14).toISOString().split('T')[0],
     retainerFeePkr: 250000,
     hearingFeePkr: 50000,
-    salesTaxPkr: 48000,
-    totalAmountPkr: 348000,
+    salesTaxPkr: 0,
+    totalAmountPkr: 300000,
     paidAmountPkr: 0,
     status: 'Pending' as const
   }));
@@ -1793,9 +1833,40 @@ export const AdminPortal: React.FC = () => {
   // Submit Handlers
   const handleCreateCase = (e: React.FormEvent) => {
     e.preventDefault();
+
+    let targetClientId = newCaseData.clientId || clients[0]?.id || '';
+    let createdNewClient: Client | undefined = undefined;
+
+    if (isAddingNewClientInCase) {
+      const trimmedName = newCaseClientDraft.name.trim();
+      if (!trimmedName) return;
+
+      const resolvedEmail = (newCaseClientDraft.email || newCaseData.clientLoginEmail || '').trim();
+      const resolvedPassword = (newCaseData.clientLoginPassword || '').trim();
+
+      createdNewClient = addClient(
+        {
+          name: trimmedName,
+          businessName: newCaseClientDraft.businessName.trim(),
+          cnic: newCaseClientDraft.cnic.trim() || 'N/A',
+          ntn: newCaseClientDraft.ntn.trim() || 'Pending',
+          category: newCaseClientDraft.category,
+          phone: newCaseClientDraft.phone.trim(),
+          email: resolvedEmail,
+          city: newCaseClientDraft.city.trim() || 'Islamabad',
+          registeredAddress: '',
+          status: 'Active' as const
+        },
+        resolvedEmail && resolvedPassword ? resolvedEmail : undefined,
+        resolvedEmail && resolvedPassword ? resolvedPassword : undefined
+      );
+      targetClientId = createdNewClient.id;
+    }
+
     const created = addCase({
       title: newCaseData.title,
-      clientId: newCaseData.clientId,
+      clientId: targetClientId,
+      clientRecord: createdNewClient,
       assignedCounsel: newCaseData.assignedCounsel,
       forum: newCaseData.forum,
       taxYear: newCaseData.taxYear,
@@ -1807,7 +1878,7 @@ export const AdminPortal: React.FC = () => {
       }`,
       nextHearingDate: newCaseData.nextHearingDate || undefined,
       nextHearingPurpose: newCaseData.nextHearingPurpose || undefined,
-      clientLoginEmail: newCaseData.clientLoginEmail,
+      clientLoginEmail: newCaseData.clientLoginEmail || newCaseClientDraft.email || '',
       clientLoginPassword: newCaseData.clientLoginPassword
     });
 
@@ -1831,12 +1902,25 @@ export const AdminPortal: React.FC = () => {
     }
 
     setShowAddCaseModal(false);
-    alert(`Tax Litigation Case File ${created.caseRef} registered successfully! ${
+    setIsAddingNewClientInCase(false);
+    setNewCaseClientDraft({
+      name: '',
+      businessName: '',
+      ntn: '',
+      cnic: '',
+      phone: '',
+      email: '',
+      category: 'Corporate' as const,
+      city: 'Islamabad'
+    });
+    alert(`Tax Litigation Case File ${created.caseRef} registered successfully!${
+      createdNewClient ? ` New client "${createdNewClient.name}" added.` : ''
+    } ${
       newCaseData.clientLoginEmail ? `Client Portal sign-in credentials created for ${newCaseData.clientLoginEmail}.` : ''
     }`);
     setNewCaseData({
       title: '',
-      clientId: clients[0]?.id || '',
+      clientId: createdNewClient?.id || clients[0]?.id || '',
       cnoNumber: '',
       sectionCode: '122(5A)',
       forum: 'Islamabad High Court (IHC)' as LegalForum,
@@ -1909,7 +1993,7 @@ export const AdminPortal: React.FC = () => {
     const selCase = cases.find((c) => c.id === newInvoiceData.caseId) || cases[0];
     const targetCaseId = selCase ? selCase.id : newInvoiceData.caseId;
     const targetClientId = selCase ? selCase.clientId : (clients[0]?.id || '');
-    const totalPkr = (newInvoiceData.retainerFeePkr || 0) + (newInvoiceData.hearingFeePkr || 0) + (newInvoiceData.salesTaxPkr || 0);
+    const totalPkr = (newInvoiceData.retainerFeePkr || 0) + (newInvoiceData.hearingFeePkr || 0);
 
     const created = addInvoice({
       caseId: targetCaseId,
@@ -1919,7 +2003,7 @@ export const AdminPortal: React.FC = () => {
       dueDate: newInvoiceData.dueDate || new Date(Date.now() + 86400000 * 14).toISOString().split('T')[0],
       retainerFeePkr: newInvoiceData.retainerFeePkr,
       hearingFeePkr: newInvoiceData.hearingFeePkr,
-      salesTaxPkr: newInvoiceData.salesTaxPkr,
+      salesTaxPkr: 0,
       totalAmountPkr: totalPkr,
       paidAmountPkr: 0,
       status: 'Pending'
@@ -2027,7 +2111,7 @@ export const AdminPortal: React.FC = () => {
     e.preventDefault();
     if (!selectedCase) return;
     const client = clients.find((c) => c.id === selectedCase.clientId);
-    const totalPkr = inlineInvoice.retainerFeePkr + inlineInvoice.hearingFeePkr + inlineInvoice.salesTaxPkr;
+    const totalPkr = inlineInvoice.retainerFeePkr + inlineInvoice.hearingFeePkr;
 
     addInvoice({
       caseId: selectedCase.id,
@@ -2037,7 +2121,7 @@ export const AdminPortal: React.FC = () => {
       dueDate: inlineInvoice.dueDate,
       retainerFeePkr: inlineInvoice.retainerFeePkr,
       hearingFeePkr: inlineInvoice.hearingFeePkr,
-      salesTaxPkr: inlineInvoice.salesTaxPkr,
+      salesTaxPkr: 0,
       totalAmountPkr: totalPkr,
       paidAmountPkr: 0,
       status: 'Pending'
@@ -2047,7 +2131,7 @@ export const AdminPortal: React.FC = () => {
       serviceDescription: 'Legal Retainer & Representation',
       retainerFeePkr: 200000,
       hearingFeePkr: 50000,
-      salesTaxPkr: 40000,
+      salesTaxPkr: 0,
       dueDate: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0]
     });
   };
@@ -2297,12 +2381,151 @@ export const AdminPortal: React.FC = () => {
     );
   }
 
+  const navMenuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'cases', label: 'Case Management', icon: Briefcase, badge: cases.length },
+    { id: 'calendar', label: 'Hearing Calendar', icon: CalendarIcon, badge: hearings.length },
+    { id: 'documents', label: 'Document Vault', icon: FolderOpen },
+    { id: 'tasks', label: 'Tasks & Internal Notes', icon: CheckSquare },
+    { id: 'billing', label: 'Billing & Invoices', icon: CreditCard },
+    { id: 'notifications', label: 'WhatsApp / Email Alerts', icon: Send },
+    { id: 'practiceAreas', label: 'Practice Areas', icon: Scale, badge: practiceAreas?.length || 0 },
+    { id: 'team', label: 'Our Team', icon: Users, badge: teamMembers?.length || 0 },
+    { id: 'reviews', label: 'Client Reviews', icon: MessageSquareQuote, badge: reviews?.length || 0 },
+    { id: 'insights', label: 'Legal Insights', icon: BookOpen, badge: insights?.length || 0 },
+    { id: 'partners', label: 'Membership & Partners', icon: Award, badge: partners?.length || 0 }
+  ];
+
+  const activeTabObj = navMenuItems.find((m) => m.id === activeTab) || navMenuItems[0];
+
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1A1A1A] flex flex-col md:flex-row">
-      {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-[#612912] text-white shrink-0 border-r border-[#452415] p-4 flex flex-col justify-between">
+    <div className="admin-portal-root font-nexa min-h-screen bg-[#FAF8F5] text-[#1A1A1A] flex flex-col md:flex-row w-full max-w-full overflow-x-hidden">
+      {/* --- MOBILE APP STICKY TOP HEADER --- */}
+      <header className="md:hidden sticky top-0 z-40 bg-[#612912] text-white px-4 py-3 flex items-center justify-between border-b border-[#452415] shadow-md">
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition-all flex items-center gap-2 text-xs font-extrabold cursor-pointer border border-white/15"
+          aria-label="Open Navigation Drawer"
+        >
+          <Menu className="w-5 h-5 text-[#E5B842]" />
+          <span className="whitespace-nowrap">Menu</span>
+        </button>
+
+        <div className="text-center px-2">
+          <span className="text-[9px] uppercase font-mono tracking-widest text-[#E5B842] block">
+            Rahim Law Associates
+          </span>
+          <h2 className="text-xs font-heading font-extrabold text-white truncate max-w-[150px] sm:max-w-[200px]">
+            {activeTabObj.label}
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowAddCaseModal(true)}
+          className="min-h-[44px] px-3 py-2 rounded-xl bg-[#E5B842] hover:bg-[#D4A533] text-[#1A1A1A] font-extrabold text-xs flex items-center gap-1 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+        >
+          <Plus className="w-4 h-4 shrink-0" />
+          <span>Case</span>
+        </button>
+      </header>
+
+      {/* --- ANIMATED MOBILE SLIDE-IN SLIDE-OUT DRAWER --- */}
+      {/* Backdrop Overlay */}
+      <div
+        onClick={() => setIsMobileMenuOpen(false)}
+        className={`md:hidden fixed inset-0 bg-black/70 backdrop-blur-xs z-50 transition-opacity duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Drawer Container with Slide Animation */}
+      <aside
+        className={`md:hidden fixed inset-y-0 left-0 w-[290px] max-w-[85vw] bg-[#612912] text-white z-50 p-5 flex flex-col justify-between shadow-2xl transition-transform duration-300 ease-out transform ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="overflow-y-auto space-y-5 pr-1">
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between border-b border-[#452415] pb-4">
+            <div>
+              <span className="text-[10px] uppercase font-extrabold tracking-wider text-[#E5B842] block">
+                Chambers Mobile App
+              </span>
+              <h2 className="text-base font-heading font-extrabold text-white">Rahim Law Associates</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="min-h-[44px] min-w-[44px] rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-all active:scale-95"
+              aria-label="Close Navigation Drawer"
+            >
+              <X className="w-5 h-5 text-[#E5B842]" />
+            </button>
+          </div>
+
+          {/* Drawer Nav Items */}
+          <nav className="space-y-1.5">
+            {navMenuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id as any);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all min-h-[44px] cursor-pointer ${
+                    isActive
+                      ? 'bg-[#E5B842] text-[#1A1A1A] shadow-md font-extrabold scale-[1.02]'
+                      : 'text-amber-100/90 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap truncate">{item.label}</span>
+                  </div>
+                  {item.badge !== undefined && (
+                    <span
+                      className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shrink-0 ${
+                        isActive ? 'bg-[#612912] text-white' : 'bg-white/20 text-white'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Drawer Footer */}
+        <div className="pt-4 border-t border-[#452415]/60 text-xs text-[#E5B842] space-y-3 shrink-0">
+          <div>
+            <div className="font-bold text-white text-xs">Advocate Chambers Admin</div>
+            <div className="text-[10px] text-[#E5B842] font-mono truncate">{adminUser?.email || 'Authorized Advocate Admin'}</div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleAdminSignOut();
+            }}
+            className="w-full min-h-[44px] bg-red-600/90 hover:bg-red-600 text-white font-extrabold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95 whitespace-nowrap"
+          >
+            <LogOut className="w-4 h-4 shrink-0" />
+            <span className="whitespace-nowrap">Sign Out Admin</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* --- DESKTOP SIDEBAR NAVIGATION --- */}
+      <aside className="hidden md:flex w-64 bg-[#612912] text-white shrink-0 border-r border-[#452415] p-5 flex-col justify-between min-h-screen">
         <div>
-          <div className="mb-6 px-2 pt-2">
+          <div className="mb-6 px-1 pt-1">
             <span className="text-[10px] uppercase font-extrabold tracking-wider text-[#E5B842] block">
               Case Management System
             </span>
@@ -2310,39 +2533,26 @@ export const AdminPortal: React.FC = () => {
           </div>
 
           <nav className="space-y-1.5">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'cases', label: 'Case Management', icon: Briefcase, badge: cases.length },
-              { id: 'calendar', label: 'Hearing Calendar', icon: CalendarIcon, badge: hearings.length },
-              { id: 'documents', label: 'Document Vault', icon: FolderOpen },
-              { id: 'tasks', label: 'Tasks & Internal Notes', icon: CheckSquare },
-              { id: 'billing', label: 'Billing & Invoices', icon: CreditCard },
-              { id: 'notifications', label: 'WhatsApp / Email Alerts', icon: Send },
-              { id: 'practiceAreas', label: 'Practice Areas', icon: Scale, badge: practiceAreas?.length || 0 },
-              { id: 'team', label: 'Our Team', icon: Users, badge: teamMembers?.length || 0 },
-              { id: 'reviews', label: 'Client Reviews', icon: MessageSquareQuote, badge: reviews?.length || 0 },
-              { id: 'insights', label: 'Legal Insights', icon: BookOpen, badge: insights?.length || 0 },
-              { id: 'partners', label: 'Membership & Partners', icon: Award, badge: partners?.length || 0 }
-            ].map((item) => {
+            {navMenuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id as any)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-[#E5B842] text-[#1A1A1A] shadow-md'
+                      ? 'bg-[#E5B842] text-[#1A1A1A] shadow-md font-extrabold'
                       : 'text-amber-100/90 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.label}</span>
+                    <span className="whitespace-nowrap truncate">{item.label}</span>
                   </div>
                   {item.badge !== undefined && (
                     <span
-                      className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                      className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 ${
                         isActive ? 'bg-[#612912] text-white' : 'bg-white/15 text-white'
                       }`}
                     >
@@ -2355,15 +2565,15 @@ export const AdminPortal: React.FC = () => {
           </nav>
         </div>
 
-        <div className="pt-4 border-t border-[#452415]/30 text-[11px] text-[#E5B842]/90 space-y-2">
+        <div className="pt-4 border-t border-[#452415]/60 text-[11px] text-[#E5B842] space-y-2.5">
           <div>
             <div className="font-bold text-white">Rahim Law Associates Advocates</div>
-            <div className="text-[10px] text-[#E5B842] font-mono">{adminUser?.email || 'Authorized Advocate Admin'}</div>
+            <div className="text-[10px] text-[#E5B842] font-mono truncate">{adminUser?.email || 'Authorized Advocate Admin'}</div>
           </div>
           <button
             type="button"
             onClick={handleAdminSignOut}
-            className="w-full bg-red-600/80 hover:bg-red-600 text-white font-bold py-1.5 px-3 rounded-xl text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            className="w-full bg-red-600/80 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Sign Out Admin</span>
@@ -2372,26 +2582,38 @@ export const AdminPortal: React.FC = () => {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto overflow-x-hidden">
-        {/* --- TAB 1: DASHBOARD --- */}
+      <main className="flex-1 w-full max-w-full overflow-x-hidden p-3 sm:p-6 lg:p-8 pb-24 md:pb-8">
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            {/* Top Control Header & Quick Launch Hub */}
-            <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-6 font-sans">
+            {/* 1. Executive Desk Header & Quick Action Launch Hub */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#452415]/15 shadow-sm space-y-5">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
                 <div>
-                  <span className="text-[10px] font-extrabold text-[#E5B842] uppercase tracking-wider block">Senior Partner Executive Desk</span>
-                  <h1 className="text-2xl font-heading font-extrabold text-[#1A1A1A]">Advocate Control & Analytics Dashboard</h1>
-                  <p className="text-xs text-[#5A6275]">High Court Tax Writs, ATIR Appeals, FBR Notice Compliance & Fee Receivables.</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[11px] font-extrabold text-[#612912] bg-[#E5B842]/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      Rahim Law Associates • Executive Desk
+                    </span>
+                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      System Online & Synced
+                    </span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1A1A1A] tracking-tight">
+                    Advocate Control & Analytics Dashboard
+                  </h1>
+                  <p className="text-xs sm:text-sm text-[#5A6275] mt-1 max-w-2xl leading-relaxed">
+                    At-a-glance overview of active High Court writs, ATIR appeals, FBR statutory notice deadlines, cause list court hearings & fee receivables.
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap">
+                {/* Primary Launch Action Buttons */}
+                <div className="flex items-center gap-2.5 flex-wrap w-full lg:w-auto">
                   <button
                     type="button"
                     onClick={() => setShowAddCaseModal(true)}
-                    className="bg-[#E5B842] hover:bg-[#E09415] text-[#1A1A1A] font-extrabold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                    className="flex-1 sm:flex-initial bg-[#E5B842] hover:bg-[#D4A533] text-[#1A1A1A] font-extrabold px-4 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer border border-[#E5B842]/40"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-4 h-4 shrink-0" />
                     <span>Register Case File</span>
                   </button>
 
@@ -2405,10 +2627,10 @@ export const AdminPortal: React.FC = () => {
                       }));
                       setShowAddDocModal(true);
                     }}
-                    className="bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                    className="flex-1 sm:flex-initial bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-4 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
                   >
-                    <Upload className="w-4 h-4 text-[#E5B842]" />
-                    <span>Upload Case File</span>
+                    <Upload className="w-4 h-4 text-[#E5B842] shrink-0" />
+                    <span>Upload Case Brief</span>
                   </button>
 
                   <button
@@ -2421,168 +2643,339 @@ export const AdminPortal: React.FC = () => {
                       }));
                       setShowAddInvoiceModal(true);
                     }}
-                    className="bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                    className="flex-1 sm:flex-initial bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-4 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
                   >
-                    <CreditCard className="w-4 h-4 text-[#E5B842]" />
+                    <CreditCard className="w-4 h-4 text-[#E5B842] shrink-0" />
                     <span>Issue Fee Invoice</span>
                   </button>
                 </div>
               </div>
 
-              {/* Action Bar Shortcuts */}
-              <div className="pt-3 border-t border-gray-100 flex items-center gap-2 overflow-x-auto text-xs font-bold text-[#452415]">
-                <span className="text-gray-400 text-[11px] uppercase font-mono mr-1">Quick Actions:</span>
+              {/* Quick Navigation & Shortcut Bar */}
+              <div className="pt-4 border-t border-gray-100 flex items-center gap-2.5 overflow-x-auto text-xs font-bold text-[#452415] scrollbar-none">
+                <span className="text-gray-400 text-[10px] uppercase tracking-wider font-mono shrink-0 mr-1">
+                  Quick Actions:
+                </span>
                 <button
+                  type="button"
                   onClick={() => setShowAddNoticeModal(true)}
-                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 px-3 py-1.5 rounded-xl flex items-center gap-1 shrink-0"
+                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 hover:border-[#612912]/30 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
                 >
                   <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
                   <span>Log FBR Notice</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setShowAddHearingModal(true)}
-                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 px-3 py-1.5 rounded-xl flex items-center gap-1 shrink-0"
+                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 hover:border-[#612912]/30 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
                 >
                   <CalendarIcon className="w-3.5 h-3.5 text-[#E5B842]" />
                   <span>Schedule Cause List Hearing</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setActiveTab('documents')}
-                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 px-3 py-1.5 rounded-xl flex items-center gap-1 shrink-0"
+                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 hover:border-[#612912]/30 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
                 >
                   <FolderOpen className="w-3.5 h-3.5 text-[#452415]" />
                   <span>Document Vault ({documents.length})</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setActiveTab('billing')}
-                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 px-3 py-1.5 rounded-xl flex items-center gap-1 shrink-0"
+                  className="bg-[#FAF8F5] hover:bg-[#612912]/10 text-[#452415] border border-gray-200 hover:border-[#612912]/30 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
                 >
                   <CreditCard className="w-3.5 h-3.5 text-[#452415]" />
-                  <span>Billing & Invoices ({invoices.length})</span>
+                  <span>Billing Ledger ({invoices.length})</span>
                 </button>
               </div>
             </div>
 
-            {/* Decision Analytics Metric Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm">
-                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase">
-                  <span>Active Case Files</span>
-                  <Briefcase className="w-4 h-4 text-[#452415]" />
+            {/* 2. Key Performance Indicators (4 Cards Grid) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Card 1: Active Cases */}
+              <div 
+                onClick={() => setActiveTab('cases')}
+                className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm hover:border-[#612912] transition-all cursor-pointer group"
+              >
+                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase tracking-wider">
+                  <span>Active Litigation Files</span>
+                  <div className="p-2 rounded-xl bg-[#612912]/10 text-[#612912] group-hover:bg-[#612912] group-hover:text-white transition-colors">
+                    <Briefcase className="w-4 h-4" />
+                  </div>
                 </div>
-                <div className="text-2xl font-heading font-extrabold text-[#1A1A1A] mt-1">{cases.length} Active Files</div>
-                <div className="text-[11px] text-[#612912] font-semibold mt-1">
-                  Demand Protected: Rs. {(cases.reduce((a, c) => a + c.demandAmountPkr, 0) / 10000000).toFixed(2)} Cr
+                <div className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1A1A1A] mt-2">
+                  {cases.length} Files
+                </div>
+                <div className="text-xs text-[#612912] font-semibold mt-1 flex items-center justify-between">
+                  <span>Demand Protected:</span>
+                  <span className="font-extrabold">Rs. {(cases.reduce((a, c) => a + c.demandAmountPkr, 0) / 10000000).toFixed(2)} Cr</span>
+                </div>
+                <div className="text-[10px] text-[#5A6275] mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+                  <span>High Court, ATIR & FBR</span>
+                  <span className="text-[#612912] font-bold group-hover:underline">Manage Cases →</span>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm">
-                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase">
-                  <span>Fee Receivables</span>
-                  <CreditCard className="w-4 h-4 text-[#E5B842]" />
-                </div>
-                <div className="text-2xl font-heading font-extrabold text-[#452415] mt-1">
-                  Rs. {(invoices.filter((i) => i.status !== 'Paid').reduce((a, i) => a + (i.totalAmountPkr - i.paidAmountPkr), 0) / 1000).toFixed(0)}k PKR
-                </div>
-                <div className="text-[11px] text-amber-700 font-semibold mt-1">
-                  {invoices.filter((i) => i.status !== 'Paid').length} Unpaid / Pending Invoices
-                </div>
-              </div>
-
+              {/* Card 2: FBR Notice Compliance */}
               <div
                 onClick={() => setShowNoticesModal(true)}
                 className="bg-white p-5 rounded-3xl border border-red-200 hover:border-red-500 shadow-sm transition-all cursor-pointer group hover:shadow-md"
                 title="Click to view all pending FBR notice replies"
               >
-                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase">
+                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase tracking-wider">
                   <span>FBR Notice Compliance</span>
-                  <AlertTriangle className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
+                  <div className="p-2 rounded-xl bg-red-100 text-red-700 group-hover:bg-red-700 group-hover:text-white transition-colors">
+                    <AlertTriangle className="w-4 h-4" />
+                  </div>
                 </div>
-                <div className="text-2xl font-heading font-extrabold text-red-700 mt-1 flex items-center justify-between">
-                  <span>{notices.filter((n) => n.status === 'Pending Reply').length} Replies Due</span>
-                  <span className="text-xs font-extrabold text-[#452415] group-hover:underline flex items-center gap-1">
-                    View All ({notices.length}) →
+                <div className="text-2xl sm:text-3xl font-heading font-extrabold text-red-700 mt-2 flex items-center justify-between">
+                  <span>{notices.filter((n) => n.status === 'Pending Reply').length} Due</span>
+                  <span className="text-xs font-extrabold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                    Action Needed
                   </span>
                 </div>
-                <div className="text-[11px] text-red-600 font-semibold mt-1">
-                  Avoid Ex-Parte Demand Orders • Click to view due replies
+                <div className="text-xs text-red-700 font-semibold mt-1">
+                  Avoid ex-parte tax demand orders
+                </div>
+                <div className="text-[10px] text-red-600 mt-2 pt-2 border-t border-red-100 flex items-center justify-between font-bold">
+                  <span>Total Notices Logged: {notices.length}</span>
+                  <span className="group-hover:underline">View All Notices →</span>
+                </div>
+              </div>
+
+              {/* Card 3: Cause List Court Schedule */}
+              <div 
+                onClick={() => setActiveTab('calendar')}
+                className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm hover:border-[#612912] transition-all cursor-pointer group"
+              >
+                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase tracking-wider">
+                  <span>Cause List Hearings</span>
+                  <div className="p-2 rounded-xl bg-[#E5B842]/20 text-[#612912] group-hover:bg-[#E5B842] group-hover:text-[#1A1A1A] transition-colors">
+                    <CalendarIcon className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-heading font-extrabold text-[#1A1A1A] mt-2">
+                  {hearings.length} Hearings
+                </div>
+                <div className="text-xs text-[#452415] font-semibold mt-1 flex items-center justify-between">
+                  <span>Next Court Hearing:</span>
+                  <span className="font-extrabold bg-[#E5B842]/30 px-2 py-0.5 rounded text-[11px]">
+                    {hearings[0]?.date || 'Aug 12'}
+                  </span>
+                </div>
+                <div className="text-[10px] text-[#5A6275] mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+                  <span>IHC & ATIR Cause Lists</span>
+                  <span className="text-[#612912] font-bold group-hover:underline">Open Calendar →</span>
+                </div>
+              </div>
+
+              {/* Card 4: Fee Receivables */}
+              <div 
+                onClick={() => setActiveTab('billing')}
+                className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm hover:border-[#612912] transition-all cursor-pointer group"
+              >
+                <div className="flex justify-between items-center text-[11px] font-bold text-[#5A6275] uppercase tracking-wider">
+                  <span>Fee Receivables</span>
+                  <div className="p-2 rounded-xl bg-amber-100 text-amber-800 group-hover:bg-amber-700 group-hover:text-white transition-colors">
+                    <CreditCard className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-heading font-extrabold text-[#452415] mt-2">
+                  Rs. {(invoices.filter((i) => i.status !== 'Paid').reduce((a, i) => a + (i.totalAmountPkr - i.paidAmountPkr), 0) / 1000).toFixed(0)}k PKR
+                </div>
+                <div className="text-xs text-amber-800 font-semibold mt-1 flex items-center justify-between">
+                  <span>Pending Invoices:</span>
+                  <span className="font-extrabold">{invoices.filter((i) => i.status !== 'Paid').length} Unpaid</span>
+                </div>
+                <div className="text-[10px] text-[#5A6275] mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+                  <span>Retainers & Hearing Fees</span>
+                  <span className="text-[#612912] font-bold group-hover:underline">Billing Ledger →</span>
                 </div>
               </div>
             </div>
 
-            {/* High Priority Decision Action Queue & Recent Cases */}
+            {/* 3. Action Queue & Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Active Litigation Cases (2 Cols) */}
-              <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">Active Tax Litigation Repository</h3>
-                    <p className="text-xs text-[#5A6275]">Click any case file to view all synced documents, invoices, tasks, notes, and WhatsApp dispatches.</p>
-                  </div>
-                  <button onClick={() => setActiveTab('cases')} className="text-xs font-extrabold text-[#452415] hover:underline shrink-0">
-                    View All ({cases.length}) →
-                  </button>
-                </div>
-
-                <div className="space-y-3">
-                  {cases.map((c) => {
-                    const caseDocs = documents.filter((d) => d.caseId === c.id);
-                    const caseInvs = invoices.filter((i) => i.caseId === c.id);
-                    return (
-                      <div
-                        key={c.id}
-                        onClick={() => setSelectedCase(c)}
-                        className="p-4 rounded-2xl bg-[#FAF8F5] border border-gray-200 hover:border-[#452415] transition-all cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                      >
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[10px] font-mono font-bold bg-[#612912] text-white px-2 py-0.5 rounded">
-                              {c.caseRef}
-                            </span>
-                            <span className="text-xs font-extrabold text-[#1A1A1A]">{c.clientName}</span>
-                            <span className="text-[10px] font-bold bg-[#612912]/10 text-[#452415] px-2 py-0.5 rounded">
-                              Tax Year {c.taxYear}
-                            </span>
-                          </div>
-                          <h4 className="font-heading font-extrabold text-sm text-[#1A1A1A]">{c.caseTitle}</h4>
-                          <div className="text-[11px] text-[#5A6275] flex items-center gap-3 flex-wrap">
-                            <span>Forum: <strong className="text-[#452415]">{c.forum}</strong></span>
-                            <span>• Lead Counsel: <strong>{c.assignedCounsel}</strong></span>
-                          </div>
-
-                          {/* Synced Stats Tags */}
-                          <div className="flex items-center gap-2 pt-1 text-[10px] font-bold text-gray-600">
-                            <span className="bg-white border px-2 py-0.5 rounded-md text-[#452415] flex items-center gap-1">
-                              <FolderOpen className="w-3 h-3 text-[#E5B842]" /> {caseDocs.length} Synced Docs
-                            </span>
-                            <span className="bg-white border px-2 py-0.5 rounded-md text-[#452415] flex items-center gap-1">
-                              <CreditCard className="w-3 h-3 text-[#E5B842]" /> {caseInvs.length} Invoices
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="text-right shrink-0">
-                          <span className="text-xs font-extrabold text-red-700 block">
-                            Rs. {(c.demandAmountPkr / 100000).toFixed(1)} Lakh
-                          </span>
-                          <span className="text-[10px] font-bold bg-[#E5B842]/20 text-[#1A1A1A] px-2.5 py-0.5 rounded-full inline-block mt-1">
-                            {c.status}
-                          </span>
-                        </div>
+              {/* Left Side (2 Columns): Active Tax Litigation Repository with Filters */}
+              <div className="lg:col-span-2 space-y-4">
+                <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
+                  {/* Panel Title & Controls */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">
+                          Active Tax Litigation Repository
+                        </h3>
+                        <span className="text-[10px] font-extrabold bg-[#612912] text-white px-2 py-0.5 rounded-full">
+                          {cases.length} Files
+                        </span>
                       </div>
-                    );
-                  })}
+                      <p className="text-xs text-[#5A6275] mt-0.5">
+                        Select any litigation file to view timeline events, synced briefs, billing ledgers & WhatsApp dispatches.
+                      </p>
+                    </div>
+
+                    <button 
+                      onClick={() => setActiveTab('cases')} 
+                      className="text-xs font-extrabold text-[#452415] hover:text-[#612912] hover:underline shrink-0 cursor-pointer self-start sm:self-auto"
+                    >
+                      View All Files ({cases.length}) →
+                    </button>
+                  </div>
+
+                  {/* Integrated Dashboard Search & Filter Bar */}
+                  <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
+                    <div className="relative w-full sm:flex-1">
+                      <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <input
+                        type="text"
+                        value={dashSearch}
+                        onChange={(e) => setDashSearch(e.target.value)}
+                        placeholder="Search by client name, case ref or court forum..."
+                        className="w-full pl-9 pr-3 py-2 text-xs bg-[#FAF8F5] border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#612912] focus:border-transparent font-medium"
+                      />
+                      {dashSearch && (
+                        <button
+                          onClick={() => setDashSearch('')}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Filter Chips */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto text-[11px] font-bold">
+                      {['All', 'Stay Granted', 'ATIR Tribunal Pending', 'Response Drafted', 'Favorable Order Passed'].map((st) => (
+                        <button
+                          key={st}
+                          type="button"
+                          onClick={() => setDashFilter(st)}
+                          className={`px-3 py-1.5 rounded-xl border transition-all shrink-0 cursor-pointer ${
+                            dashFilter === st
+                              ? 'bg-[#612912] text-white border-[#612912]'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-[#FAF8F5]'
+                          }`}
+                        >
+                          {st === 'All' ? 'All Statuses' : st}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Case Cards List */}
+                  <div className="space-y-3 pt-1">
+                    {(() => {
+                      const filtered = cases.filter((c) => {
+                        const matchesSearch =
+                          !dashSearch ||
+                          c.clientName.toLowerCase().includes(dashSearch.toLowerCase()) ||
+                          c.caseTitle.toLowerCase().includes(dashSearch.toLowerCase()) ||
+                          c.caseRef.toLowerCase().includes(dashSearch.toLowerCase()) ||
+                          c.forum.toLowerCase().includes(dashSearch.toLowerCase());
+                        const matchesFilter = dashFilter === 'All' || c.status === dashFilter;
+                        return matchesSearch && matchesFilter;
+                      });
+
+                      if (filtered.length === 0) {
+                        return (
+                          <div className="p-8 text-center bg-[#FAF8F5] rounded-2xl border border-dashed border-gray-300 text-gray-500 text-xs">
+                            <p className="font-bold">No litigation cases match your search or filter.</p>
+                            <button
+                              onClick={() => {
+                                setDashSearch('');
+                                setDashFilter('All');
+                              }}
+                              className="text-[#612912] font-extrabold underline mt-2 inline-block cursor-pointer"
+                            >
+                              Reset filters
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      return filtered.map((c) => {
+                        const caseDocs = documents.filter((d) => d.caseId === c.id);
+                        const caseInvs = invoices.filter((i) => i.caseId === c.id);
+                        return (
+                          <div
+                            key={c.id}
+                            onClick={() => setSelectedCase(c)}
+                            className="p-4 rounded-2xl bg-[#FAF8F5] border border-gray-200 hover:border-[#612912] transition-all cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:shadow-md"
+                          >
+                            <div className="space-y-1.5 flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-[10px] font-mono font-extrabold bg-[#612912] text-white px-2.5 py-0.5 rounded-md">
+                                  {c.caseRef}
+                                </span>
+                                <span className="text-xs font-extrabold text-[#1A1A1A]">{c.clientName}</span>
+                                <span className="text-[10px] font-bold bg-[#612912]/10 text-[#452415] px-2 py-0.5 rounded-md">
+                                  Tax Year {c.taxYear}
+                                </span>
+                              </div>
+
+                              <h4 className="font-heading font-extrabold text-sm text-[#1A1A1A] group-hover:text-[#612912] transition-colors leading-snug">
+                                {c.caseTitle}
+                              </h4>
+
+                              <div className="text-[11px] text-[#5A6275] flex items-center gap-3 flex-wrap">
+                                <span>Forum: <strong className="text-[#452415]">{c.forum}</strong></span>
+                                <span>• Lead Counsel: <strong className="text-[#1A1A1A]">{c.assignedCounsel}</strong></span>
+                              </div>
+
+                              {/* Synced Stats Tags */}
+                              <div className="flex items-center gap-2 pt-1 text-[10px] font-bold text-gray-600 flex-wrap">
+                                <span className="bg-white border border-gray-200 px-2.5 py-0.5 rounded-md text-[#452415] flex items-center gap-1 shadow-2xs">
+                                  <FolderOpen className="w-3 h-3 text-[#E5B842]" /> {caseDocs.length} Synced Docs
+                                </span>
+                                <span className="bg-white border border-gray-200 px-2.5 py-0.5 rounded-md text-[#452415] flex items-center gap-1 shadow-2xs">
+                                  <CreditCard className="w-3 h-3 text-[#E5B842]" /> {caseInvs.length} Invoices
+                                </span>
+                                {c.nextHearingDate && (
+                                  <span className="bg-[#E5B842]/20 border border-[#E5B842]/40 px-2.5 py-0.5 rounded-md text-[#452415] flex items-center gap-1 font-extrabold">
+                                    <CalendarIcon className="w-3 h-3 text-[#612912]" /> Next Hearing: {c.nextHearingDate}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Disputed Demand & Status Pill */}
+                            <div className="text-left sm:text-right shrink-0 space-y-1">
+                              <div className="text-xs font-extrabold text-red-700">
+                                Disputed Demand:
+                              </div>
+                              <div className="text-sm font-extrabold text-red-800 font-mono">
+                                Rs. {(c.demandAmountPkr / 100000).toFixed(1)} Lakh
+                              </div>
+                              <span className="text-[10px] font-extrabold bg-[#E5B842] text-[#1A1A1A] px-2.5 py-1 rounded-full inline-block shadow-2xs">
+                                {c.status}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
                 </div>
               </div>
 
-              {/* Cause List Hearings & Priority Action Queue */}
+              {/* Right Side (1 Column): Cause List Schedule & Billing Receivables */}
               <div className="space-y-6">
-                {/* Upcoming Hearings */}
+                {/* Panel 1: Cause List Court Schedule */}
                 <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">Cause List Court Schedule</h3>
-                    <button onClick={() => setShowAddHearingModal(true)} className="text-xs font-bold text-[#452415] flex items-center gap-1 hover:underline">
-                      <Plus className="w-3.5 h-3.5 text-[#E5B842]" /> Add
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div>
+                      <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">
+                        Cause List Court Schedule
+                      </h3>
+                      <p className="text-[11px] text-[#5A6275]">High Court & Appellate Benches</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowAddHearingModal(true)} 
+                      className="text-xs font-bold bg-[#612912] hover:bg-[#452415] text-white px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-2xs transition-all cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-[#E5B842]" /> Schedule
                     </button>
                   </div>
 
@@ -2594,17 +2987,27 @@ export const AdminPortal: React.FC = () => {
                           const selCase = cases.find((c) => c.id === h.caseId);
                           if (selCase) setSelectedCase(selCase);
                         }}
-                        className="p-4 rounded-2xl bg-[#612912]/5 border border-[#452415]/20 text-xs space-y-1.5 cursor-pointer hover:border-[#452415] transition-all"
+                        className="p-4 rounded-2xl bg-[#FAF8F5] border border-gray-200 hover:border-[#612912] text-xs space-y-2 cursor-pointer transition-all hover:shadow-sm group"
                       >
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-[#452415]">{h.forum}</span>
-                          <span className="font-extrabold text-[#1A1A1A] bg-[#E5B842] px-2 py-0.5 rounded">
-                            {h.date}
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="font-extrabold text-[#452415] bg-[#612912]/10 px-2 py-0.5 rounded text-[10px]">
+                            {h.forum}
+                          </span>
+                          <span className="font-extrabold text-[#1A1A1A] bg-[#E5B842] px-2.5 py-0.5 rounded shadow-2xs text-[11px]">
+                            📅 {h.date}
                           </span>
                         </div>
-                        <div className="font-extrabold text-sm text-[#1A1A1A]">{h.caseTitle}</div>
-                        <div className="text-[#5A6275]">Bench: {h.bench}</div>
-                        <div className="flex justify-end pt-1">
+
+                        <div className="font-extrabold text-sm text-[#1A1A1A] group-hover:text-[#612912] leading-snug">
+                          {h.caseTitle}
+                        </div>
+
+                        <div className="text-[11px] text-[#5A6275]">
+                          Bench: <strong className="text-[#1A1A1A]">{h.bench}</strong>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+                          <span className="text-[10px] text-gray-500 font-medium">Counsel: {h.counselAssigned.split(' ')[0]}</span>
                           <button
                             type="button"
                             onClick={(e) => {
@@ -2618,34 +3021,59 @@ export const AdminPortal: React.FC = () => {
                               });
                               window.open(url, '_blank');
                             }}
-                            className="text-[10px] font-extrabold text-[#452415] flex items-center gap-1 hover:underline"
+                            className="text-[10px] font-extrabold text-[#452415] hover:text-[#612912] flex items-center gap-1 hover:underline cursor-pointer"
                           >
-                            <CalendarIcon className="w-3 h-3 text-[#E5B842]" /> Add to Google Calendar
+                            <CalendarIcon className="w-3 h-3 text-[#E5B842]" /> + Google Calendar
                           </button>
                         </div>
                       </div>
                     ))}
                   </div>
+
+                  <button
+                    onClick={() => setActiveTab('calendar')}
+                    className="w-full text-center text-xs font-bold text-[#612912] hover:underline pt-1 block cursor-pointer"
+                  >
+                    View Full Cause List Calendar ({hearings.length}) →
+                  </button>
                 </div>
 
-                {/* Pending Unpaid Invoices Summary */}
-                <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-3">
-                  <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">Fee Receivables Summary</h3>
-                  <div className="space-y-2 text-xs">
+                {/* Panel 2: Pending Fee Receivables Summary */}
+                <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div>
+                      <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">
+                        Fee Receivables
+                      </h3>
+                      <p className="text-[11px] text-[#5A6275]">Unpaid Retainers & Bills</p>
+                    </div>
+                    <button 
+                      onClick={() => setActiveTab('billing')} 
+                      className="text-xs font-bold text-[#452415] hover:underline cursor-pointer"
+                    >
+                      Billing Ledger →
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5 text-xs">
                     {invoices.filter((i) => i.status !== 'Paid').map((i) => (
-                      <div key={i.id} className="p-3 rounded-xl bg-[#FAF8F5] border border-gray-200 flex items-center justify-between">
-                        <div>
-                          <div className="font-bold text-[#1A1A1A]">{i.clientName}</div>
-                          <div className="text-[10px] text-gray-500 font-mono">{i.invoiceNumber} • Due: {i.dueDate}</div>
+                      <div key={i.id} className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-gray-200 flex items-center justify-between gap-3">
+                        <div className="space-y-0.5">
+                          <div className="font-extrabold text-[#1A1A1A]">{i.clientName}</div>
+                          <div className="text-[10px] text-gray-500 font-mono">
+                            {i.invoiceNumber} • Due: {i.dueDate}
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <span className="font-extrabold text-[#452415] block">Rs. {i.totalAmountPkr.toLocaleString()}</span>
+                        <div className="text-right shrink-0">
+                          <span className="font-extrabold text-[#452415] block text-sm font-mono">
+                            Rs. {i.totalAmountPkr.toLocaleString()}
+                          </span>
                           <button
                             type="button"
                             onClick={() => setSelectedInvoiceForPdf(i)}
-                            className="text-[10px] font-bold text-[#612912] bg-[#612912]/5 px-2 py-0.5 rounded hover:bg-[#612912]/10 mt-0.5"
+                            className="text-[10px] font-extrabold text-white bg-[#612912] hover:bg-[#452415] px-2.5 py-1 rounded-lg transition-colors cursor-pointer mt-1 inline-block shadow-2xs"
                           >
-                            Send Invoice
+                            Send Invoice PDF
                           </button>
                         </div>
                       </div>
@@ -2916,7 +3344,7 @@ export const AdminPortal: React.FC = () => {
                   return (
                     <button
                       key={cd.dateStr}
-                      onClick={() => setSelectedCalendarDate(cd.dateStr)}
+                      onClick={() => handleSelectCalendarDate(cd.dateStr)}
                       className={`p-2 min-h-[70px] rounded-2xl border transition-all flex flex-col justify-between text-left ${
                         isSelected
                           ? 'bg-[#612912] text-white border-[#612912] shadow-md'
@@ -2939,7 +3367,7 @@ export const AdminPortal: React.FC = () => {
                               isSelected ? 'bg-[#E5B842] text-[#1A1A1A]' : 'bg-[#452415] text-white'
                             }`}
                           >
-                            {cd.dayHearings.length} Hearing{cd.dayHearings.length > 1 ? 's' : ''}
+                            {cd.dayHearings.length}
                           </span>
                         </div>
                       )}
@@ -2950,7 +3378,7 @@ export const AdminPortal: React.FC = () => {
             </div>
 
             {/* Hearings List for Selected Date or All */}
-            <div className="space-y-4">
+            <div ref={calendarHearingsListRef} className="space-y-4 scroll-mt-24">
               <h3 className="font-heading font-extrabold text-lg text-[#1A1A1A]">
                 {selectedCalendarDate ? `Hearings Scheduled for ${selectedCalendarDate}` : 'All Scheduled Hearings'}
               </h3>
@@ -3444,7 +3872,7 @@ export const AdminPortal: React.FC = () => {
               <div className="text-[11px] text-[#5A6275] font-semibold flex items-center justify-between px-1">
                 <span>Showing {filteredInvoices.length} of {invoices.length} fee invoices</span>
                 <span>
-                  Total Filtered Amount: <strong className="text-[#452415]">Rs. {filteredInvoices.reduce((acc, i) => acc + i.totalAmountPkr, 0).toLocaleString()}</strong>
+                  Total Filtered Amount: <strong className="text-[#452415]">Rs. {filteredInvoices.reduce((acc, i) => acc + (i.retainerFeePkr + i.hearingFeePkr), 0).toLocaleString()}</strong>
                 </span>
               </div>
             </div>
@@ -3482,7 +3910,7 @@ export const AdminPortal: React.FC = () => {
                           </button>
                         ) : (
                           <div className="text-xs text-[#5A6275]">
-                            Client: <span className="font-bold text-[#1A1A1A]">{inv.clientName}</span> (NTN: {inv.clientNtn})
+                            Client: <span className="font-bold text-[#1A1A1A]">{inv.clientName}</span>
                           </div>
                         )}
                       </div>
@@ -3491,7 +3919,7 @@ export const AdminPortal: React.FC = () => {
                       <div>
                         <div className="text-[10px] text-[#5A6275]">Total Invoice Fee</div>
                         <div className="font-extrabold text-[#452415] text-base">
-                          Rs. {inv.totalAmountPkr.toLocaleString()}
+                          Rs. {(inv.retainerFeePkr + inv.hearingFeePkr).toLocaleString()}
                         </div>
                       </div>
 
@@ -5077,6 +5505,68 @@ export const AdminPortal: React.FC = () => {
         )}
       </main>
 
+      {/* --- MOBILE APP STICKY BOTTOM QUICK NAV BAR --- */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#612912] border-t border-[#452415] px-2 py-1 flex items-center justify-around text-[10px] font-bold text-amber-100 shadow-2xl backdrop-blur-md">
+        <button
+          type="button"
+          onClick={() => setActiveTab('dashboard')}
+          className={`flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl transition-all cursor-pointer min-h-[44px] justify-center ${
+            activeTab === 'dashboard' ? 'text-[#E5B842] font-extrabold scale-105' : 'hover:text-white'
+          }`}
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          <span>Dashboard</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('cases')}
+          className={`flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl transition-all cursor-pointer min-h-[44px] justify-center relative ${
+            activeTab === 'cases' ? 'text-[#E5B842] font-extrabold scale-105' : 'hover:text-white'
+          }`}
+        >
+          <Briefcase className="w-5 h-5" />
+          <span>Cases</span>
+          {cases.length > 0 && (
+            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-[#E5B842]" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('calendar')}
+          className={`flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl transition-all cursor-pointer min-h-[44px] justify-center relative ${
+            activeTab === 'calendar' ? 'text-[#E5B842] font-extrabold scale-105' : 'hover:text-white'
+          }`}
+        >
+          <CalendarIcon className="w-5 h-5" />
+          <span>Calendar</span>
+          {hearings.length > 0 && (
+            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-[#E5B842]" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('billing')}
+          className={`flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl transition-all cursor-pointer min-h-[44px] justify-center ${
+            activeTab === 'billing' ? 'text-[#E5B842] font-extrabold scale-105' : 'hover:text-white'
+          }`}
+        >
+          <CreditCard className="w-5 h-5" />
+          <span>Billing</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl text-amber-100 hover:text-white transition-all cursor-pointer min-h-[44px] justify-center"
+        >
+          <Menu className="w-5 h-5 text-[#E5B842]" />
+          <span>More</span>
+        </button>
+      </nav>
+
       {/* --- MODALS --- */}
 
       {/* MODAL 1: COMPREHENSIVE NEW TAX CASE MODAL */}
@@ -5088,7 +5578,13 @@ export const AdminPortal: React.FC = () => {
                 <span className="text-[10px] font-bold text-[#E5B842] uppercase tracking-wider block">Litigation Intake</span>
                 <h3 className="text-lg font-heading font-extrabold text-[#1A1A1A]">Register New Tax Litigation File</h3>
               </div>
-              <button onClick={() => setShowAddCaseModal(false)} className="text-gray-400 hover:text-black font-bold">
+              <button
+                onClick={() => {
+                  setShowAddCaseModal(false);
+                  setIsAddingNewClientInCase(false);
+                }}
+                className="text-gray-400 hover:text-black font-bold"
+              >
                 ✕
               </button>
             </div>
@@ -5106,23 +5602,112 @@ export const AdminPortal: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">Select Client</label>
-                  <select
-                    value={newCaseData.clientId}
-                    onChange={(e) => setNewCaseData({ ...newCaseData, clientId: e.target.value })}
-                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold"
-                  >
-                    {clients.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name} (NTN: {c.ntn})
-                      </option>
-                    ))}
-                  </select>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className={isAddingNewClientInCase ? 'sm:col-span-2' : ''}>
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <label className="font-bold text-gray-700">
+                      {isAddingNewClientInCase ? 'New Client Details' : 'Select Client'}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingNewClientInCase(!isAddingNewClientInCase)}
+                      className="text-[11px] font-extrabold text-[#612912] hover:text-[#452415] underline cursor-pointer whitespace-nowrap"
+                    >
+                      {isAddingNewClientInCase ? '← Select Existing Client' : '+ Add New Client'}
+                    </button>
+                  </div>
+
+                  {!isAddingNewClientInCase ? (
+                    <select
+                      value={newCaseData.clientId}
+                      onChange={(e) => {
+                        if (e.target.value === '__NEW_CLIENT__') {
+                          setIsAddingNewClientInCase(true);
+                        } else {
+                          setNewCaseData({ ...newCaseData, clientId: e.target.value });
+                        }
+                      }}
+                      className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold"
+                    >
+                      {clients.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name} (NTN: {c.ntn})
+                        </option>
+                      ))}
+                      <option value="__NEW_CLIENT__">+ Add New Client...</option>
+                    </select>
+                  ) : (
+                    <div className="bg-[#612912]/5 p-3 rounded-2xl border border-[#452415]/20 space-y-2.5">
+                      <div>
+                        <label className="font-bold text-gray-700 block mb-1">
+                          New Client Name / Entity <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. Al-Farooq Traders or Muhammad Tariq"
+                          value={newCaseClientDraft.name}
+                          onChange={(e) =>
+                            setNewCaseClientDraft({ ...newCaseClientDraft, name: e.target.value })
+                          }
+                          className="w-full bg-white p-2.5 rounded-xl border border-gray-200 font-bold"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                          <label className="font-bold text-gray-700 block mb-1">NTN Number (Optional)</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. 3948572-9"
+                            value={newCaseClientDraft.ntn}
+                            onChange={(e) =>
+                              setNewCaseClientDraft({ ...newCaseClientDraft, ntn: e.target.value })
+                            }
+                            className="w-full bg-white p-2 rounded-xl border border-gray-200 font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-gray-700 block mb-1">CNIC Number (Optional)</label>
+                          <input
+                            type="text"
+                            placeholder="35202-1234567-1"
+                            value={newCaseClientDraft.cnic}
+                            onChange={(e) =>
+                              setNewCaseClientDraft({ ...newCaseClientDraft, cnic: e.target.value })
+                            }
+                            className="w-full bg-white p-2 rounded-xl border border-gray-200 font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-gray-700 block mb-1">Phone / WhatsApp (Optional)</label>
+                          <input
+                            type="text"
+                            placeholder="+92 300 1234567"
+                            value={newCaseClientDraft.phone}
+                            onChange={(e) =>
+                              setNewCaseClientDraft({ ...newCaseClientDraft, phone: e.target.value })
+                            }
+                            className="w-full bg-white p-2 rounded-xl border border-gray-200"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-gray-700 block mb-1">Client Email (Optional)</label>
+                          <input
+                            type="email"
+                            placeholder="client@company.pk"
+                            value={newCaseClientDraft.email}
+                            onChange={(e) =>
+                              setNewCaseClientDraft({ ...newCaseClientDraft, email: e.target.value })
+                            }
+                            className="w-full bg-white p-2 rounded-xl border border-gray-200"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div>
+                <div className={isAddingNewClientInCase ? 'sm:col-span-2' : ''}>
                   <label className="font-bold text-gray-700 block mb-1">FBR CNO / Order No.</label>
                   <input
                     type="text"
@@ -5134,7 +5719,7 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Legal Forum</label>
                   <select
@@ -5174,7 +5759,7 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Lead Counsel</label>
                   <select
@@ -5218,7 +5803,7 @@ export const AdminPortal: React.FC = () => {
               {/* Hearing Schedule Block */}
               <div className="bg-[#612912]/5 p-3 rounded-2xl border border-[#452415]/20 space-y-2">
                 <span className="font-extrabold text-[#452415] block">Initial Cause List Schedule</span>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="font-bold text-gray-700 block mb-1">Initial Hearing Date</label>
                     <input
@@ -5252,7 +5837,7 @@ export const AdminPortal: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Initial Privileged Note (Optional)</label>
                   <input
@@ -5277,11 +5862,11 @@ export const AdminPortal: React.FC = () => {
 
               {/* Client Portal Credentials Block */}
               <div className="bg-amber-500/10 p-3 rounded-2xl border border-amber-500/20 space-y-2">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <span className="font-extrabold text-[#1A1A1A] text-xs block">🔐 Assign Client Portal Login (Optional)</span>
                   <span className="text-[10px] text-gray-600 font-bold">Allows client to sign-in to track this case</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="font-bold text-gray-700 block mb-1">Client Sign-In Email</label>
                     <input
@@ -5305,18 +5890,20 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t">
-
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t">
                 <button
                   type="button"
-                  onClick={() => setShowAddCaseModal(false)}
-                  className="px-4 py-2 rounded-xl border text-gray-600 font-bold"
+                  onClick={() => {
+                    setShowAddCaseModal(false);
+                    setIsAddingNewClientInCase(false);
+                  }}
+                  className="w-full sm:w-auto px-4 py-2.5 min-h-[44px] rounded-xl border text-gray-600 font-bold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-[#E5B842] text-[#1A1A1A] font-extrabold shadow-sm"
+                  className="w-full sm:w-auto px-5 py-2.5 min-h-[44px] rounded-xl bg-[#E5B842] hover:bg-[#E09415] text-[#1A1A1A] font-extrabold shadow-sm transition-all cursor-pointer"
                 >
                   Register Case File
                 </button>
@@ -5349,7 +5936,7 @@ export const AdminPortal: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">NTN Number</label>
                   <input
@@ -5374,7 +5961,7 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Phone (WhatsApp)</label>
                   <input
@@ -5412,18 +5999,17 @@ export const AdminPortal: React.FC = () => {
                 <span className="text-[10px] text-gray-500 mt-1 block">Client can use this email & password to sign in to their Client Portal</span>
               </div>
 
-              <div className="flex justify-end gap-2 pt-3">
-
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t">
                 <button
                   type="button"
                   onClick={() => setShowAddClientModal(false)}
-                  className="px-4 py-2 rounded-xl border text-gray-600 font-bold"
+                  className="w-full sm:w-auto px-4 py-2.5 min-h-[44px] rounded-xl border text-gray-600 font-bold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-[#612912] text-white font-extrabold shadow-sm"
+                  className="w-full sm:w-auto px-5 py-2.5 min-h-[44px] rounded-xl bg-[#612912] hover:bg-[#452415] text-white font-extrabold shadow-sm transition-all cursor-pointer"
                 >
                   Save Client
                 </button>
@@ -5937,7 +6523,7 @@ export const AdminPortal: React.FC = () => {
                       setNewInvoiceData({
                         ...newInvoiceData,
                         retainerFeePkr: Number(e.target.value),
-                        totalAmountPkr: Number(e.target.value) + newInvoiceData.hearingFeePkr + newInvoiceData.salesTaxPkr
+                        totalAmountPkr: Number(e.target.value) + newInvoiceData.hearingFeePkr
                       })
                     }
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200"
@@ -5952,7 +6538,7 @@ export const AdminPortal: React.FC = () => {
                       setNewInvoiceData({
                         ...newInvoiceData,
                         hearingFeePkr: Number(e.target.value),
-                        totalAmountPkr: newInvoiceData.retainerFeePkr + Number(e.target.value) + newInvoiceData.salesTaxPkr
+                        totalAmountPkr: newInvoiceData.retainerFeePkr + Number(e.target.value)
                       })
                     }
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200"
@@ -7371,7 +7957,7 @@ export const AdminPortal: React.FC = () => {
                       className="w-full bg-white p-2 rounded-xl border border-gray-200"
                     />
 
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       <div>
                         <label className="font-bold text-gray-600 block mb-1">Retainer (PKR)</label>
                         <input
@@ -7390,20 +7976,11 @@ export const AdminPortal: React.FC = () => {
                           className="w-full bg-white p-2 rounded-xl border border-gray-200"
                         />
                       </div>
-                      <div>
-                        <label className="font-bold text-gray-600 block mb-1">Sales Tax (PKR)</label>
-                        <input
-                          type="number"
-                          value={inlineInvoice.salesTaxPkr}
-                          onChange={(e) => setInlineInvoice({ ...inlineInvoice, salesTaxPkr: Number(e.target.value) })}
-                          className="w-full bg-white p-2 rounded-xl border border-gray-200"
-                        />
-                      </div>
                     </div>
 
                     <div className="flex items-center justify-between pt-1">
                       <div className="font-extrabold text-[#452415]">
-                        Total: Rs. {(inlineInvoice.retainerFeePkr + inlineInvoice.hearingFeePkr + inlineInvoice.salesTaxPkr).toLocaleString()}
+                        Total: Rs. {(inlineInvoice.retainerFeePkr + inlineInvoice.hearingFeePkr).toLocaleString()}
                       </div>
 
                       <button
