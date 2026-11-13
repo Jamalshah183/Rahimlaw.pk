@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, MessageSquare, Clock, ShieldCheck, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
+import { usePortalStore } from '../lib/portalStore';
 
 interface ContactSectionProps {
   initialPracticeArea?: string;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeArea = '' }) => {
+  const { practiceAreas: storePracticeAreas } = usePortalStore();
+  const practiceTopics =
+    storePracticeAreas.length > 0 ? storePracticeAreas : FIRM_CONFIG.practiceAreas;
   const [selectedTopic, setSelectedTopic] = useState<string>(
     initialPracticeArea || ''
   );
@@ -126,7 +130,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialPracticeA
                     Select Matter Topic (Optional — Pre-fills Your WhatsApp Message)
                   </span>
                   <div className="flex flex-wrap gap-2">
-                    {FIRM_CONFIG.practiceAreas.map((area) => {
+                    {practiceTopics.map((area) => {
                       const isSelected = selectedTopic === area.title;
                       return (
                         <button

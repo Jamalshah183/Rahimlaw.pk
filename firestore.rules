@@ -23,6 +23,7 @@ service cloud.firestore {
         request.auth.token.email.lower() == 'contact@rahimlawassociates.com' ||
         request.auth.token.email.lower() == 'info@rahimlawassociates.com' ||
         request.auth.token.email.lower() == 'rahim.nawaz@i-con.pk' ||
+        request.auth.token.email.lower() == 'kamranroshanshaikh@gmail.com' ||
         exists(/databases/$(database)/documents/admins/$(request.auth.uid))
       );
     }

@@ -11,10 +11,14 @@ import {
   PracticeArea,
   TeamMember,
   ReviewItem,
-  LegalInsightItem,
-  PartnerItem
+  LegalInsightItem
 } from '../types/portal';
-import { ATTORNEYS, TESTIMONIALS, BLOG_POSTS } from './lawFirmData';
+import { FIRM_CONFIG } from './firmData';
+import { INSIGHTS_DATA } from './insightsData';
+import rahimMemberImg from '../assets/images/rahim_nawaz_khan_abbasi.png';
+import hasanImg from '../assets/images/hasan_rashid_qamar.png';
+import mehakImg from '../assets/images/mehak_ali.png';
+import khadijaImg from '../assets/images/khadija_sharafat_khan.png';
 
 export const INITIAL_CLIENTS: Client[] = [
   {
@@ -567,242 +571,212 @@ export const INITIAL_CLIENT_CREDENTIALS = [
   }
 ];
 
-export const INITIAL_PRACTICE_AREAS: PracticeArea[] = [
-  // 1. LITIGATION & DISPUTES
-  {
-    id: 'litigation-arbitration-white-collar',
-    title: 'Civil, Commercial & Trial Litigation',
+const PRACTICE_AREA_METADATA: Record<
+  string,
+  { category: string; iconName: string; badge: string }
+> = {
+  'litigation-dispute-resolution': {
     category: 'Litigation & Disputes',
-    shortDesc: 'High Court civil suits, commercial disputes, domestic/international arbitration (ADR), and banking recovery defense.',
-    fullDesc: 'Tenacious courtroom advocacy and dispute resolution before District Courts, Special Banking Courts, and High Courts across Pakistan. We specialize in commercial contract breaches, recovery of finances, domestic & international arbitration under the Arbitration Act, and trial defense in white-collar accountability matters (NAB / FIA).',
-    subServices: [
-      'Civil & Commercial Court Suits',
-      'Commercial Arbitration & ADR',
-      'Banking Court Recovery & Defense',
-      'White-Collar Crime (NAB & FIA)'
-    ],
-    keyHighlights: [
-      'High Court & District Court Civil and Commercial Trials',
-      'Domestic & International Commercial Arbitration (ADR)',
-      'Banking Court Recovery Defense & Financial Suits',
-      'NAB & FIA Accountability Trial & Investigation Defense'
-    ],
     iconName: 'Gavel',
-    badge: 'Trial & Arbitration'
+    badge: 'Litigation'
   },
-  {
-    id: 'constitutional-public-law',
-    title: 'Constitutional Writs & Public Law',
-    category: 'Litigation & Disputes',
-    shortDesc: 'High Court Constitutional Writ Petitions under Article 199, emergency stay orders, and challenging unlawful government actions.',
-    fullDesc: 'Defending fundamental constitutional rights and commercial operations against executive excess before the High Courts of Pakistan. We draft and argue high-impact Article 199 constitutional petitions, secure urgent stay orders against coercive actions, challenge arbitrary FBR notifications/SROs, and litigate public procurement (PPRA) disputes.',
-    subServices: [
-      'High Court Writs (Article 199)',
-      'Emergency Stay Orders & Injunctions',
-      'Challenging Unlawful SROs & Circulars',
-      'Public Procurement (PPRA) Disputes'
-    ],
-    keyHighlights: [
-      'High Court Article 199 Writs Against Arbitrary Executive Orders',
-      'Emergency Injunctions Against Coercive Bank Attachment',
-      'Challenging Ultra Vires FBR Rules, Statutory SROs & Notices',
-      'Government Tender Invalidation & PPRA Compliance Appeals'
-    ],
-    iconName: 'Scale',
-    badge: 'Constitutional Writs'
-  },
-
-  // 2. CORPORATE & ADVISORY
-  {
-    id: 'corporate-secp-advisory',
-    title: 'Corporate, SECP & Business Advisory',
+  'corporate-commercial': {
     category: 'Corporate & Advisory',
-    shortDesc: 'SECP company incorporation, annual statutory compliance (Form A/29), shareholder agreements, and corporate governance.',
-    fullDesc: 'Full-spectrum corporate legal counsel for startups, mid-sized enterprises, and multinational corporations. We oversee entity incorporation (Private Limited, SMC, LLP) with SECP, statutory annual filings, board governance, shareholder pacts, capital restructuring, and regulatory compliance.',
-    subServices: [
-      'Company Formation (Pvt Ltd / SMC / LLP)',
-      'SECP Statutory Filings (Form A / Form 29)',
-      'Corporate Governance & Structuring',
-      'Shareholder & Joint Venture Agreements'
-    ],
-    keyHighlights: [
-      'SECP Incorporation, Licensing & Name Reservations',
-      'Annual Statutory Compliance & Regulatory Returns',
-      'Drafting Articles of Association & Board Resolutions',
-      'Corporate Restructuring, Amalgamations & Dissolutions'
-    ],
     iconName: 'Building2',
     badge: 'Corporate'
   },
-  {
-    id: 'commercial-contracts-advisory',
-    title: 'Commercial Contracts & Transaction Advisory',
-    category: 'Corporate & Advisory',
-    shortDesc: 'Strategic commercial agreements, M&A due diligence, IPO trademark registrations, and labor law compliance.',
-    fullDesc: 'Safeguarding commercial operations with precision legal drafting and transaction advisory. We structure multi-party commercial contracts, lead legal due diligence for mergers & acquisitions (M&A), register and defend trademarks and patents with IPO Pakistan, and advise on labor laws, EOBI, and employment contracts.',
-    subServices: [
-      'Commercial Contract Drafting & Vetting',
-      'Mergers, Acquisitions (M&A) & Due Diligence',
-      'IPO Trademark & Intellectual Property',
-      'Employment, Labor & EOBI Compliance'
-    ],
-    keyHighlights: [
-      'High-Stakes Vendor, Distribution & Franchise Agreements',
-      'M&A Legal Due Diligence & Share Purchase Contracts',
-      'Trademark, Brand & Copyright Registration with IPO Pakistan',
-      'Employment Agreements, Workplace Policies & Labor Law Compliance'
-    ],
-    iconName: 'Briefcase',
-    badge: 'Advisory'
+  'property-real-estate': {
+    category: 'Property & Real Estate',
+    iconName: 'Home',
+    badge: 'Real Estate'
   },
-
-  // 3. TAX & COMPLIANCE
-  {
-    id: 'taxation-fbr-advisory',
-    title: 'Taxation & FBR Legal Defense',
-    category: 'Tax & Compliance',
-    shortDesc: 'Direct & indirect taxation, high-stakes FBR show-cause defense, tax audit rebuttals, and High Court tax writs.',
-    fullDesc: 'Premier tax litigation and contentious defense for corporations, manufacturers, and high-net-worth individuals. We represent clients against FBR show-cause notices, Section 122 reassessments, sales tax audits across provincial authorities (PRA, SRB, KPRA, BRA), and lead appeals before CIR-A, ATIR, and High Courts.',
-    subServices: [
-      'Direct & Indirect Taxation',
-      'FBR Notice & Audit Defense',
-      'Appellate Tribunal (ATIR) Appeals',
-      'High Court Tax Writ Litigation'
-    ],
-    keyHighlights: [
-      'Rebutting FBR Section 122 & Section 111 Audit Show-Cause Notices',
-      'Stay Orders Against Bank Account Attachments & Coercive Recovery',
-      'Appeals Before Commissioner (Appeals) & ATIR Tribunal',
-      'High Court Reference Applications on Substantial Questions of Law'
-    ],
-    iconName: 'FileText',
-    badge: 'Core Specialty'
+  'family-private-client': {
+    category: 'Family & Private Client',
+    iconName: 'Users',
+    badge: 'Private Client'
   },
-  {
-    id: 'tax-compliance-returns-bookkeeping',
-    title: 'Tax Compliance, Returns & Bookkeeping',
-    category: 'Tax & Compliance',
-    shortDesc: 'Annual income tax filings, monthly sales tax returns, Active Taxpayer List (ATL) status, and tax-compliant bookkeeping.',
-    fullDesc: 'Meticulous, proactive tax compliance designed to insulate businesses from scrutiny and penalties. We manage timely annual income tax returns, monthly sales tax e-filing, Active Taxpayer List (ATL) maintenance, withholding tax statements, exemption certificates (Section 153/159), and computerized ledger bookkeeping.',
-    subServices: [
-      'Annual Return Filing & ATL Status',
-      'Monthly Sales Tax Returns (FBR & Provinces)',
-      'Withholding Tax Statements & Exemptions',
-      'Computerized Ledger & Bookkeeping'
-    ],
-    keyHighlights: [
-      'Active Taxpayer List (ATL) Restoration & Surcharge Immunity',
-      'Tax Exemption Certificates (u/s 153 & 159) Filing & Approval',
-      'Sales Tax Invoice Auditing & Input-Tax Reconciliations',
-      'Compliant Double-Entry Bookkeeping & Financial Statements'
-    ],
+  'international-cross-border': {
+    category: 'International & Cross-Border',
     iconName: 'Landmark',
-    badge: 'Compliance'
+    badge: 'Cross-Border'
+  },
+  'legal-research-advisory': {
+    category: 'Legal Research & Advisory',
+    iconName: 'FileText',
+    badge: 'Advisory'
+  }
+};
+
+export const INITIAL_PRACTICE_AREAS: PracticeArea[] = FIRM_CONFIG.practiceAreas.map((pa) => {
+  const meta = PRACTICE_AREA_METADATA[pa.id] || {
+    category: pa.title,
+    iconName: 'Scale',
+    badge: 'Core Practice'
+  };
+  return {
+    id: pa.id,
+    title: pa.title,
+    category: meta.category,
+    shortDesc: pa.shortDesc,
+    fullDesc: pa.fullDesc,
+    subServices: pa.keyServices,
+    keyHighlights: pa.keyServices,
+    iconName: meta.iconName,
+    image: pa.image,
+    badge: meta.badge
+  };
+});
+
+export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
+  {
+    id: 'rahim-abbasi',
+    name: 'Mr. Rahim Nawaz Khan Abbasi',
+    title: 'Senior Counsel (Founding Member)',
+    credentials: ['Advocate High Court', 'Founding Member'],
+    pillarWatermark: 'FOUNDER',
+    experienceYears: 18,
+    specialty: 'Taxation, Corporate & Company Laws',
+    specializations: [
+      'Taxation, Corporate & Company Laws',
+      'Banking, NBFCs & Financial Advisory',
+      'Intellectual Property & Corporate Structuring',
+      'High Court Litigation & Regulatory Disputes'
+    ],
+    bio: 'Mr. Rahim is the Senior Counsel overseeing the matters pertaining to Taxation, Corporate and Company Laws, Intellectual Property, Banking and NBFCs. Mr. Rahim has vast experience in dealing tax and corporate cases with individuals, AOPs, and companies.',
+    fullBio: [
+      'Mr. Rahim is the Senior Counsel overseeing the matters pertaining to Taxation, Corporate and Company Laws, Intellectual Property, Banking and NBFCs. Mr. Rahim has vast experience in dealing tax and corporate cases with individuals, AOPs, and companies.',
+      'He is a law graduate and also holds the degree of M.Phil (Finance) and MBA. He is also Fellow Member of Institute of Corporate Secretaries of Pakistan (ICSP), Member of Institute of Bankers of Pakistan and Registered Tax Practitioner with FBR.'
+    ],
+    image: rahimMemberImg,
+    keyWin: 'Lead Senior Counsel overseeing Taxation, Corporate, Banking & NBFC litigation.',
+    isCeo: true,
+    stickToLeft: true,
+    order: 1,
+    createdAt: '2025-01-01'
+  },
+  {
+    id: 'hasan-qamar',
+    name: 'Mr. Hasan Rashid Qamar',
+    title: 'Advocate Supreme Court (Founding Member)',
+    credentials: ['Advocate Supreme Court', 'CIArb Accredited Mediator'],
+    pillarWatermark: 'FOUNDER',
+    experienceYears: 15,
+    specialty: 'Supreme Court Litigation & Appellate Advocacy',
+    specializations: [
+      'Supreme Court Litigation & Appellate Advocacy',
+      'CIArb Accredited Mediation & Dispute Resolution',
+      'UK & International Legal Practice (Oxford & Warwick)',
+      'Constitutional & Commercial Litigation'
+    ],
+    bio: 'Mr. Hasan completed his education from Army Burn Hall College, Abbottabad and thereafter went to Warwick University, UK and completed his LLB (Hons.) from University of London. He also obtained Post Graduate Diploma in Law & Legal practice from Oxford University, UK as well as Oxford Brookes University, UK.',
+    fullBio: [
+      'Mr. Hasan completed his education from Army Burn Hall College, Abbottabad and thereafter went to Warwick University, UK and completed his LLB (Hons.) from University of London. He also obtained Post Graduate Diploma in Law & Legal practice from Oxford University, UK as well as Oxford Brookes University, UK.',
+      'Mr. Hasan is enrolled as an Advocate of the Supreme Court since 2020. Mr. Hasan successfully completed and passed Mediation Training & Assessment from Chartered Institute of Arbitrators (UK) and is certified as CIArb Accredited Mediator.'
+    ],
+    image: hasanImg,
+    keyWin: 'Advocate Supreme Court since 2020 & CIArb Accredited Mediator.',
+    isCeo: false,
+    stickToLeft: false,
+    order: 2,
+    createdAt: '2025-01-01'
+  },
+  {
+    id: 'mehak-ali',
+    name: 'Ms. Mehak Ali',
+    title: 'Advocate High Court',
+    credentials: ['Advocate High Court', 'LL.M.'],
+    pillarWatermark: 'ADVOCATE',
+    experienceYears: 8,
+    specialty: 'SECP Corporate Compliance & FBR Tax Litigation',
+    specializations: [
+      'SECP Corporate Compliance & Structuring',
+      'FBR Tax Litigation & Statutory Advisory',
+      'High Court Practice & Legal Drafting',
+      'Commercial Contracts & Corporate Law'
+    ],
+    bio: 'She obtained her law degree from Punjab University and completed her LLM from the University of Lahore. She has been actively practicing in corporate and tax law before the SECP, FBR, and the High Court.',
+    fullBio: [
+      'She obtained her law degree from Punjab University and completed her LLM from the University of Lahore.',
+      'She has been associated with several renowned law firms and has been actively practicing in the areas of corporate and tax law, with a specialization in matters before the SECP, FBR, and the High Court.'
+    ],
+    image: mehakImg,
+    keyWin: 'Corporate & Tax Litigation before SECP, FBR, and the High Court.',
+    isCeo: false,
+    stickToLeft: false,
+    order: 3,
+    createdAt: '2025-01-01'
+  },
+  {
+    id: 'khadija-sharafat-khan',
+    name: 'Barrister Khadija Sharafat Khan',
+    title: 'Advocate High Court',
+    credentials: ['Advocate High Court', 'Bar-at-Law'],
+    pillarWatermark: 'BARRISTER',
+    experienceYears: 8,
+    specialty: 'Litigation, Family & Property Law, IP & ADR',
+    specializations: [
+      'Litigation, Family & Property Law',
+      'Intellectual Property & Cybercrime',
+      'Banking Law & NAB-Related Matters',
+      'Mediation & Alternative Dispute Resolution (ADR)'
+    ],
+    bio: 'She holds an LL.B. from Brunel University London, an LL.M., and a Bar-at-Law qualification from the University of Law, London.',
+    fullBio: [
+      'She holds an LL.B. from Brunel University London, an LL.M., and a Bar-at-Law qualification from the University of Law, London.',
+      'Her practice covers litigation, family and property law, intellectual property, cybercrime, banking law, and NAB-related matters. She also specializes in mediation and Alternative Dispute Resolution (ADR), adopting an empathetic yet assertive approach to resolving disputes with professionalism, integrity, and discretion.'
+    ],
+    image: khadijaImg,
+    keyWin: 'Litigation, IP, Banking, NAB matters & Alternative Dispute Resolution (ADR).',
+    isCeo: false,
+    stickToLeft: false,
+    order: 4,
+    createdAt: '2025-01-01'
   }
 ];
 
-export const INITIAL_TEAM_MEMBERS: TeamMember[] = ATTORNEYS.map((attorney, index) => ({
-  ...attorney,
-  order: index + 1,
-  createdAt: '2025-01-01',
-  stickToLeft: attorney.stickToLeft ?? (attorney.isCeo || index === 0)
-}));
-
-export const INITIAL_REVIEWS: ReviewItem[] = TESTIMONIALS.map((rev) => ({
-  ...rev,
+export const INITIAL_REVIEWS: ReviewItem[] = FIRM_CONFIG.testimonials.map((t) => ({
+  id: t.id,
+  clientInitials: t.clientName,
+  clientRole: t.matterArea,
+  location: t.location || 'Islamabad',
+  caseType: t.matterArea,
+  dollarSaved: 'Verified Relief',
+  rating: 5,
+  reviewText: t.quote,
+  verifiedBadge: true,
+  date: '2026',
   status: 'published',
   featured: true,
   createdAt: '2026-01-01'
 }));
 
-export const INITIAL_INSIGHTS: LegalInsightItem[] = BLOG_POSTS.map((post) => ({
-  ...post,
+export const INITIAL_INSIGHTS: LegalInsightItem[] = INSIGHTS_DATA.map((post) => ({
+  id: post.slug,
+  slug: post.slug,
+  title: post.title,
+  subtitle: post.subtitle,
+  category: post.category,
+  date: post.publishedDate,
+  publishedDate: post.publishedDate,
+  readTime: post.readTime,
+  excerpt: post.excerpt,
+  image: post.image,
+  imageCaption: post.imageCaption,
+  number: post.number,
+  author: {
+    name: post.author.name,
+    role: post.author.role,
+    credentials: post.author.credentials
+  },
+  keyTakeaways: post.keyTakeaways,
+  content: post.sections.flatMap((s) => s.paragraphs),
+  sections: post.sections,
+  pullQuote: post.pullQuote,
+  statutesReferenced: post.statutesReferenced,
+  featured: true,
   status: 'published',
-  createdAt: '2026-01-01'
+  createdAt: post.date
 }));
-
-export const INITIAL_PARTNERS: PartnerItem[] = [
-  {
-    id: 'partner-fbr',
-    name: 'Federal Board of Revenue (FBR)',
-    logoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://fbr.gov.pk',
-    category: 'Tax & Regulatory Body',
-    description: 'Federal Revenue & Tax Statutory Authority of Pakistan',
-    status: 'published',
-    order: 1
-  },
-  {
-    id: 'partner-ihcba',
-    name: 'Islamabad High Court Bar Association',
-    logoUrl: 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://ihcbar.org.pk',
-    category: 'Bar Association',
-    description: 'High Court Advocates Governing Bar Association',
-    status: 'published',
-    order: 2
-  },
-  {
-    id: 'partner-pbc',
-    name: 'Pakistan Bar Council (PBC)',
-    logoUrl: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://pakistanbarcouncil.org',
-    category: 'Apex Governing Body',
-    description: 'Supreme Regulatory Body of Legal Profession in Pakistan',
-    status: 'published',
-    order: 3
-  },
-  {
-    id: 'partner-secp',
-    name: 'Securities & Exchange Commission of Pakistan',
-    logoUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://secp.gov.pk',
-    category: 'Corporate Regulator',
-    description: 'Financial & Corporate Sector Regulatory Authority',
-    status: 'published',
-    order: 4
-  },
-  {
-    id: 'partner-scbap',
-    name: 'Supreme Court Bar Association of Pakistan',
-    logoUrl: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://scbap.org.pk',
-    category: 'Bar Association',
-    description: 'Apex Court Advocates Statutory Association',
-    status: 'published',
-    order: 5
-  },
-  {
-    id: 'partner-lhcba',
-    name: 'Lahore High Court Bar Association',
-    logoUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://lhcba.org',
-    category: 'Bar Association',
-    description: 'High Court Bar Association',
-    status: 'published',
-    order: 6
-  },
-  {
-    id: 'partner-ipo',
-    name: 'Intellectual Property Organization of Pakistan',
-    logoUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://ipo.gov.pk',
-    category: 'IP Statutory Body',
-    description: 'Trademarks, Patents & Copyright Authority',
-    status: 'published',
-    order: 7
-  },
-  {
-    id: 'partner-itba',
-    name: 'Islamabad Tax Bar Association',
-    logoUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: '#',
-    category: 'Tax Bar Association',
-    description: 'Professional Association of Tax Advocates & Consultants',
-    status: 'published',
-    order: 8
-  }
-];
 
 
 

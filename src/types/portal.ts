@@ -193,6 +193,7 @@ export interface PracticeArea {
   subServices: string[];
   keyHighlights: string[];
   iconName: string;
+  image?: string;
   badge?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -205,6 +206,8 @@ export interface TeamMember {
   credentials: string[];
   experienceYears: number;
   specialty: string;
+  specializations?: string[];
+  pillarWatermark?: string;
   bio: string;
   fullBio?: string[];
   image: string;
@@ -237,32 +240,31 @@ export interface LegalInsightItem {
   id: string;
   title: string;
   slug: string;
+  subtitle?: string;
   category: string;
   date: string;
+  publishedDate?: string;
   readTime: string;
   excerpt: string;
+  image?: string;
+  imageCaption?: string;
+  number?: string;
   author: {
     name: string;
     role: string;
-    avatar: string;
+    credentials?: string;
+    avatar?: string;
   };
   keyTakeaways: string[];
   content: string[];
+  sections?: {
+    heading: string;
+    paragraphs: string[];
+  }[];
+  pullQuote?: string;
+  statutesReferenced?: string[];
   featured?: boolean;
   status?: 'published' | 'draft' | 'archived';
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface PartnerItem {
-  id: string;
-  name: string;
-  logoUrl: string;
-  websiteUrl?: string;
-  category?: string;
-  description?: string;
-  order?: number;
-  status?: 'published' | 'archived';
   createdAt?: string;
   updatedAt?: string;
 }

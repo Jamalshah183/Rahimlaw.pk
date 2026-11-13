@@ -8,7 +8,9 @@ import {
   ChevronRight,
   Sparkles,
 } from 'lucide-react';
-import { INSIGHTS_DATA, INSIGHT_CATEGORIES, InsightPost } from '../data/insightsData';
+import { InsightPost } from '../data/insightsData';
+import { usePortalStore } from '../lib/portalStore';
+import { mapInsightsToPosts, deriveInsightCategories } from '../utils/insightMapper';
 
 interface InsightsSectionProps {
   onNavigateToAllInsights: () => void;
@@ -29,25 +31,34 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
   onNavigateToAllInsights,
   onNavigateToPost,
 }) => {
+  const { insights } = usePortalStore();
   const [activeCategory, setActiveCategory] = useState<string>('All Publications');
   const [mobileSpotlightIndex, setMobileSpotlightIndex] = useState<number>(0);
 
-  const leadPost = INSIGHTS_DATA[0];
+  const posts = mapInsightsToPosts(insights);
+  const categories = deriveInsightCategories(posts);
+  const effectiveCategory = categories.includes(activeCategory)
+    ? activeCategory
+    : 'All Publications';
+
+  if (posts.length === 0) return null;
+
+  const leadPost = posts[0];
 
   const displayedGridPosts: InsightPost[] =
-    activeCategory === 'All Publications'
-      ? INSIGHTS_DATA.slice(1, 4)
-      : INSIGHTS_DATA.filter((post) => post.category === activeCategory);
+    effectiveCategory === 'All Publications'
+      ? posts.slice(1, 4)
+      : posts.filter((post) => post.category === effectiveCategory);
 
   // Filtered list for the Mobile-Native Interactive Journal
   const mobileFilteredPosts: InsightPost[] =
-    activeCategory === 'All Publications'
-      ? INSIGHTS_DATA
-      : INSIGHTS_DATA.filter((post) => post.category === activeCategory);
+    effectiveCategory === 'All Publications'
+      ? posts
+      : posts.filter((post) => post.category === effectiveCategory);
 
   const safeSpotlightIndex =
     mobileSpotlightIndex < mobileFilteredPosts.length ? mobileSpotlightIndex : 0;
-  const mobileSpotlightPost = mobileFilteredPosts[safeSpotlightIndex] || INSIGHTS_DATA[0];
+  const mobileSpotlightPost = mobileFilteredPosts[safeSpotlightIndex] || posts[0];
   const mobileLedgerPosts = mobileFilteredPosts.filter(
     (post) => post.id !== mobileSpotlightPost.id
   );
@@ -128,10 +139,13 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           role="tablist"
           aria-label="Filter legal insights by practice area"
         >
-          {INSIGHT_CATEGORIES.map((category, idx) => {
-            const isActive = activeCategory === category;
+          {categories.map((category, idx) => {
+            const isActive = effectiveCategory === category;
             const isAllTab = idx === 0;
             const label = MOBILE_CATEGORY_SHORT_LABELS[category] || category;
+            const count = isAllTab
+              ? posts.length
+              : posts.filter((p) => p.category === category).length;
 
             return (
               <button
@@ -157,9 +171,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                       : 'bg-slate-200 text-[#475569]'
                   }`}
                 >
-                  {isAllTab
-                    ? `0${INSIGHTS_DATA.length}`
-                    : `0${INSIGHTS_DATA.filter((p) => p.category === category).length}`}
+                  {String(count).padStart(2, '0')}
                 </span>
               </button>
             );
@@ -173,7 +185,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#E5B842]" aria-hidden="true" />
               <span className="font-sans text-[10.5px] uppercase tracking-[0.14em] font-bold text-[#E5B842]">
-                {activeCategory === 'All Publications'
+                {effectiveCategory === 'All Publications'
                   ? 'Featured Briefing'
                   : 'Selected Briefing'}
               </span>
@@ -382,7 +394,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         >
           <span className="inline-flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-[#E5B842]" aria-hidden="true" />
-            <span>Explore All {INSIGHTS_DATA.length} Legal Blogs</span>
+            <span>Explore All {posts.length} Legal Blogs</span>
           </span>
           <span className="w-8.5 h-8.5 rounded-full bg-[#E5B842] text-[#452415] flex items-center justify-center shadow-xs shrink-0">
             <ArrowUpRight className="w-4 h-4" />
@@ -446,8 +458,8 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
           role="tablist"
           aria-label="Filter legal insights by practice area"
         >
-          {INSIGHT_CATEGORIES.map((category) => {
-            const isActive = activeCategory === category;
+          {categories.map((category) => {
+            const isActive = effectiveCategory === category;
             return (
               <button
                 key={category}
@@ -471,7 +483,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
         </div>
 
         {/* Tier 1: Featured Lead Publication Showcase (Shown on "All Publications") */}
-        {activeCategory === 'All Publications' && (
+        {effectiveCategory === 'All Publications' && (
           <motion.a
             href={`/insights/${leadPost.slug}`}
             onClick={(e) => handlePostClick(e, leadPost.slug)}
@@ -638,7 +650,7 @@ export const InsightsSection: React.FC<InsightsSectionProps> = ({
                 Explore the Complete Rahim Law Associates Publication Archive
               </div>
               <div className="font-sans text-[13px] text-[#64748B]">
-                Browse all {INSIGHTS_DATA.length} in-depth legal blogs, statutory guides, and cross-border commentaries on a dedicated page.
+                Browse all {posts.length} in-depth legal blogs, statutory guides, and cross-border commentaries on a dedicated page.
               </div>
             </div>
           </div>

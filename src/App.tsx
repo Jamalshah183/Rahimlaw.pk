@@ -15,6 +15,8 @@ import { Footer } from './components/Footer';
 import { ConsultationModal } from './components/ConsultationModal';
 import { LegalModal } from './components/LegalModals';
 import { INSIGHTS_DATA } from './data/insightsData';
+import { usePortalStore } from './lib/portalStore';
+import { mapInsightsToPosts } from './utils/insightMapper';
 import { AdminPortal } from './components/portal/AdminPortal';
 import { ClientPortal } from './components/portal/ClientPortal';
 
@@ -47,6 +49,7 @@ function parseLocationRoute(pathname: string): RouteState {
 }
 
 export default function App() {
+  const { insights } = usePortalStore();
   const [route, setRoute] = useState<RouteState>(() =>
     parseLocationRoute(window.location.pathname)
   );
@@ -284,9 +287,10 @@ export default function App() {
     scrollToSectionHash('#contact');
   };
 
+  const insightPosts = mapInsightsToPosts(insights);
   const activePost =
     route.view === 'insight-detail'
-      ? INSIGHTS_DATA.find((item) => item.slug === route.slug) || INSIGHTS_DATA[0]
+      ? insightPosts.find((item) => item.slug === route.slug) || insightPosts[0] || INSIGHTS_DATA[0]
       : null;
 
   useEffect(() => {

@@ -7,7 +7,9 @@ import {
   Scale,
   BookOpen,
 } from 'lucide-react';
-import { INSIGHTS_DATA, InsightPost } from '../data/insightsData';
+import { InsightPost } from '../data/insightsData';
+import { usePortalStore } from '../lib/portalStore';
+import { mapInsightsToPosts } from '../utils/insightMapper';
 import { FIRM_CONFIG } from '../data/firmData';
 import { heroConfig } from '../data/heroConfig';
 import { useTransparentLogo } from '../utils/useTransparentLogo';
@@ -25,9 +27,11 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
   onNavigateToAllInsights,
   onNavigateToPost,
 }) => {
+  const { insights } = usePortalStore();
   const { logoSrc, isProcessed } = useTransparentLogo(heroConfig.logo);
 
-  const relatedPosts = INSIGHTS_DATA.filter((item) => item.slug !== post.slug).slice(0, 3);
+  const allPosts = mapInsightsToPosts(insights);
+  const relatedPosts = allPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
 
   const whatsappText = `Assalam-o-Alaikum Rahim Law Associates, I read your publication "${post.title}" and would like to request legal counsel regarding ${post.category}.`;
   const whatsappHref = `https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
@@ -327,7 +331,7 @@ export const InsightDetailPage: React.FC<InsightDetailPageProps> = ({
               className="inline-flex items-center gap-2 font-sans text-[12.5px] uppercase tracking-[0.06em] font-bold text-[#612912] hover:text-[#452415]"
             >
               <BookOpen className="w-4 h-4" />
-              <span>View All {INSIGHTS_DATA.length} Blogs</span>
+              <span>View All {allPosts.length} Blogs</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>

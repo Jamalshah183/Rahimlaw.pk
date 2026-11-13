@@ -3,10 +3,8 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
+import { usePortalStore } from '../lib/portalStore';
 import rahimMemberImg from '../assets/images/rahim_nawaz_khan_abbasi.png';
-import hasanImg from '../assets/images/hasan_rashid_qamar.png';
-import mehakImg from '../assets/images/mehak_ali.png';
-import khadijaImg from '../assets/images/khadija_sharafat_khan.png';
 
 interface TeamMember {
   id: string;
@@ -21,88 +19,6 @@ interface TeamMember {
   specializations: string[];
 }
 
-const TEAM_MEMBERS: TeamMember[] = [
-  {
-    id: 'rahim-abbasi',
-    name: 'Mr. Rahim Nawaz Khan Abbasi',
-    fullName: 'Mr. Rahim Nawaz Khan Abbasi',
-    designation: 'Senior Counsel (Founding Member)',
-    credentials: 'Advocate High Court · Founding Member',
-    pillarWatermark: 'FOUNDER',
-    image: rahimMemberImg,
-    maxAspectRatio: 1.08,
-    bioParagraphs: [
-      'Mr. Rahim is the Senior Counsel overseeing the matters pertaining to Taxation, Corporate and Company Laws, Intellectual Property, Banking and NBFCs. Mr. Rahim has vast experience in dealing tax and corporate cases with individuals, AOPs, and companies.',
-      'He is a law graduate and also holds the degree of M.Phil (Finance) and MBA. He is also Fellow Member of Institute of Corporate Secretaries of Pakistan (ICSP), Member of Institute of Bankers of Pakistan and Registered Tax Practitioner with FBR.',
-    ],
-    specializations: [
-      'Taxation, Corporate & Company Laws',
-      'Banking, NBFCs & Financial Advisory',
-      'Intellectual Property & Corporate Structuring',
-      'High Court Litigation & Regulatory Disputes',
-    ],
-  },
-  {
-    id: 'hasan-qamar',
-    name: 'Mr. Hasan Rashid Qamar',
-    fullName: 'Mr. Hasan Rashid Qamar',
-    designation: 'Advocate Supreme Court (Founding Member)',
-    credentials: 'Advocate Supreme Court · CIArb Accredited Mediator',
-    pillarWatermark: 'FOUNDER',
-    image: hasanImg,
-    maxAspectRatio: 1.08,
-    bioParagraphs: [
-      'Mr. Hasan completed his education from Army Burn Hall College, Abbottabad and thereafter went to Warwick University, UK and completed his LLB (Hons.) from University of London. He also obtained Post Graduate Diploma in Law & Legal practice from Oxford University, UK as well as Oxford Brookes University, UK.',
-      'Mr. Hasan is enrolled as an Advocate of the Supreme Court since 2020. Mr. Hasan successfully completed and passed Mediation Training & Assessment from Chartered Institute of Arbitrators (UK) and is certified as CIArb Accredited Mediator.',
-    ],
-    specializations: [
-      'Supreme Court Litigation & Appellate Advocacy',
-      'CIArb Accredited Mediation & Dispute Resolution',
-      'UK & International Legal Practice (Oxford & Warwick)',
-      'Constitutional & Commercial Litigation',
-    ],
-  },
-  {
-    id: 'mehak-ali',
-    name: 'Ms. Mehak Ali',
-    fullName: 'Ms. Mehak Ali',
-    designation: 'Advocate High Court',
-    credentials: 'Advocate High Court · LL.M.',
-    pillarWatermark: 'ADVOCATE',
-    image: mehakImg,
-    maxAspectRatio: 1.08,
-    bioParagraphs: [
-      'She obtained her law degree from Punjab University and completed her LLM from the University of Lahore.',
-      'She has been associated with several renowned law firms and has been actively practicing in the areas of corporate and tax law, with a specialization in matters before the SECP, FBR, and the High Court.',
-    ],
-    specializations: [
-      'SECP Corporate Compliance & Structuring',
-      'FBR Tax Litigation & Statutory Advisory',
-      'High Court Practice & Legal Drafting',
-      'Commercial Contracts & Corporate Law',
-    ],
-  },
-  {
-    id: 'khadija-sharafat-khan',
-    name: 'Barrister Khadija Sharafat Khan',
-    fullName: 'Barrister Khadija Sharafat Khan',
-    designation: 'Advocate High Court',
-    credentials: 'Advocate High Court · Bar-at-Law',
-    pillarWatermark: 'BARRISTER',
-    image: khadijaImg,
-    maxAspectRatio: 1.08,
-    bioParagraphs: [
-      'She holds an LL.B. from Brunel University London, an LL.M., and a Bar-at-Law qualification from the University of Law, London.',
-      'Her practice covers litigation, family and property law, intellectual property, cybercrime, banking law, and NAB-related matters. She also specializes in mediation and Alternative Dispute Resolution (ADR), adopting an empathetic yet assertive approach to resolving disputes with professionalism, integrity, and discretion.',
-    ],
-    specializations: [
-      'Litigation, Family & Property Law',
-      'Intellectual Property & Cybercrime',
-      'Banking Law & NAB-Related Matters',
-      'Mediation & Alternative Dispute Resolution (ADR)',
-    ],
-  },
-];
 
 /**
  * Removes any outer solid/studio background if present, detects the exact bounding box
@@ -416,10 +332,46 @@ const TeamMemberCard: React.FC<{
 };
 
 export const TeamSection: React.FC = () => {
+  const { teamMembers: storeTeamMembers } = usePortalStore();
   const [selectedProfile, setSelectedProfile] = useState<{
     member: TeamMember;
     cutoutSrc: string;
   } | null>(null);
+
+  const orderedMembers = [...(storeTeamMembers || [])].sort((a, b) => {
+    if (a.stickToLeft && !b.stickToLeft) return -1;
+    if (!a.stickToLeft && b.stickToLeft) return 1;
+    if (a.isCeo && !b.isCeo) return -1;
+    if (!a.isCeo && b.isCeo) return 1;
+    return (a.order ?? 99) - (b.order ?? 99);
+  });
+
+  const displayMembers: TeamMember[] = orderedMembers.map((m) => ({
+    id: m.id,
+    name: m.name,
+    fullName: m.name,
+    designation: m.title,
+    credentials:
+      m.credentials && m.credentials.length > 0
+        ? m.credentials.join(' · ')
+        : m.title,
+    pillarWatermark: m.pillarWatermark || (m.isCeo ? 'FOUNDER' : 'ADVOCATE'),
+    image: m.image || rahimMemberImg,
+    maxAspectRatio: 1.08,
+    bioParagraphs:
+      m.fullBio && m.fullBio.length > 0
+        ? m.fullBio
+        : [m.bio].filter(Boolean),
+    specializations:
+      m.specializations && m.specializations.length > 0
+        ? m.specializations
+        : m.specialty
+        ? m.specialty
+            .split(/[\n,]+/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [],
+  }));
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -464,7 +416,7 @@ export const TeamSection: React.FC = () => {
 
         {/* Board of Directors / Team Member Cards */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 items-end justify-center">
-          {TEAM_MEMBERS.map((member, idx) => (
+          {displayMembers.map((member, idx) => (
             <motion.div
               key={member.id}
               initial={{ opacity: 0, y: 40, scale: 0.95 }}

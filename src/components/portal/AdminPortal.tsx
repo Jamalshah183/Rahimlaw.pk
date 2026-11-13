@@ -98,9 +98,17 @@ import {
   PracticeArea,
   TeamMember,
   ReviewItem,
-  LegalInsightItem,
-  PartnerItem
+  LegalInsightItem
 } from '../../types/portal';
+import { FIRM_CONFIG } from '../../data/firmData';
+import rahimMemberImg from '../../assets/images/rahim_nawaz_khan_abbasi.png';
+import hasanImg from '../../assets/images/hasan_rashid_qamar.png';
+import mehakImg from '../../assets/images/mehak_ali.png';
+import khadijaImg from '../../assets/images/khadija_sharafat_khan.png';
+import gavelImg from '../../assets/images/blog_gavel_copper_1793276830980.jpg';
+import crossBorderImg from '../../assets/images/blog_property_copper_1793276831812.jpg';
+import successionImg from '../../assets/images/blog_estate_copper_1793276833099.jpg';
+import dossierImg from '../../assets/images/blog_corporate_copper_1793276832574.jpg';
 import { buildGoogleCalendarUrl } from '../../lib/googleCalendar';
 import { buildWhatsAppUrl } from '../../lib/whatsapp';
 
@@ -115,12 +123,21 @@ const ALLOWED_ADMIN_EMAILS = [
   'contact@rahimlawassociates.com',
   'info@rahimlawassociates.com',
   'rahim.nawaz@i-con.pk',
+  'kamranroshanshaikh@gmail.com',
 ];
 
 const AUTHORIZED_ADMIN_CREDENTIALS: Record<string, string> = {
   'rahim.nawaz@i-con.pk': 'admin123',
   'contact@rahimlawassociates.com': 'admin123',
   'virtualassistant183@gmail.com': 'admin123',
+  'kamranroshanshaikh@gmail.com': 'asd123',
+};
+
+const AUTHORIZED_ADMIN_DISPLAY_NAMES: Record<string, string> = {
+  'rahim.nawaz@i-con.pk': 'Rahim Nawaz (Admin Partner)',
+  'contact@rahimlawassociates.com': 'Rahim Law Associates (Admin)',
+  'virtualassistant183@gmail.com': 'Virtual Assistant (Admin)',
+  'kamranroshanshaikh@gmail.com': 'Kamran Roshan Shaikh (Admin)',
 };
 
 const getInitialAdminPortalSession = (): FirebaseUser | null => {
@@ -166,7 +183,7 @@ export const AdminPortal: React.FC = () => {
             'rla_admin_auth_user',
             JSON.stringify({
               email: email,
-              displayName: user.displayName || email.split('@')[0],
+              displayName: user.displayName || AUTHORIZED_ADMIN_DISPLAY_NAMES[email] || email.split('@')[0],
               loggedInAt: Date.now(),
             })
           );
@@ -206,7 +223,7 @@ export const AdminPortal: React.FC = () => {
             'rla_admin_auth_user',
             JSON.stringify({
               email: email,
-              displayName: result.user.displayName || email.split('@')[0],
+              displayName: result.user.displayName || AUTHORIZED_ADMIN_DISPLAY_NAMES[email] || email.split('@')[0],
               loggedInAt: Date.now(),
             })
           );
@@ -257,12 +274,14 @@ export const AdminPortal: React.FC = () => {
 
     setAdminAuthLoading(true);
 
-    // Direct authorization check for pre-configured credentials (e.g. rahim.nawaz@i-con.pk / admin123)
+    // Direct authorization check for pre-configured credentials
     if (AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] && AUTHORIZED_ADMIN_CREDENTIALS[cleanEmail] === adminPasswordInput) {
       resetRateLimit('admin_login');
+      const resolvedDisplayName =
+        AUTHORIZED_ADMIN_DISPLAY_NAMES[cleanEmail] || `${cleanEmail.split('@')[0]} (Admin)`;
       const sessionUser = {
         email: cleanEmail,
-        displayName: 'Rahim Nawaz (Admin Partner)',
+        displayName: resolvedDisplayName,
         uid: 'admin-partner-' + cleanEmail.replace(/[^a-zA-Z0-9]/g, '_'),
       } as unknown as FirebaseUser;
 
@@ -271,7 +290,7 @@ export const AdminPortal: React.FC = () => {
           'rla_admin_auth_user',
           JSON.stringify({
             email: cleanEmail,
-            displayName: 'Rahim Nawaz (Admin Partner)',
+            displayName: resolvedDisplayName,
             loggedInAt: Date.now(),
           })
         );
@@ -280,7 +299,7 @@ export const AdminPortal: React.FC = () => {
       }
 
       setAdminUser(sessionUser);
-      setAdminAuthSuccessMessage('Authorized successfully as Rahim Nawaz (Admin). Access granted!');
+      setAdminAuthSuccessMessage(`Authorized successfully as ${resolvedDisplayName}. Access granted!`);
       setAdminAuthLoading(false);
 
       // Attempt background Firebase Auth sync/creation
@@ -452,16 +471,11 @@ export const AdminPortal: React.FC = () => {
     addInsight,
     updateInsight,
     deleteInsight,
-    resetInsights,
-    partners,
-    addPartner,
-    updatePartner,
-    deletePartner,
-    resetPartners
+    resetInsights
   } = usePortalStore();
 
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'cases' | 'calendar' | 'documents' | 'tasks' | 'billing' | 'notifications' | 'practiceAreas' | 'team' | 'reviews' | 'insights' | 'partners'
+    'dashboard' | 'cases' | 'calendar' | 'documents' | 'tasks' | 'billing' | 'practiceAreas' | 'team' | 'reviews' | 'insights'
   >('dashboard');
 
   // Mobile App Navigation Drawer State
@@ -479,14 +493,13 @@ export const AdminPortal: React.FC = () => {
   const [deleteConfirmArea, setDeleteConfirmArea] = useState<PracticeArea | null>(null);
   const [paActionSuccess, setPaActionSuccess] = useState<string | null>(null);
 
-  // Simple Practice Area Form State
+  // Practice Area Form State (strictly aligned with frontend PracticeAreasSection + PracticeModal)
   const [paFormData, setPaFormData] = useState({
     title: '',
-    category: 'Tax & Finance',
-    badge: '',
-    iconName: 'Scale',
     shortDesc: '',
-    subServicesText: ''
+    fullDesc: '',
+    subServicesText: '',
+    image: FIRM_CONFIG.images.about
   });
 
   // Team Members Search, Filters & Modal States
@@ -497,18 +510,15 @@ export const AdminPortal: React.FC = () => {
   const [deleteConfirmMember, setDeleteConfirmMember] = useState<TeamMember | null>(null);
   const [teamActionSuccess, setTeamActionSuccess] = useState<string | null>(null);
 
-  // Simple Team Member Form State
+  // Team Member Form State (strictly aligned with frontend TeamSection card + profile modal)
   const [teamFormData, setTeamFormData] = useState({
     name: '',
-    title: 'Advocate High Court | Associate Counsel',
-    roleCategory: 'Associate Counsel',
-    experienceYears: 10,
-    specialty: 'Civil, Criminal, Corporate & High Court Litigation',
+    title: 'Advocate High Court',
+    pillarWatermark: 'ADVOCATE',
+    specialty: '',
+    credentialsText: 'Advocate High Court',
     bio: '',
-    keyWin: 'Successfully represented corporate and private clients before High Court benches.',
-    credentialsText: 'Advocate High Court, High Court Bar Association, Associate Counsel',
-    image: 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg',
-    isCeo: false,
+    image: rahimMemberImg,
     stickToLeft: false
   });
 
@@ -521,19 +531,13 @@ export const AdminPortal: React.FC = () => {
   const [deleteConfirmReview, setDeleteConfirmReview] = useState<ReviewItem | null>(null);
   const [reviewActionSuccess, setReviewActionSuccess] = useState<string | null>(null);
 
-  // Review Form State
+  // Review Form State (strictly aligned with frontend Testimonials carousel)
   const [reviewFormData, setReviewFormData] = useState({
     clientInitials: '',
-    clientRole: 'CEO / Business Owner',
-    location: 'Islamabad, Pakistan',
-    caseType: 'Section 7E Property Tax & FBR Clearance',
-    dollarSaved: 'Rs. 2.5 Crore',
-    rating: 5,
+    caseType: 'Corporate & Commercial Law',
+    location: 'Islamabad',
     reviewText: '',
-    verifiedBadge: true,
-    date: 'March 2026',
-    status: 'published' as 'published' | 'pending' | 'archived',
-    featured: true
+    status: 'published' as 'published' | 'pending' | 'archived'
   });
 
   // Legal Insights Search, Filters & Modal States
@@ -545,20 +549,21 @@ export const AdminPortal: React.FC = () => {
   const [deleteConfirmInsight, setDeleteConfirmInsight] = useState<LegalInsightItem | null>(null);
   const [insightActionSuccess, setInsightActionSuccess] = useState<string | null>(null);
 
-  // Legal Insight Form State
+  // Legal Insight Form State (strictly aligned with frontend InsightsSection, Archive & Detail pages)
   const [insightFormData, setInsightFormData] = useState({
     title: '',
-    slug: '',
-    category: 'FBR Notice Defense',
+    category: 'Litigation & Dispute Resolution',
     author: 'Mr. Rahim Nawaz Khan Abbasi',
-    authorRole: 'Advocate High Court | Managing Partner',
-    date: 'March 2026',
+    authorRole: 'Senior Counsel',
+    date: 'Oct 14, 2026',
     readTime: '6 min read',
+    image: gavelImg,
     excerpt: '',
-    keyTakeawaysText: '',
+    pullQuote: '',
     fullContentText: '',
-    status: 'published' as 'published' | 'draft' | 'archived',
-    featured: true
+    keyTakeawaysText: '',
+    statutesReferencedText: '',
+    status: 'published' as 'published' | 'draft' | 'archived'
   });
 
   // Case Management Search & Filters
@@ -583,11 +588,6 @@ export const AdminPortal: React.FC = () => {
   const [billingSearchTerm, setBillingSearchTerm] = useState('');
   const [billingStatusFilter, setBillingStatusFilter] = useState('All');
   const [billingClientFilter, setBillingClientFilter] = useState('All');
-
-  // WhatsApp & Email Alerts Search & Filters
-  const [notifSearchTerm, setNotifSearchTerm] = useState('');
-  const [notifTypeFilter, setNotifTypeFilter] = useState('All');
-  const [notifStatusFilter, setNotifStatusFilter] = useState('All');
 
   // Dashboard Cases Quick Search & Filter
   const [dashSearch, setDashSearch] = useState('');
@@ -767,31 +767,6 @@ export const AdminPortal: React.FC = () => {
     return matchesSearch && matchesStatus && matchesClient;
   });
 
-  const filteredNotifications = notifications.filter((notif) => {
-    const q = notifSearchTerm.trim().toLowerCase();
-    const linkedCase = cases.find((c) => c.id === notif.caseId);
-
-    const matchesSearch =
-      q === '' ||
-      notif.title.toLowerCase().includes(q) ||
-      notif.message.toLowerCase().includes(q) ||
-      notif.clientName.toLowerCase().includes(q) ||
-      notif.recipientPhoneOrEmail.toLowerCase().includes(q) ||
-      notif.type.toLowerCase().includes(q) ||
-      notif.status.toLowerCase().includes(q) ||
-      (linkedCase && (
-        linkedCase.caseTitle.toLowerCase().includes(q) ||
-        linkedCase.caseRef.toLowerCase().includes(q)
-      ));
-
-    const matchesType =
-      notifTypeFilter === 'All' || notif.type === notifTypeFilter;
-    const matchesStatus =
-      notifStatusFilter === 'All' || notif.status === notifStatusFilter;
-
-    return matchesSearch && matchesType && matchesStatus;
-  });
-
   // Dynamic Practice Area Categories & Filtered List
   const paCategories = Array.from(new Set((practiceAreas || []).map((p) => p.category).filter(Boolean)));
   const filteredPracticeAreas = (practiceAreas || []).filter((pa) => {
@@ -814,11 +789,10 @@ export const AdminPortal: React.FC = () => {
     setEditingPracticeArea(null);
     setPaFormData({
       title: '',
-      category: 'Tax & Finance',
-      badge: '',
-      iconName: 'Scale',
       shortDesc: '',
-      subServicesText: ''
+      fullDesc: '',
+      subServicesText: '',
+      image: FIRM_CONFIG.images.about
     });
     setShowPracticeAreaModal(true);
   };
@@ -827,11 +801,10 @@ export const AdminPortal: React.FC = () => {
     setEditingPracticeArea(area);
     setPaFormData({
       title: area.title,
-      category: area.category,
-      badge: area.badge || '',
-      iconName: area.iconName || 'Scale',
       shortDesc: area.shortDesc,
-      subServicesText: (area.subServices || []).join(', ')
+      fullDesc: area.fullDesc || '',
+      subServicesText: (area.subServices || []).join(', '),
+      image: area.image || FIRM_CONFIG.images.about
     });
     setShowPracticeAreaModal(true);
   };
@@ -840,7 +813,6 @@ export const AdminPortal: React.FC = () => {
     e.preventDefault();
     if (!paFormData.title.trim()) return;
 
-    // Parse sub-services from simple comma or newline input
     const subServicesList = paFormData.subServicesText
       ? paFormData.subServicesText
           .split(/[\n,]+/)
@@ -849,35 +821,35 @@ export const AdminPortal: React.FC = () => {
       : [];
 
     const shortDescText = paFormData.shortDesc.trim();
-    // Default highlights to subServices or shortDesc so public card is always complete
+    const fullDescText = paFormData.fullDesc.trim() || shortDescText;
     const highlightsList = subServicesList.length > 0
-      ? subServicesList.slice(0, 4)
+      ? subServicesList.slice(0, 6)
       : [shortDescText || 'Full legal advisory and representation'];
-
-    const fullDescText = editingPracticeArea?.fullDesc || shortDescText;
+    const imageSrc = paFormData.image.trim() || FIRM_CONFIG.images.about;
 
     if (editingPracticeArea) {
       updatePracticeArea(editingPracticeArea.id, {
         title: paFormData.title.trim(),
-        category: paFormData.category.trim() || 'General Law',
-        badge: paFormData.badge.trim() || undefined,
-        iconName: paFormData.iconName || 'Scale',
+        category: editingPracticeArea.category || paFormData.title.trim(),
+        badge: editingPracticeArea.badge || '',
+        iconName: editingPracticeArea.iconName || 'Scale',
         shortDesc: shortDescText,
         fullDesc: fullDescText,
         subServices: subServicesList,
-        keyHighlights: highlightsList
+        keyHighlights: highlightsList,
+        image: imageSrc
       });
       setPaActionSuccess(`Updated "${paFormData.title.trim()}" successfully.`);
     } else {
       addPracticeArea({
         title: paFormData.title.trim(),
-        category: paFormData.category.trim() || 'General Law',
-        badge: paFormData.badge.trim() || undefined,
-        iconName: paFormData.iconName || 'Scale',
+        category: paFormData.title.trim(),
+        iconName: 'Scale',
         shortDesc: shortDescText,
-        fullDesc: shortDescText,
+        fullDesc: fullDescText,
         subServices: subServicesList,
-        keyHighlights: highlightsList
+        keyHighlights: highlightsList,
+        image: imageSrc
       });
       setPaActionSuccess(`Added "${paFormData.title.trim()}" successfully.`);
     }
@@ -894,7 +866,7 @@ export const AdminPortal: React.FC = () => {
   };
 
   const handleResetPracticeAreas = () => {
-    if (typeof window !== 'undefined' && window.confirm('Reset all practice areas to firm default services? Any custom practice areas will be replaced with the 7 core specialties.')) {
+    if (typeof window !== 'undefined' && window.confirm('Reset all practice areas to firm default services? Any custom practice areas will be replaced with the 6 core practice areas.')) {
       resetPracticeAreas();
       setPaActionSuccess('Practice areas reset to standard firm defaults.');
       setTimeout(() => setPaActionSuccess(null), 4000);
@@ -942,15 +914,12 @@ export const AdminPortal: React.FC = () => {
     setEditingTeamMember(null);
     setTeamFormData({
       name: '',
-      title: 'Advocate High Court | Associate Counsel',
-      roleCategory: 'Associate Counsel',
-      experienceYears: 10,
-      specialty: 'Civil, Criminal, Corporate & High Court Litigation',
+      title: 'Advocate High Court',
+      pillarWatermark: 'ADVOCATE',
+      specialty: '',
+      credentialsText: 'Advocate High Court',
       bio: '',
-      keyWin: 'Successfully represented corporate and private clients before High Court benches.',
-      credentialsText: 'Advocate High Court, High Court Bar Association, Associate Counsel',
-      image: 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg',
-      isCeo: false,
+      image: rahimMemberImg,
       stickToLeft: false
     });
     setShowTeamModal(true);
@@ -959,17 +928,22 @@ export const AdminPortal: React.FC = () => {
   const handleOpenEditTeamMember = (member: TeamMember) => {
     setEditingTeamMember(member);
     const isCurrentlyStuck = !!member.stickToLeft || (!teamMembers.some((m) => m.stickToLeft) && !!member.isCeo);
+    const combinedBio =
+      member.fullBio && member.fullBio.length > 0
+        ? member.fullBio.join('\n\n')
+        : member.bio || '';
+    const combinedSpecs =
+      member.specializations && member.specializations.length > 0
+        ? member.specializations.join(', ')
+        : member.specialty || '';
     setTeamFormData({
       name: member.name,
       title: member.title,
-      roleCategory: member.isCeo ? 'Founder & CEO' : 'Associate Counsel',
-      experienceYears: member.experienceYears || 10,
-      specialty: member.specialty || '',
-      bio: member.bio || '',
-      keyWin: member.keyWin || '',
+      pillarWatermark: member.pillarWatermark || (member.isCeo ? 'FOUNDER' : 'ADVOCATE'),
+      specialty: combinedSpecs,
       credentialsText: (member.credentials || []).join(', '),
-      image: member.image || 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg',
-      isCeo: !!member.isCeo,
+      bio: combinedBio,
+      image: member.image || rahimMemberImg,
       stickToLeft: isCurrentlyStuck
     });
     setShowTeamModal(true);
@@ -997,24 +971,36 @@ export const AdminPortal: React.FC = () => {
 
     const bioText =
       teamFormData.bio.trim() ||
-      `${teamFormData.name.trim()} is an experienced advocate at Rahim Law Associates specializing in ${teamFormData.specialty.trim() || 'legal advisory, appellate defense, and court representation'}.`;
+      `${teamFormData.name.trim()} is an advocate at Rahim Law Associates advising and representing clients across trial and appellate courts.`;
 
-    const keyWinText =
-      teamFormData.keyWin.trim() ||
-      'Consistently secured favorable legal relief and stay orders for clients across appellate forums.';
+    const bioParagraphs = bioText
+      .split(/\n\n+/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    const parsedSpecs = teamFormData.specialty
+      ? teamFormData.specialty
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : ['Appellate & Corporate Law'];
+
+    const watermark = teamFormData.pillarWatermark.trim().toUpperCase() || 'ADVOCATE';
 
     if (editingTeamMember) {
       updateTeamMember(editingTeamMember.id, {
         name: teamFormData.name.trim(),
         title: teamFormData.title.trim(),
-        experienceYears: Number(teamFormData.experienceYears) || 5,
-        specialty: teamFormData.specialty.trim() || 'Appellate & Corporate Law',
-        bio: bioText,
-        fullBio: [bioText],
+        experienceYears: editingTeamMember.experienceYears || 10,
+        specialty: parsedSpecs[0] || teamFormData.specialty.trim() || 'Appellate & Corporate Law',
+        specializations: parsedSpecs,
+        pillarWatermark: watermark,
+        bio: bioParagraphs[0] || bioText,
+        fullBio: bioParagraphs.length > 0 ? bioParagraphs : [bioText],
         credentials: credsList,
-        keyWin: keyWinText,
-        image: teamFormData.image.trim() || 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg',
-        isCeo: teamFormData.isCeo,
+        keyWin: editingTeamMember.keyWin || '',
+        image: teamFormData.image.trim() || rahimMemberImg,
+        isCeo: editingTeamMember.isCeo || watermark === 'FOUNDER',
         stickToLeft: teamFormData.stickToLeft
       });
       if (teamFormData.stickToLeft) {
@@ -1028,14 +1014,16 @@ export const AdminPortal: React.FC = () => {
       addTeamMember({
         name: teamFormData.name.trim(),
         title: teamFormData.title.trim(),
-        experienceYears: Number(teamFormData.experienceYears) || 5,
-        specialty: teamFormData.specialty.trim() || 'Appellate & Corporate Law',
-        bio: bioText,
-        fullBio: [bioText],
+        experienceYears: 10,
+        specialty: parsedSpecs[0] || teamFormData.specialty.trim() || 'Appellate & Corporate Law',
+        specializations: parsedSpecs,
+        pillarWatermark: watermark,
+        bio: bioParagraphs[0] || bioText,
+        fullBio: bioParagraphs.length > 0 ? bioParagraphs : [bioText],
         credentials: credsList,
-        keyWin: keyWinText,
-        image: teamFormData.image.trim() || 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg',
-        isCeo: teamFormData.isCeo,
+        keyWin: '',
+        image: teamFormData.image.trim() || rahimMemberImg,
+        isCeo: watermark === 'FOUNDER',
         stickToLeft: teamFormData.stickToLeft
       });
       if (teamFormData.stickToLeft) {
@@ -1091,16 +1079,10 @@ export const AdminPortal: React.FC = () => {
     setEditingReview(null);
     setReviewFormData({
       clientInitials: '',
-      clientRole: 'CEO / Business Owner',
-      location: 'Islamabad, Pakistan',
-      caseType: 'Section 7E Property Tax & FBR Clearance',
-      dollarSaved: 'Rs. 2.5 Crore',
-      rating: 5,
+      caseType: 'Corporate & Commercial Law',
+      location: 'Islamabad',
       reviewText: '',
-      verifiedBadge: true,
-      date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-      status: 'published',
-      featured: true
+      status: 'published'
     });
     setShowReviewModal(true);
   };
@@ -1109,16 +1091,10 @@ export const AdminPortal: React.FC = () => {
     setEditingReview(review);
     setReviewFormData({
       clientInitials: review.clientInitials,
-      clientRole: review.clientRole,
-      location: review.location,
-      caseType: review.caseType,
-      dollarSaved: review.dollarSaved,
-      rating: review.rating || 5,
+      caseType: review.caseType || review.clientRole || 'Corporate & Commercial Law',
+      location: review.location || '',
       reviewText: review.reviewText,
-      verifiedBadge: !!review.verifiedBadge,
-      date: review.date || 'January 2026',
-      status: review.status || 'published',
-      featured: review.featured !== false
+      status: review.status || 'published'
     });
     setShowReviewModal(true);
   };
@@ -1127,34 +1103,36 @@ export const AdminPortal: React.FC = () => {
     e.preventDefault();
     if (!reviewFormData.clientInitials.trim() || !reviewFormData.reviewText.trim()) return;
 
+    const matterArea = reviewFormData.caseType.trim() || 'Legal Advisory';
+
     if (editingReview) {
       updateReview(editingReview.id, {
         clientInitials: reviewFormData.clientInitials.trim(),
-        clientRole: reviewFormData.clientRole.trim() || 'Client',
-        location: reviewFormData.location.trim() || 'Pakistan',
-        caseType: reviewFormData.caseType.trim() || 'Tax Defense & Litigation',
-        dollarSaved: reviewFormData.dollarSaved.trim() || 'Substantial Tax Relief',
-        rating: Number(reviewFormData.rating) || 5,
+        clientRole: editingReview.clientRole || matterArea,
+        location: reviewFormData.location.trim(),
+        caseType: matterArea,
+        dollarSaved: editingReview.dollarSaved || '',
+        rating: editingReview.rating || 5,
         reviewText: reviewFormData.reviewText.trim(),
-        verifiedBadge: reviewFormData.verifiedBadge,
-        date: reviewFormData.date.trim() || 'Recent',
+        verifiedBadge: editingReview.verifiedBadge ?? true,
+        date: editingReview.date || '',
         status: reviewFormData.status,
-        featured: reviewFormData.featured
+        featured: editingReview.featured !== false
       });
       setReviewActionSuccess(`Updated testimonial for "${reviewFormData.clientInitials.trim()}".`);
     } else {
       addReview({
         clientInitials: reviewFormData.clientInitials.trim(),
-        clientRole: reviewFormData.clientRole.trim() || 'Client',
-        location: reviewFormData.location.trim() || 'Pakistan',
-        caseType: reviewFormData.caseType.trim() || 'Tax Defense & Litigation',
-        dollarSaved: reviewFormData.dollarSaved.trim() || 'Substantial Tax Relief',
-        rating: Number(reviewFormData.rating) || 5,
+        clientRole: matterArea,
+        location: reviewFormData.location.trim(),
+        caseType: matterArea,
+        dollarSaved: '',
+        rating: 5,
         reviewText: reviewFormData.reviewText.trim(),
-        verifiedBadge: reviewFormData.verifiedBadge,
-        date: reviewFormData.date.trim() || 'Recent',
+        verifiedBadge: true,
+        date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
         status: reviewFormData.status,
-        featured: reviewFormData.featured
+        featured: true
       });
       setReviewActionSuccess(`Added new client review from "${reviewFormData.clientInitials.trim()}".`);
     }
@@ -1216,17 +1194,18 @@ export const AdminPortal: React.FC = () => {
     setEditingInsight(null);
     setInsightFormData({
       title: '',
-      slug: '',
-      category: 'FBR Notice Defense',
+      category: 'Litigation & Dispute Resolution',
       author: 'Mr. Rahim Nawaz Khan Abbasi',
-      authorRole: 'Advocate High Court | Managing Partner',
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      authorRole: 'Senior Counsel',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
       readTime: '6 min read',
+      image: gavelImg,
       excerpt: '',
-      keyTakeawaysText: '',
+      pullQuote: '',
       fullContentText: '',
-      status: 'published',
-      featured: true
+      keyTakeawaysText: '',
+      statutesReferencedText: '',
+      status: 'published'
     });
     setShowInsightModal(true);
   };
@@ -1234,20 +1213,25 @@ export const AdminPortal: React.FC = () => {
   const handleOpenEditInsight = (insight: LegalInsightItem) => {
     setEditingInsight(insight);
     const authorName = typeof insight.author === 'object' && insight.author !== null ? insight.author.name : String(insight.author || 'Mr. Rahim Nawaz Khan Abbasi');
-    const authorRole = typeof insight.author === 'object' && insight.author !== null ? insight.author.role : 'Advocate High Court';
+    const authorRole = typeof insight.author === 'object' && insight.author !== null ? insight.author.role : 'Senior Counsel';
+    const initialBody =
+      insight.sections && insight.sections.length > 0
+        ? insight.sections.flatMap((s) => s.paragraphs).join('\n\n')
+        : (insight.content || []).join('\n\n');
     setInsightFormData({
       title: insight.title,
-      slug: insight.slug,
       category: insight.category,
       author: authorName,
       authorRole: authorRole,
-      date: insight.date,
+      date: insight.publishedDate || insight.date,
       readTime: insight.readTime || '5 min read',
+      image: insight.image || gavelImg,
       excerpt: insight.excerpt,
+      pullQuote: insight.pullQuote || '',
+      fullContentText: initialBody,
       keyTakeawaysText: (insight.keyTakeaways || []).join('\n'),
-      fullContentText: (insight.content || []).join('\n\n'),
-      status: insight.status || 'published',
-      featured: insight.featured !== false
+      statutesReferencedText: (insight.statutesReferenced || []).join('\n'),
+      status: insight.status || 'published'
     });
     setShowInsightModal(true);
   };
@@ -1263,6 +1247,13 @@ export const AdminPortal: React.FC = () => {
           .filter(Boolean)
       : [insightFormData.title.trim()];
 
+    const parsedStatutes = insightFormData.statutesReferencedText
+      ? insightFormData.statutesReferencedText
+          .split('\n')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
+
     const parsedFullContent = insightFormData.fullContentText
       ? insightFormData.fullContentText
           .split(/\n\n+/)
@@ -1271,43 +1262,93 @@ export const AdminPortal: React.FC = () => {
       : [insightFormData.excerpt.trim() || insightFormData.title.trim()];
 
     const generatedSlug =
-      insightFormData.slug.trim() ||
-      insightFormData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      (editingInsight && editingInsight.slug) ||
+      insightFormData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') ||
+      `insight-${Date.now()}`;
+
+    const existingAuthor =
+      editingInsight && typeof editingInsight.author === 'object' && editingInsight.author !== null
+        ? editingInsight.author
+        : null;
 
     const authorPayload = {
       name: insightFormData.author.trim() || 'Mr. Rahim Nawaz Khan Abbasi',
-      role: insightFormData.authorRole.trim() || 'Advocate High Court | Managing Partner',
-      avatar: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=400'
+      role: insightFormData.authorRole.trim() || 'Senior Counsel',
+      credentials:
+        existingAuthor?.credentials ||
+        insightFormData.authorRole.trim() ||
+        'Advocate High Court'
     };
 
+    const dateText =
+      insightFormData.date.trim() ||
+      new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const coverImage = insightFormData.image.trim() || gavelImg;
+    const cleanPullQuote = insightFormData.pullQuote.trim();
+
     if (editingInsight) {
+      const originalSectionsBody =
+        editingInsight.sections && editingInsight.sections.length > 0
+          ? editingInsight.sections.flatMap((s) => s.paragraphs).join('\n\n')
+          : '';
+      const updatedSections =
+        editingInsight.sections &&
+        editingInsight.sections.length > 0 &&
+        insightFormData.fullContentText.trim() === originalSectionsBody.trim()
+          ? editingInsight.sections
+          : [
+              {
+                heading:
+                  editingInsight.sections?.[0]?.heading || 'Overview & Legal Analysis',
+                paragraphs: parsedFullContent
+              }
+            ];
+
       updateInsight(editingInsight.id, {
         title: insightFormData.title.trim(),
         slug: generatedSlug,
-        category: insightFormData.category.trim() || 'FBR Notice Defense',
+        category: insightFormData.category.trim() || 'Litigation & Dispute Resolution',
         author: authorPayload,
-        date: insightFormData.date.trim() || 'March 2026',
+        date: dateText,
+        publishedDate: dateText,
         readTime: insightFormData.readTime.trim() || '5 min read',
-        excerpt: insightFormData.excerpt.trim() || 'Legal brief and compliance advisory.',
+        image: coverImage,
+        excerpt: insightFormData.excerpt.trim() || 'Legal brief and statutory commentary.',
         keyTakeaways: parsedKeyTakeaways,
         content: parsedFullContent,
+        sections: updatedSections,
+        ...(cleanPullQuote ? { pullQuote: cleanPullQuote } : {}),
+        ...(parsedStatutes.length > 0 ? { statutesReferenced: parsedStatutes } : {}),
+        ...(editingInsight.subtitle ? { subtitle: editingInsight.subtitle } : {}),
+        ...(editingInsight.imageCaption ? { imageCaption: editingInsight.imageCaption } : {}),
+        ...(editingInsight.number ? { number: editingInsight.number } : {}),
         status: insightFormData.status,
-        featured: insightFormData.featured
+        featured: editingInsight.featured ?? true
       });
       setInsightActionSuccess(`Updated article "${insightFormData.title.trim()}".`);
     } else {
       addInsight({
         title: insightFormData.title.trim(),
         slug: generatedSlug,
-        category: insightFormData.category.trim() || 'FBR Notice Defense',
+        category: insightFormData.category.trim() || 'Litigation & Dispute Resolution',
         author: authorPayload,
-        date: insightFormData.date.trim() || 'March 2026',
+        date: dateText,
+        publishedDate: dateText,
         readTime: insightFormData.readTime.trim() || '5 min read',
-        excerpt: insightFormData.excerpt.trim() || 'Legal brief and compliance advisory.',
+        image: coverImage,
+        excerpt: insightFormData.excerpt.trim() || 'Legal brief and statutory commentary.',
         keyTakeaways: parsedKeyTakeaways,
         content: parsedFullContent,
+        sections: [
+          {
+            heading: 'Overview & Legal Analysis',
+            paragraphs: parsedFullContent
+          }
+        ],
+        ...(cleanPullQuote ? { pullQuote: cleanPullQuote } : {}),
+        ...(parsedStatutes.length > 0 ? { statutesReferenced: parsedStatutes } : {}),
         status: insightFormData.status,
-        featured: insightFormData.featured
+        featured: true
       });
       setInsightActionSuccess(`Added new legal insight "${insightFormData.title.trim()}".`);
     }
@@ -1339,134 +1380,6 @@ export const AdminPortal: React.FC = () => {
       resetInsights();
       setInsightActionSuccess('Restored standard firm legal publications.');
       setTimeout(() => setInsightActionSuccess(null), 4000);
-    }
-  };
-
-  // Membership & Partners Search, Filters & Modal States
-  const [partnerSearchTerm, setPartnerSearchTerm] = useState('');
-  const [partnerCategoryFilter, setPartnerCategoryFilter] = useState('All');
-  const [partnerStatusFilter, setPartnerStatusFilter] = useState('All');
-  const [showPartnerModal, setShowPartnerModal] = useState(false);
-  const [editingPartner, setEditingPartner] = useState<PartnerItem | null>(null);
-  const [deleteConfirmPartner, setDeleteConfirmPartner] = useState<PartnerItem | null>(null);
-  const [partnerActionSuccess, setPartnerActionSuccess] = useState<string | null>(null);
-
-  // Partner Form State
-  const [partnerFormData, setPartnerFormData] = useState({
-    name: '',
-    category: 'Bar Association',
-    logoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=300',
-    websiteUrl: 'https://',
-    description: '',
-    order: 1,
-    status: 'published' as 'published' | 'archived'
-  });
-
-  // Membership & Partners Filtering & Handlers
-  const partnerCategories = Array.from(new Set((partners || []).map((p) => p.category).filter(Boolean)));
-
-  const filteredPartners = (partners || []).filter((p) => {
-    const q = partnerSearchTerm.trim().toLowerCase();
-    const matchesSearch =
-      q === '' ||
-      p.name.toLowerCase().includes(q) ||
-      (p.category && p.category.toLowerCase().includes(q)) ||
-      (p.description && p.description.toLowerCase().includes(q));
-
-    const matchesCategory =
-      partnerCategoryFilter === 'All' || p.category === partnerCategoryFilter;
-
-    const matchesStatus =
-      partnerStatusFilter === 'All' ||
-      (partnerStatusFilter === 'published' && (p.status === 'published' || !p.status)) ||
-      p.status === partnerStatusFilter;
-
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
-
-  const handleOpenAddPartner = () => {
-    setEditingPartner(null);
-    setPartnerFormData({
-      name: '',
-      category: 'Bar Association',
-      logoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=300',
-      websiteUrl: 'https://',
-      description: '',
-      order: (partners?.length || 0) + 1,
-      status: 'published'
-    });
-    setShowPartnerModal(true);
-  };
-
-  const handleOpenEditPartner = (partner: PartnerItem) => {
-    setEditingPartner(partner);
-    setPartnerFormData({
-      name: partner.name,
-      category: partner.category || 'Bar Association',
-      logoUrl: partner.logoUrl || '',
-      websiteUrl: partner.websiteUrl || '',
-      description: partner.description || '',
-      order: partner.order || 1,
-      status: partner.status || 'published'
-    });
-    setShowPartnerModal(true);
-  };
-
-  const handleSavePartner = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!partnerFormData.name.trim()) return;
-
-    if (editingPartner) {
-      updatePartner(editingPartner.id, {
-        name: partnerFormData.name.trim(),
-        category: partnerFormData.category.trim() || 'Bar Association',
-        logoUrl: partnerFormData.logoUrl.trim() || 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=300',
-        websiteUrl: partnerFormData.websiteUrl.trim() || '#',
-        description: partnerFormData.description.trim() || undefined,
-        order: Number(partnerFormData.order) || 1,
-        status: partnerFormData.status
-      });
-      setPartnerActionSuccess(`Updated partner "${partnerFormData.name.trim()}".`);
-    } else {
-      addPartner({
-        name: partnerFormData.name.trim(),
-        category: partnerFormData.category.trim() || 'Bar Association',
-        logoUrl: partnerFormData.logoUrl.trim() || 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=300',
-        websiteUrl: partnerFormData.websiteUrl.trim() || '#',
-        description: partnerFormData.description.trim() || undefined,
-        order: Number(partnerFormData.order) || ((partners?.length || 0) + 1),
-        status: partnerFormData.status
-      });
-      setPartnerActionSuccess(`Added new affiliate partner "${partnerFormData.name.trim()}".`);
-    }
-
-    setShowPartnerModal(false);
-    setTimeout(() => setPartnerActionSuccess(null), 4000);
-  };
-
-  const handleDeletePartner = (partner: PartnerItem) => {
-    deletePartner(partner.id);
-    setDeleteConfirmPartner(null);
-    setPartnerActionSuccess(`Removed partner "${partner.name}".`);
-    setTimeout(() => setPartnerActionSuccess(null), 4000);
-  };
-
-  const handleTogglePartnerStatus = (partner: PartnerItem) => {
-    const nextStatus = partner.status === 'archived' ? 'published' : 'archived';
-    updatePartner(partner.id, { status: nextStatus });
-    setPartnerActionSuccess(
-      nextStatus === 'published'
-        ? `Published partner "${partner.name}" on main website marquee.`
-        : `Archived partner "${partner.name}".`
-    );
-    setTimeout(() => setPartnerActionSuccess(null), 4000);
-  };
-
-  const handleResetPartners = () => {
-    if (typeof window !== 'undefined' && window.confirm('Reset partners to default firm affiliations?')) {
-      resetPartners();
-      setPartnerActionSuccess('Restored default partner affiliations.');
-      setTimeout(() => setPartnerActionSuccess(null), 4000);
     }
   };
 
@@ -2388,12 +2301,10 @@ export const AdminPortal: React.FC = () => {
     { id: 'documents', label: 'Document Vault', icon: FolderOpen },
     { id: 'tasks', label: 'Tasks & Internal Notes', icon: CheckSquare },
     { id: 'billing', label: 'Billing & Invoices', icon: CreditCard },
-    { id: 'notifications', label: 'WhatsApp / Email Alerts', icon: Send },
     { id: 'practiceAreas', label: 'Practice Areas', icon: Scale, badge: practiceAreas?.length || 0 },
     { id: 'team', label: 'Our Team', icon: Users, badge: teamMembers?.length || 0 },
     { id: 'reviews', label: 'Client Reviews', icon: MessageSquareQuote, badge: reviews?.length || 0 },
-    { id: 'insights', label: 'Legal Insights', icon: BookOpen, badge: insights?.length || 0 },
-    { id: 'partners', label: 'Membership & Partners', icon: Award, badge: partners?.length || 0 }
+    { id: 'insights', label: 'Legal Insights', icon: BookOpen, badge: insights?.length || 0 }
   ];
 
   const activeTabObj = navMenuItems.find((m) => m.id === activeTab) || navMenuItems[0];
@@ -3970,140 +3881,6 @@ export const AdminPortal: React.FC = () => {
           </div>
         )}
 
-        {/* --- TAB 9: NOTIFICATIONS DISPATCHER --- */}
-        {activeTab === 'notifications' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm">
-              <div>
-                <h1 className="text-2xl font-heading font-extrabold text-[#1A1A1A]">WhatsApp & Email Dispatcher</h1>
-                <p className="text-xs text-[#5A6275]">Send real-time hearing reminders and FBR notice response alerts to clients.</p>
-              </div>
-              <button
-                onClick={() => setShowSendNotifModal(true)}
-                className="bg-[#25D366] hover:bg-[#612912] text-white font-extrabold px-5 py-2.5 rounded-2xl text-xs flex items-center gap-2 shadow-sm transition-all"
-              >
-                <Send className="w-4 h-4" />
-                <span>Send WhatsApp Alert</span>
-              </button>
-            </div>
-
-            {/* Notifications Search & Filter Bar */}
-            <div className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm space-y-3">
-              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                {/* Search Input */}
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-[#5A6275] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={notifSearchTerm}
-                    onChange={(e) => setNotifSearchTerm(e.target.value)}
-                    placeholder="Search alert logs by client, phone, email, CNO #, Section Code, or case ref..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#FAF8F5] rounded-2xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  />
-                  {notifSearchTerm && (
-                    <button
-                      onClick={() => setNotifSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {/* Filters */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-1.5 bg-[#FAF8F5] px-3 py-2 rounded-2xl border border-gray-200 text-xs">
-                    <Filter className="w-3.5 h-3.5 text-[#452415]" />
-                    <span className="font-bold text-[#5A6275]">Channel:</span>
-                    <select
-                      value={notifTypeFilter}
-                      onChange={(e) => setNotifTypeFilter(e.target.value)}
-                      className="bg-transparent font-bold text-[#1A1A1A] focus:outline-none cursor-pointer"
-                    >
-                      <option value="All">All Channels ({notifications.length})</option>
-                      <option value="WhatsApp">WhatsApp</option>
-                      <option value="Email">Email</option>
-                      <option value="SMS">SMS</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 bg-[#FAF8F5] px-3 py-2 rounded-2xl border border-gray-200 text-xs">
-                    <span className="font-bold text-[#5A6275]">Delivery:</span>
-                    <select
-                      value={notifStatusFilter}
-                      onChange={(e) => setNotifStatusFilter(e.target.value)}
-                      className="bg-transparent font-bold text-[#1A1A1A] focus:outline-none cursor-pointer"
-                    >
-                      <option value="All">All Statuses</option>
-                      <option value="Sent">Sent / Delivered</option>
-                      <option value="Failed">Failed</option>
-                      <option value="Pending">Pending</option>
-                    </select>
-                  </div>
-
-                  {(notifSearchTerm || notifTypeFilter !== 'All' || notifStatusFilter !== 'All') && (
-                    <button
-                      onClick={() => {
-                        setNotifSearchTerm('');
-                        setNotifTypeFilter('All');
-                        setNotifStatusFilter('All');
-                      }}
-                      className="bg-red-50 text-red-700 hover:bg-red-100 font-bold px-3 py-2 rounded-2xl text-xs transition-colors"
-                    >
-                      Clear Filters
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <div className="text-[11px] text-[#5A6275] font-semibold flex items-center justify-between px-1">
-                <span>Showing {filteredNotifications.length} of {notifications.length} client communication logs</span>
-              </div>
-            </div>
-
-            {/* Notifications Log */}
-            <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
-              <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">Sent Notifications Log</h3>
-              {filteredNotifications.length === 0 ? (
-                <div className="p-8 text-center text-xs text-gray-500 bg-[#FAF8F5] rounded-2xl border border-dashed border-gray-200">
-                  No communication logs match your search or filter.
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {filteredNotifications.map((notif) => (
-                    <div key={notif.id} className="p-4 rounded-2xl bg-[#FAF8F5] border border-gray-200 flex items-start justify-between gap-3 hover:border-[#452415] transition-all">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span
-                            className={`text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
-                              notif.type === 'WhatsApp'
-                                ? 'bg-[#25D366]'
-                                : notif.type === 'Email'
-                                ? 'bg-blue-600'
-                                : 'bg-purple-600'
-                            }`}
-                          >
-                            {notif.type}
-                          </span>
-                          <span className="font-bold text-xs text-[#1A1A1A]">{notif.title}</span>
-                          <span className="text-[10px] text-[#5A6275]">({notif.sentAt})</span>
-                        </div>
-                        <p className="text-xs text-gray-700 font-medium italic mb-1">&quot;{notif.message}&quot;</p>
-                        <div className="text-[11px] text-[#5A6275]">
-                          Recipient: <span className="font-bold text-[#1A1A1A]">{notif.clientName}</span> ({notif.recipientPhoneOrEmail})
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-[#612912] bg-[#612912]/5 px-2.5 py-1 rounded-full shrink-0">
-                        {notif.status}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* --- TAB 10: PRACTICE AREAS MANAGEMENT (SIMPLIFIED) --- */}
         {activeTab === 'practiceAreas' && (
           <div className="space-y-6">
@@ -4230,9 +4007,11 @@ export const AdminPortal: React.FC = () => {
                           <h3 className="font-heading font-extrabold text-[#1A1A1A] text-sm sm:text-base">
                             {area.title}
                           </h3>
-                          <span className="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">
-                            {area.category}
-                          </span>
+                          {area.category && area.category !== area.title && (
+                            <span className="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">
+                              {area.category}
+                            </span>
+                          )}
                           {area.badge && (
                             <span className="text-[10px] font-extrabold text-[#D98200] bg-[#E5B842]/15 px-2 py-0.5 rounded-md border border-[#E5B842]/30">
                               {area.badge}
@@ -4460,7 +4239,7 @@ export const AdminPortal: React.FC = () => {
                     <div className="flex items-start gap-4 flex-1 min-w-0">
                       <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shrink-0 border-2 border-[#452415]/20 bg-[#34160B] shadow-sm">
                         <img
-                          src={member.image || 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg'}
+                          src={member.image || rahimMemberImg}
                           alt={member.name}
                           className="w-full h-full object-cover object-top"
                           referrerPolicy="no-referrer"
@@ -4477,15 +4256,11 @@ export const AdminPortal: React.FC = () => {
                           <h3 className="font-heading font-extrabold text-[#1A1A1A] text-sm sm:text-base">
                             {member.name}
                           </h3>
-                          {member.isCeo && (
-                            <span className="text-[10px] font-extrabold text-[#D98200] bg-[#E5B842]/15 px-2 py-0.5 rounded-md border border-[#E5B842]/30 flex items-center gap-1">
-                              <Award className="w-3 h-3 text-[#D98200]" />
-                              <span>Founder &amp; CEO</span>
+                          {(member.pillarWatermark || member.isCeo) && (
+                            <span className="text-[10px] font-bold text-[#452415] bg-[#612912]/5 px-2 py-0.5 rounded-md border border-[#612912]/20">
+                              {member.pillarWatermark || (member.isCeo ? 'FOUNDER' : 'ADVOCATE')}
                             </span>
                           )}
-                          <span className="text-[10px] font-bold text-[#452415] bg-[#612912]/5 px-2 py-0.5 rounded-md border border-[#612912]/20">
-                            {member.experienceYears || 10}+ Years Exp
-                          </span>
                         </div>
 
                         <div className="text-xs font-semibold text-[#452415]">
@@ -4795,14 +4570,18 @@ export const AdminPortal: React.FC = () => {
                         </span>
                       </div>
 
-                      {/* Date & Tax Saved Highlight */}
+                      {/* Date & Optional Highlight */}
                       <div className="flex items-center gap-2.5">
-                        <span className="text-xs text-gray-400 font-medium">
-                          {review.date}
-                        </span>
-                        <span className="bg-[#FAF3E6] border border-[#E5B842]/30 text-[#8F5605] font-extrabold text-xs px-3 py-1 rounded-xl">
-                          Saved {review.dollarSaved}
-                        </span>
+                        {review.date && (
+                          <span className="text-xs text-gray-400 font-medium">
+                            {review.date}
+                          </span>
+                        )}
+                        {review.dollarSaved && (
+                          <span className="bg-[#FAF3E6] border border-[#E5B842]/30 text-[#8F5605] font-extrabold text-xs px-3 py-1 rounded-xl">
+                            Saved {review.dollarSaved}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -4826,15 +4605,23 @@ export const AdminPortal: React.FC = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gray-100">
                       {/* Client info */}
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#452415] text-white flex items-center justify-center font-heading font-extrabold text-xs shadow-sm">
-                          {review.clientInitials}
+                        <div className="w-9 h-9 rounded-full bg-[#452415] text-white flex items-center justify-center font-heading font-extrabold text-xs shadow-sm shrink-0">
+                          {(review.clientInitials || 'CL')
+                            .split(' ')
+                            .map((w) => w[0])
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .join('')
+                            .toUpperCase()}
                         </div>
                         <div>
                           <div className="text-xs font-extrabold text-[#1A1A1A]">
                             {review.clientInitials}
                           </div>
                           <div className="text-[11px] text-gray-500">
-                            {review.clientRole} • {review.location}
+                            {review.clientRole && review.clientRole !== review.caseType
+                              ? `${review.clientRole}${review.location ? ` • ${review.location}` : ''}`
+                              : review.location || review.caseType}
                           </div>
                         </div>
                       </div>
@@ -5269,240 +5056,6 @@ export const AdminPortal: React.FC = () => {
           </div>
         )}
 
-        {/* --- TAB 12: MEMBERSHIP & PARTNERS MANAGEMENT --- */}
-        {activeTab === 'partners' && (
-          <div className="space-y-6">
-            {/* Header & Action Toolbar */}
-            <div className="bg-white p-6 rounded-3xl border border-[#452415]/15 shadow-sm space-y-4">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <span className="text-[10px] font-extrabold text-[#E5B842] uppercase tracking-wider block">
-                    Institutional Affiliations &amp; Accreditations
-                  </span>
-                  <h1 className="text-2xl font-heading font-extrabold text-[#1A1A1A]">
-                    Membership &amp; Partners Management
-                  </h1>
-                  <p className="text-xs text-[#5A6275]">
-                    Manage official logos, bar associations, judicial councils, and statutory partner affiliations displayed on the main website marquee.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={handleOpenAddPartner}
-                    className="bg-[#E5B842] hover:bg-[#E09415] text-[#1A1A1A] font-extrabold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Partner Logo</span>
-                  </button>
-
-                  <a
-                    href="/#partners"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
-                  >
-                    <ExternalLink className="w-4 h-4 text-[#E5B842]" />
-                    <span>View Public Marquee</span>
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={handleResetPartners}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-3 py-2.5 rounded-2xl text-xs flex items-center gap-1 transition-all cursor-pointer"
-                    title="Restore default partner affiliations"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Reset</span>
-                  </button>
-                </div>
-              </div>
-
-              {partnerActionSuccess && (
-                <div className="bg-[#612912]/5 border border-[#612912]/20 text-[#452415] text-xs p-3 rounded-2xl font-medium flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#612912] shrink-0" />
-                  <span>{partnerActionSuccess}</span>
-                </div>
-              )}
-
-              {/* Search & Filter Toolbar */}
-              <div className="pt-3 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="relative w-full sm:w-80">
-                  <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={partnerSearchTerm}
-                    onChange={(e) => setPartnerSearchTerm(e.target.value)}
-                    placeholder="Search partners by name or category..."
-                    className="w-full pl-10 pr-3 py-2 text-xs bg-[#FAF8F5] border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#452415] focus:border-transparent transition"
-                  />
-                  {partnerSearchTerm && (
-                    <button
-                      onClick={() => setPartnerSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  {/* Category Filter */}
-                  <select
-                    value={partnerCategoryFilter}
-                    onChange={(e) => setPartnerCategoryFilter(e.target.value)}
-                    className="py-2 px-3 text-xs bg-[#FAF8F5] border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#452415] font-semibold text-gray-700"
-                  >
-                    <option value="All">All Categories ({partners.length})</option>
-                    {partnerCategories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* Status Filter */}
-                  <select
-                    value={partnerStatusFilter}
-                    onChange={(e) => setPartnerStatusFilter(e.target.value)}
-                    className="py-2 px-3 text-xs bg-[#FAF8F5] border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#452415] font-semibold text-gray-700"
-                  >
-                    <option value="All">All Statuses</option>
-                    <option value="published">Published</option>
-                    <option value="archived">Archived</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Partners List Grid */}
-            {filteredPartners.length === 0 ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-gray-200 space-y-3">
-                <Award className="w-12 h-12 text-gray-300 mx-auto" />
-                <h3 className="text-base font-extrabold text-[#1A1A1A]">No Membership Partners Found</h3>
-                <p className="text-xs text-gray-500 max-w-sm mx-auto">
-                  No partner items match your current search parameters. Try clearing filters or add a new partner logo.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleOpenAddPartner}
-                  className="bg-[#452415] hover:bg-[#612912] text-white px-4 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add First Partner</span>
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredPartners.map((partner) => (
-                  <div
-                    key={partner.id}
-                    className="bg-white rounded-3xl p-5 border border-[#452415]/15 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group"
-                  >
-                    <div>
-                      {/* Top Badges */}
-                      <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-gray-100">
-                        <span className="text-[10px] font-extrabold text-[#452415] bg-[#E8F5F0] border border-[#452415]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                          <ShieldCheck className="w-3 h-3 text-[#452415]" />
-                          <span>{partner.category || 'Bar Association'}</span>
-                        </span>
-
-                        <span
-                          className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
-                            partner.status === 'archived'
-                              ? 'bg-gray-100 text-gray-600'
-                              : 'bg-[#612912]/10 text-[#452415]'
-                          }`}
-                        >
-                          {partner.status === 'archived' ? 'Archived' : 'Published on Site'}
-                        </span>
-                      </div>
-
-                      {/* Logo Frame */}
-                      <div className="h-20 w-full bg-[#FAF8F5] rounded-2xl border border-gray-100 p-2 mb-3 flex items-center justify-center relative overflow-hidden">
-                        {partner.logoUrl ? (
-                          <div className="relative w-full h-full flex items-center justify-center">
-                            <img
-                              src={partner.logoUrl}
-                              alt={partner.name}
-                              className="w-full h-full object-contain p-1"
-                              referrerPolicy="no-referrer"
-                            />
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2 text-[#452415] font-extrabold text-xs">
-                            <Award className="w-5 h-5 text-[#C5A059]" />
-                            <span>{partner.name}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <h3 className="font-heading font-extrabold text-base text-[#1A1A1A] line-clamp-1 mb-1">
-                        {partner.name}
-                      </h3>
-
-                      {partner.description && (
-                        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-3">
-                          {partner.description}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-                      {partner.websiteUrl && partner.websiteUrl !== '#' ? (
-                        <a
-                          href={partner.websiteUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[11px] font-bold text-[#452415] hover:underline flex items-center gap-1"
-                        >
-                          <span>Website Link</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      ) : (
-                        <span className="text-[11px] text-gray-400 font-medium">No Link</span>
-                      )}
-
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleTogglePartnerStatus(partner)}
-                          className={`p-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                            partner.status === 'archived'
-                              ? 'bg-[#612912]/5 hover:bg-[#612912]/10 text-[#612912]'
-                              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                          }`}
-                          title={partner.status === 'archived' ? 'Publish to Marquee' : 'Archive from Marquee'}
-                        >
-                          {partner.status === 'archived' ? <Eye className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEditPartner(partner)}
-                          className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-colors cursor-pointer"
-                          title="Edit Partner Details"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setDeleteConfirmPartner(partner)}
-                          className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold transition-colors cursor-pointer"
-                          title="Delete Partner"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
       </main>
 
       {/* --- MOBILE APP STICKY BOTTOM QUICK NAV BAR --- */}
@@ -8068,17 +7621,17 @@ export const AdminPortal: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL: ADD / EDIT PRACTICE AREA (SIMPLIFIED) */}
+      {/* MODAL: ADD / EDIT PRACTICE AREA */}
       {showPracticeAreaModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 border border-[#452415]/20 shadow-2xl">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 border border-[#452415]/20 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-5 border-b border-gray-100 pb-3">
               <div>
                 <h3 className="text-lg font-heading font-extrabold text-[#1A1A1A]">
                   {editingPracticeArea ? `Edit: ${editingPracticeArea.title}` : 'Add New Practice Area'}
                 </h3>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  Enter service details to show on the public website.
+                  Only the details displayed in the Practice Areas list and detail modal are needed.
                 </p>
               </div>
               <button
@@ -8091,7 +7644,7 @@ export const AdminPortal: React.FC = () => {
             </div>
 
             <form onSubmit={handleSavePracticeArea} className="space-y-4 text-xs">
-              {/* Field 1: Title */}
+              {/* Field 1: Practice Area Name */}
               <div>
                 <label className="font-bold text-gray-800 block mb-1">
                   Practice Area Name <span className="text-red-500">*</span>
@@ -8099,101 +7652,97 @@ export const AdminPortal: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Taxation & FBR Advisory"
+                  placeholder="e.g. Corporate & Commercial"
                   value={paFormData.title}
                   onChange={(e) => setPaFormData({ ...paFormData, title: e.target.value })}
                   className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
                 />
               </div>
 
-              {/* Field 2: Category & Icon */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Category <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={paFormData.category}
-                    onChange={(e) => setPaFormData({ ...paFormData, category: e.target.value })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] font-semibold"
-                  >
-                    <option value="Tax & Finance">Tax & Finance</option>
-                    <option value="Corporate & Business">Corporate & Business</option>
-                    <option value="Litigation & Disputes">Litigation & Disputes</option>
-                    <option value="Property & Real Estate">Property & Real Estate</option>
-                    <option value="Specialized Law">Specialized Law</option>
-                    <option value="Banking & Finance">Banking & Finance</option>
-                    <option value="Criminal Defense">Criminal Defense</option>
-                    <option value="General Practice">General Practice</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Icon Symbol
-                  </label>
-                  <select
-                    value={paFormData.iconName}
-                    onChange={(e) => setPaFormData({ ...paFormData, iconName: e.target.value })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] font-semibold"
-                  >
-                    <option value="Scale">⚖️ Balance & Court (Scale)</option>
-                    <option value="FileText">📄 Advisory & Contracts (Document)</option>
-                    <option value="Building2">🏢 Corporate & Commercial (Building)</option>
-                    <option value="Gavel">🔨 Litigation & Court (Gavel)</option>
-                    <option value="Home">🏠 Real Estate & Land (Home)</option>
-                    <option value="Shield">🛡️ Protection & Defense (Shield)</option>
-                    <option value="Landmark">🏛️ Banking & Finance (Landmark)</option>
-                    <option value="Briefcase">💼 Business & Cases (Briefcase)</option>
-                    <option value="Users">👥 Labor & Family (Users)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Field 3: Short Description */}
+              {/* Field 2: Short Summary (Homepage row) */}
               <div>
                 <label className="font-bold text-gray-800 block mb-1">
-                  Description <span className="text-red-500">*</span>
+                  Short Summary <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   required
                   rows={2}
-                  placeholder="Provide a short summary of this practice area for clients..."
+                  placeholder="Concise 1-2 line summary shown on the Practice Areas list..."
                   value={paFormData.shortDesc}
                   onChange={(e) => setPaFormData({ ...paFormData, shortDesc: e.target.value })}
                   className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
                 />
               </div>
 
-              {/* Field 4: Sub-Services */}
+              {/* Field 3: Detailed Overview (Detail Modal) */}
+              <div>
+                <label className="font-bold text-gray-800 block mb-1">
+                  Detailed Overview <span className="text-gray-400 font-normal">(Modal View)</span>
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Expanded overview shown when a visitor clicks to view full details (defaults to Short Summary if blank)..."
+                  value={paFormData.fullDesc}
+                  onChange={(e) => setPaFormData({ ...paFormData, fullDesc: e.target.value })}
+                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
+                />
+              </div>
+
+              {/* Field 4: Core Services */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="font-bold text-gray-800">
-                    Included Services
+                    Core Services
                   </label>
                   <span className="text-[10px] text-gray-400">Separate with commas</span>
                 </div>
                 <textarea
                   rows={2}
-                  placeholder="e.g. FBR Notice Defense, Income Tax Return, Sales Tax Appeals, Audit Representation"
+                  placeholder="e.g. Commercial Transactions, Corporate Structuring, Shareholder Arrangements"
                   value={paFormData.subServicesText}
                   onChange={(e) => setPaFormData({ ...paFormData, subServicesText: e.target.value })}
                   className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
                 />
               </div>
 
-              {/* Field 5: Optional Badge */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Badge Tag <span className="text-gray-400 font-normal">(Optional)</span>
+              {/* Field 5: Modal Banner Image */}
+              <div className="space-y-2">
+                <label className="font-bold text-gray-800 block">
+                  Modal Banner Image <span className="text-gray-400 font-normal">(Optional)</span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Core Specialty, High Court, Corporate"
-                  value={paFormData.badge}
-                  onChange={(e) => setPaFormData({ ...paFormData, badge: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
+                <div className="flex items-center gap-3">
+                  <div className="relative w-14 h-10 rounded-lg overflow-hidden shrink-0 border border-gray-300 bg-gray-100">
+                    <img
+                      src={paFormData.image || FIRM_CONFIG.images.about}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Image URL or asset path..."
+                    value={paFormData.image}
+                    onChange={(e) => setPaFormData({ ...paFormData, image: e.target.value })}
+                    className="flex-1 bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] text-gray-400 font-bold">Quick Presets:</span>
+                  {[
+                    { label: 'Chambers Still-Life', url: FIRM_CONFIG.images.practiceCivil },
+                    { label: 'Legal Library', url: FIRM_CONFIG.images.practiceCorporate }
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => setPaFormData({ ...paFormData, image: preset.url })}
+                      className="text-[10px] font-semibold bg-gray-100 hover:bg-[#612912] hover:text-white px-2 py-0.5 rounded-md transition-colors cursor-pointer"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Form Buttons */}
@@ -8303,151 +7852,106 @@ export const AdminPortal: React.FC = () => {
                 />
               </div>
 
-              {/* Field 2: Designation / Title */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Designation / Role Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Advocate High Court | Associate Counsel"
-                  value={teamFormData.title}
-                  onChange={(e) => setTeamFormData({ ...teamFormData, title: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 3: Experience, CEO Toggle & Stick to Left Toggle */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-                <div>
+              {/* Field 2: Designation & Pillar Watermark */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
                   <label className="font-bold text-gray-800 block mb-1">
-                    Years of Experience
+                    Designation / Role <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="number"
-                    min={1}
-                    max={60}
-                    value={teamFormData.experienceYears}
-                    onChange={(e) => setTeamFormData({ ...teamFormData, experienceYears: Number(e.target.value) || 1 })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
+                    type="text"
+                    required
+                    placeholder="e.g. Advocate High Court"
+                    value={teamFormData.title}
+                    onChange={(e) => setTeamFormData({ ...teamFormData, title: e.target.value })}
+                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
                   />
                 </div>
 
-                <div className="pt-2 sm:pt-4">
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 hover:border-[#452415]">
-                    <input
-                      type="checkbox"
-                      checked={teamFormData.isCeo}
-                      onChange={(e) => {
-                        const isCeo = e.target.checked;
-                        setTeamFormData({
-                          ...teamFormData,
-                          isCeo,
-                          stickToLeft: isCeo ? true : teamFormData.stickToLeft
-                        });
-                      }}
-                      className="w-4 h-4 text-[#452415] rounded border-gray-300 focus:ring-[#452415] cursor-pointer"
-                    />
-                    <span className="font-bold text-gray-800 text-[11px] flex items-center gap-1">
-                      <Award className="w-3.5 h-3.5 text-[#E5B842]" />
-                      Founder &amp; CEO
-                    </span>
+                <div>
+                  <label className="font-bold text-gray-800 block mb-1">
+                    Card Pillar Label
                   </label>
-                </div>
-
-                <div className="pt-2 sm:pt-4">
-                  <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 hover:border-amber-400">
-                    <input
-                      type="checkbox"
-                      checked={teamFormData.stickToLeft}
-                      onChange={(e) => setTeamFormData({ ...teamFormData, stickToLeft: e.target.checked })}
-                      className="w-4 h-4 text-amber-600 rounded border-gray-300 focus:ring-amber-500 cursor-pointer"
-                    />
-                    <span className="font-bold text-gray-800 text-[11px] flex items-center gap-1">
-                      <Pin className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
-                      Stick to Left Side
-                    </span>
-                  </label>
+                  <input
+                    type="text"
+                    placeholder="FOUNDER / ADVOCATE"
+                    value={teamFormData.pillarWatermark}
+                    onChange={(e) => setTeamFormData({ ...teamFormData, pillarWatermark: e.target.value.toUpperCase() })}
+                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs font-bold uppercase focus:outline-none focus:border-[#452415]"
+                  />
                 </div>
               </div>
 
-              {/* Field 4: Practice Scope / Specialty */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Primary Practice Scope / Specialty
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Civil, Criminal, Corporate & High Court Litigation"
-                  value={teamFormData.specialty}
-                  onChange={(e) => setTeamFormData({ ...teamFormData, specialty: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 5: Credentials */}
+              {/* Field 3: Credentials */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="font-bold text-gray-800">
-                    Professional Credentials
+                    Credentials <span className="text-red-500">*</span>
                   </label>
-                  <span className="text-[10px] text-gray-400">Separate with commas</span>
+                  <span className="text-[10px] text-gray-400">Separate with commas (shown in profile header)</span>
                 </div>
                 <input
                   type="text"
-                  placeholder="e.g. Advocate High Court, High Court Bar Association, Associate Counsel"
+                  required
+                  placeholder="e.g. Advocate High Court, LL.M."
                   value={teamFormData.credentialsText}
                   onChange={(e) => setTeamFormData({ ...teamFormData, credentialsText: e.target.value })}
                   className="w-full bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
                 />
               </div>
 
-              {/* Field 6: Biography */}
+              {/* Field 4: Areas of Specialization */}
               <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Professional Biography
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-gray-800">
+                    Areas of Specialization
+                  </label>
+                  <span className="text-[10px] text-gray-400">Separate with commas</span>
+                </div>
                 <textarea
-                  rows={3}
-                  placeholder="Brief summary of advocate's legal background, qualifications, and domain practice..."
+                  rows={2}
+                  placeholder="e.g. Corporate Structuring, FBR Tax Litigation, High Court Practice"
+                  value={teamFormData.specialty}
+                  onChange={(e) => setTeamFormData({ ...teamFormData, specialty: e.target.value })}
+                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
+                />
+              </div>
+
+              {/* Field 5: Biography */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-gray-800">
+                    Biography <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-gray-400">Blank line separates paragraphs</span>
+                </div>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Enter advocate background and legal practice summary..."
                   value={teamFormData.bio}
                   onChange={(e) => setTeamFormData({ ...teamFormData, bio: e.target.value })}
                   className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
                 />
               </div>
 
-              {/* Field 7: Key Strategic Win */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Notable Case / Strategic Achievement
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Secured landmark stay order against Rs. 450M demand in High Court"
-                  value={teamFormData.keyWin}
-                  onChange={(e) => setTeamFormData({ ...teamFormData, keyWin: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 8: Photo URL & Quick Presets */}
+              {/* Field 6: Portrait Photo & Leftmost Pin */}
               <div className="space-y-2">
                 <label className="font-bold text-gray-800 block">
-                  Profile Photo URL
+                  Portrait Photo
                 </label>
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-gray-300 bg-gray-100">
                     <img
-                      src={teamFormData.image || 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg'}
+                      src={teamFormData.image || rahimMemberImg}
                       alt="Preview"
                       className="w-full h-full object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
                   <input
-                    type="url"
-                    placeholder="https://..."
+                    type="text"
+                    placeholder="Portrait image URL or asset path..."
                     value={teamFormData.image}
                     onChange={(e) => setTeamFormData({ ...teamFormData, image: e.target.value })}
                     className="flex-1 bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
@@ -8458,10 +7962,10 @@ export const AdminPortal: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
                   <span className="text-[10px] text-gray-400 font-bold">Quick Presets:</span>
                   {[
-                    { label: 'CEO Portrait', url: 'https://i.postimg.cc/VvWYYzzW/CEO.jpg' },
-                    { label: 'Associate 1', url: 'https://i.postimg.cc/yY6Km4V5/Associate-1.jpg' },
-                    { label: 'Associate 2', url: 'https://i.postimg.cc/Qtsx9f0Q/advocate-high-court.jpg' },
-                    { label: 'Associate 3', url: 'https://i.postimg.cc/qRCSrr8s/associate-3.jpg' }
+                    { label: 'Mr. Rahim Abbasi', url: rahimMemberImg },
+                    { label: 'Mr. Hasan Qamar', url: hasanImg },
+                    { label: 'Ms. Mehak Ali', url: mehakImg },
+                    { label: 'Barrister Khadija', url: khadijaImg }
                   ].map((preset) => (
                     <button
                       key={preset.label}
@@ -8473,6 +7977,21 @@ export const AdminPortal: React.FC = () => {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div>
+                <label className="inline-flex items-center gap-2 cursor-pointer bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 hover:border-amber-400">
+                  <input
+                    type="checkbox"
+                    checked={teamFormData.stickToLeft}
+                    onChange={(e) => setTeamFormData({ ...teamFormData, stickToLeft: e.target.checked })}
+                    className="w-4 h-4 text-amber-600 rounded border-gray-300 focus:ring-amber-500 cursor-pointer"
+                  />
+                  <span className="font-bold text-gray-800 text-[11px] flex items-center gap-1">
+                    <Pin className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
+                    Pin First on Left (Team Grid Order)
+                  </span>
+                </label>
               </div>
 
               {/* Form Buttons */}
@@ -8550,15 +8069,13 @@ export const AdminPortal: React.FC = () => {
             <div className="flex justify-between items-center mb-4 border-b pb-3">
               <div>
                 <span className="text-[10px] font-bold text-[#E5B842] uppercase tracking-wider block">
-                  Website Reviews
+                  Website Testimonials
                 </span>
                 <h3 className="text-lg font-heading font-extrabold text-[#1A1A1A]">
                   {editingReview ? 'Edit Client Review' : 'Add New Client Review'}
                 </h3>
                 <p className="text-[11px] text-gray-500">
-                  {editingReview
-                    ? 'Update testimonial text, case metrics, and display status.'
-                    : 'Add a client testimonial to appear in the homepage continuous review marquee.'}
+                  Only the details displayed in the public Client Testimonials carousel are requested.
                 </p>
               </div>
               <button
@@ -8572,16 +8089,16 @@ export const AdminPortal: React.FC = () => {
 
             {/* Form */}
             <form onSubmit={handleSaveReview} className="space-y-4 text-xs">
-              {/* Field 1: Client Initials & Role */}
+              {/* Field 1: Client Name & Location */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-800 block mb-1">
-                    Client Name or Initials <span className="text-red-500">*</span>
+                    Client Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. T. R. or Tariq Rehman"
+                    placeholder="e.g. Tariq Mahmood Butt"
                     value={reviewFormData.clientInitials}
                     onChange={(e) => setReviewFormData({ ...reviewFormData, clientInitials: e.target.value })}
                     className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
@@ -8590,66 +8107,38 @@ export const AdminPortal: React.FC = () => {
 
                 <div>
                   <label className="font-bold text-gray-800 block mb-1">
-                    Designation / Role
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. CEO, Tech Software House"
-                    value={reviewFormData.clientRole}
-                    onChange={(e) => setReviewFormData({ ...reviewFormData, clientRole: e.target.value })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  />
-                </div>
-              </div>
-
-              {/* Field 2: Location & Date */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
                     City / Location
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Islamabad, Pakistan"
+                    placeholder="e.g. Islamabad"
                     value={reviewFormData.location}
                     onChange={(e) => setReviewFormData({ ...reviewFormData, location: e.target.value })}
                     className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
                   />
                 </div>
-
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Date / Month
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. March 2026"
-                    value={reviewFormData.date}
-                    onChange={(e) => setReviewFormData({ ...reviewFormData, date: e.target.value })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  />
-                </div>
               </div>
 
-              {/* Field 3: Case Type / Domain with Quick Suggestions */}
+              {/* Field 2: Matter Area / Legal Domain with Quick Suggestions */}
               <div>
                 <label className="font-bold text-gray-800 block mb-1">
-                  Case Type / Legal Domain
+                  Matter Area / Legal Domain <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Section 7E Property Tax & FBR Clearance"
+                  required
+                  placeholder="e.g. Corporate & Commercial Law"
                   value={reviewFormData.caseType}
                   onChange={(e) => setReviewFormData({ ...reviewFormData, caseType: e.target.value })}
                   className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
                 />
                 <div className="flex flex-wrap gap-1.5 mt-1.5">
                   {[
-                    'Section 7E Property Tax & FBR Clearance',
-                    'FBR Section 154A IT Export Audit',
-                    'Sales Tax Disallowance Appeal',
-                    'High Court Constitutional Tax Writ',
-                    'Corporate Tax Dispute & Stay'
+                    'Corporate & Commercial Law',
+                    'Property & Real Estate Litigation',
+                    'Family & Succession Matters',
+                    'Tax & Regulatory Advisory',
+                    'International & Cross-Border Counsel'
                   ].map((sugg) => (
                     <button
                       key={sugg}
@@ -8663,87 +8152,24 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              {/* Field 4: Tax Relief / Dollar Saved & Star Rating */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Tax Relief / Amount Saved
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Rs. 2.5 Crore or Rs. 80 Lakh"
-                    value={reviewFormData.dollarSaved}
-                    onChange={(e) => setReviewFormData({ ...reviewFormData, dollarSaved: e.target.value })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Client Rating
-                  </label>
-                  <div className="flex items-center gap-2 bg-[#FAF8F5] p-2 rounded-xl border border-gray-200">
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => setReviewFormData({ ...reviewFormData, rating: star })}
-                          className="cursor-pointer p-0.5 hover:scale-110 transition-transform"
-                        >
-                          <Star
-                            className={`w-5 h-5 ${
-                              star <= reviewFormData.rating
-                                ? 'text-[#E5B842] fill-[#E5B842]'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                    <span className="font-bold text-[#1A1A1A] ml-2">
-                      {reviewFormData.rating} / 5 Stars
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Field 5: Review Text */}
+              {/* Field 3: Testimonial Quote */}
               <div>
                 <label className="font-bold text-gray-800 block mb-1">
-                  Testimonial / Review Quote <span className="text-red-500">*</span>
+                  Testimonial Quote <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   rows={4}
                   required
-                  placeholder="Share the client's detailed feedback regarding Rahim Law Associates's advocacy, counsel, tribunal representation, or tax resolution..."
+                  placeholder="Enter the client's testimonial quote shown in the public carousel..."
                   value={reviewFormData.reviewText}
                   onChange={(e) => setReviewFormData({ ...reviewFormData, reviewText: e.target.value })}
                   className="w-full bg-[#FAF8F5] p-3 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415] leading-relaxed"
                 />
               </div>
 
-              {/* Field 6: Verification & Status Toggles */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] p-3 rounded-xl border border-gray-200 hover:border-[#452415]">
-                  <input
-                    type="checkbox"
-                    checked={reviewFormData.verifiedBadge}
-                    onChange={(e) => setReviewFormData({ ...reviewFormData, verifiedBadge: e.target.checked })}
-                    className="w-4 h-4 text-[#452415] rounded border-gray-300 focus:ring-[#452415] cursor-pointer"
-                  />
-                  <div>
-                    <span className="font-bold text-gray-800 text-[11px] block flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#452415]" />
-                      Verified Case Badge
-                    </span>
-                    <span className="text-[10px] text-gray-500">
-                      Displays green verification badge
-                    </span>
-                  </div>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] p-3 rounded-xl border border-gray-200 hover:border-[#452415]">
+              {/* Field 4: Published Status Toggle */}
+              <div>
+                <label className="flex items-center gap-2.5 cursor-pointer bg-[#FAF8F5] p-3 rounded-xl border border-gray-200 hover:border-[#452415]">
                   <input
                     type="checkbox"
                     checked={reviewFormData.status === 'published'}
@@ -8760,7 +8186,7 @@ export const AdminPortal: React.FC = () => {
                       Published on Public Site
                     </span>
                     <span className="text-[10px] text-gray-500">
-                      Active in homepage review stream
+                      Visible in the homepage Client Testimonials carousel
                     </span>
                   </div>
                 </label>
@@ -8859,59 +8285,49 @@ export const AdminPortal: React.FC = () => {
             </div>
 
             <form onSubmit={handleSaveInsight} className="space-y-4 text-xs">
-              {/* Article Title */}
-              <div>
-                <label className="font-bold text-gray-700 block mb-1">
-                  Article Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Navigating FBR Section 7E Capital Value Tax Notices (2025-26)"
-                  value={insightFormData.title}
-                  onChange={(e) => setInsightFormData({ ...insightFormData, title: e.target.value })}
-                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold text-[#1A1A1A] focus:outline-none focus:border-[#452415]"
-                />
-              </div>
+              {/* Article Title & Practice Category */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <label className="font-bold text-gray-700 block mb-1">
+                    Article Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Securing Interim Injunctions & Stay Orders in High Courts"
+                    value={insightFormData.title}
+                    onChange={(e) => setInsightFormData({ ...insightFormData, title: e.target.value })}
+                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold text-[#1A1A1A] focus:outline-none focus:border-[#452415]"
+                  />
+                </div>
 
-              {/* Category & Slug */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Practice Category
+                    Category <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={insightFormData.category}
                     onChange={(e) => setInsightFormData({ ...insightFormData, category: e.target.value })}
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold text-[#452415] focus:outline-none focus:border-[#452415]"
                   >
-                    <option value="FBR Notice Defense">FBR Notice Defense</option>
-                    <option value="Corporate & M&A Law">Corporate &amp; M&amp;A Law</option>
-                    <option value="High Court Writs & Appeals">High Court Writs &amp; Appeals</option>
+                    <option value="Litigation & Dispute Resolution">Litigation &amp; Dispute Resolution</option>
                     <option value="Property & Real Estate">Property &amp; Real Estate</option>
-                    <option value="Banking & Financial Crimes">Banking &amp; Financial Crimes</option>
-                    <option value="NAB & FIA White-Collar Defense">NAB &amp; FIA White-Collar Defense</option>
-                    <option value="International Trade & Customs">International Trade &amp; Customs</option>
-                    <option value="Tax Compliance & Audit">Tax Compliance &amp; Audit</option>
-                    <option value="Intellectual Property">Intellectual Property</option>
-                    <option value="General Legal Advisory">General Legal Advisory</option>
+                    <option value="Family & Private Client">Family &amp; Private Client</option>
+                    <option value="Corporate & Commercial">Corporate &amp; Commercial</option>
+                    <option value="International & Cross-Border">International &amp; Cross-Border</option>
+                    <option value="Legal Research & Advisory">Legal Research &amp; Advisory</option>
+                    {insightFormData.category &&
+                      ![
+                        'Litigation & Dispute Resolution',
+                        'Property & Real Estate',
+                        'Family & Private Client',
+                        'Corporate & Commercial',
+                        'International & Cross-Border',
+                        'Legal Research & Advisory'
+                      ].includes(insightFormData.category) && (
+                        <option value={insightFormData.category}>{insightFormData.category}</option>
+                      )}
                   </select>
-                </div>
-
-                <div>
-                  <label className="font-bold text-gray-700 block mb-1">
-                    Custom URL Slug (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. fbr-section-7e-defense-guide"
-                    value={insightFormData.slug}
-                    onChange={(e) => setInsightFormData({ ...insightFormData, slug: e.target.value })}
-                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-mono text-gray-700 focus:outline-none focus:border-[#452415]"
-                  />
-                  <span className="text-[10px] text-gray-400 block mt-0.5">
-                    Will be generated automatically from title if left blank.
-                  </span>
                 </div>
               </div>
 
@@ -8919,7 +8335,7 @@ export const AdminPortal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Author / Lead Counsel
+                    Author Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -8932,23 +8348,23 @@ export const AdminPortal: React.FC = () => {
 
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Author Designation / Role
+                    Author Role
                   </label>
                   <input
                     type="text"
                     value={insightFormData.authorRole}
                     onChange={(e) => setInsightFormData({ ...insightFormData, authorRole: e.target.value })}
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-gray-700 focus:outline-none focus:border-[#452415]"
-                    placeholder="Advocate High Court | Managing Partner"
+                    placeholder="Senior Counsel"
                   />
                 </div>
               </div>
 
-              {/* Date & Read Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Date, Read Time & Publication Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Publication Date
+                    Published Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -8956,13 +8372,13 @@ export const AdminPortal: React.FC = () => {
                     value={insightFormData.date}
                     onChange={(e) => setInsightFormData({ ...insightFormData, date: e.target.value })}
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-gray-700 focus:outline-none focus:border-[#452415]"
-                    placeholder="e.g. March 15, 2026"
+                    placeholder="e.g. Oct 14, 2026"
                   />
                 </div>
 
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Estimated Read Time
+                    Read Time
                   </label>
                   <input
                     type="text"
@@ -8972,62 +8388,10 @@ export const AdminPortal: React.FC = () => {
                     placeholder="e.g. 6 min read"
                   />
                 </div>
-              </div>
 
-              {/* Brief Excerpt / Summary */}
-              <div>
-                <label className="font-bold text-gray-700 block mb-1">
-                  Executive Excerpt / Overview <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  rows={2}
-                  required
-                  placeholder="Concise 1-2 sentence executive overview displayed in insight listing cards..."
-                  value={insightFormData.excerpt}
-                  onChange={(e) => setInsightFormData({ ...insightFormData, excerpt: e.target.value })}
-                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 resize-none focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Key Takeaways */}
-              <div>
-                <label className="font-bold text-gray-700 block mb-1">
-                  Key Counsel Takeaways (One item per line)
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Section 7E notices require prompt formal response before CIR Appeals.&#10;High Court stay petitions require substantiation of constitutional rights violation.&#10;Strict 30-day deadline applies for appellate review."
-                  value={insightFormData.keyTakeawaysText}
-                  onChange={(e) => setInsightFormData({ ...insightFormData, keyTakeawaysText: e.target.value })}
-                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-mono text-xs resize-none focus:outline-none focus:border-[#452415]"
-                />
-                <span className="text-[10px] text-gray-400 block mt-0.5">
-                  Enter each takeaway bullet on a new line.
-                </span>
-              </div>
-
-              {/* Full Article Content */}
-              <div>
-                <label className="font-bold text-gray-700 block mb-1">
-                  Full Article Body Paragraphs
-                </label>
-                <textarea
-                  rows={6}
-                  placeholder="Enter the full article commentary here. Separate individual paragraphs with an empty line (two enters).&#10;&#10;Our firm provides comprehensive legal representations before appellate tribunals and the High Court."
-                  value={insightFormData.fullContentText}
-                  onChange={(e) => setInsightFormData({ ...insightFormData, fullContentText: e.target.value })}
-                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs leading-relaxed focus:outline-none focus:border-[#452415]"
-                />
-                <span className="text-[10px] text-gray-400 block mt-0.5">
-                  Separate paragraphs with an empty blank line for clean typography on the public article page.
-                </span>
-              </div>
-
-              {/* Status and Featured Controls */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-100">
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    Publication Status
+                    Status
                   </label>
                   <select
                     value={insightFormData.status}
@@ -9037,26 +8401,127 @@ export const AdminPortal: React.FC = () => {
                         status: e.target.value as 'published' | 'draft' | 'archived'
                       })
                     }
-                    className="w-full bg-[#FAF8F5] p-2 rounded-xl border border-gray-200 font-bold text-[#452415] focus:outline-none focus:border-[#452415]"
+                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold text-[#452415] focus:outline-none focus:border-[#452415]"
                   >
-                    <option value="published">Published (Visible on Website)</option>
-                    <option value="draft">Draft (Private in Portal)</option>
-                    <option value="archived">Archived (Hidden from Website)</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                    <option value="archived">Archived</option>
                   </select>
                 </div>
+              </div>
 
-                <div className="flex items-center gap-2 pt-6">
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={insightFormData.featured}
-                      onChange={(e) =>
-                        setInsightFormData({ ...insightFormData, featured: e.target.checked })
-                      }
-                      className="w-4 h-4 rounded text-[#452415] focus:ring-[#452415]"
+              {/* Cover Image */}
+              <div className="space-y-2">
+                <label className="font-bold text-gray-700 block">
+                  Cover Image
+                </label>
+                <div className="flex items-center gap-3">
+                  <div className="relative w-14 h-10 rounded-lg overflow-hidden shrink-0 border border-gray-300 bg-gray-100">
+                    <img
+                      src={insightFormData.image || gavelImg}
+                      alt="Cover preview"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
                     />
-                    <span className="font-bold text-gray-700">Feature on Homepage Feed</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Cover image URL or asset path..."
+                    value={insightFormData.image}
+                    onChange={(e) => setInsightFormData({ ...insightFormData, image: e.target.value })}
+                    className="flex-1 bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] text-gray-400 font-bold">Quick Presets:</span>
+                  {[
+                    { label: 'Court Gavel', url: gavelImg },
+                    { label: 'Property & Title', url: crossBorderImg },
+                    { label: 'Estate & Succession', url: successionImg },
+                    { label: 'Corporate Dossier', url: dossierImg }
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => setInsightFormData({ ...insightFormData, image: preset.url })}
+                      className="text-[10px] font-semibold bg-gray-100 hover:bg-[#612912] hover:text-white px-2 py-0.5 rounded-md transition-colors cursor-pointer"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Brief Excerpt / Overview */}
+              <div>
+                <label className="font-bold text-gray-700 block mb-1">
+                  Overview / Excerpt <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  rows={2}
+                  required
+                  placeholder="Concise 1-2 sentence overview displayed on insight cards..."
+                  value={insightFormData.excerpt}
+                  onChange={(e) => setInsightFormData({ ...insightFormData, excerpt: e.target.value })}
+                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 resize-none focus:outline-none focus:border-[#452415]"
+                />
+              </div>
+
+              {/* Pull Quote */}
+              <div>
+                <label className="font-bold text-gray-700 block mb-1">
+                  Editorial Pull Quote <span className="text-gray-400 font-normal">(Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Highlighted quote displayed in the article reading view (defaults to Overview if blank)..."
+                  value={insightFormData.pullQuote}
+                  onChange={(e) => setInsightFormData({ ...insightFormData, pullQuote: e.target.value })}
+                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
+                />
+              </div>
+
+              {/* Full Article Content */}
+              <div>
+                <label className="font-bold text-gray-700 block mb-1">
+                  Article Body Paragraphs <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  rows={5}
+                  required
+                  placeholder="Enter the full article body here. Separate paragraphs with an empty blank line..."
+                  value={insightFormData.fullContentText}
+                  onChange={(e) => setInsightFormData({ ...insightFormData, fullContentText: e.target.value })}
+                  className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs leading-relaxed focus:outline-none focus:border-[#452415]"
+                />
+              </div>
+
+              {/* Key Takeaways & Applicable Statutes */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">
+                    Key Legal Takeaways <span className="text-gray-400 font-normal">(1 per line)</span>
                   </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Key takeaway 1&#10;Key takeaway 2&#10;Key takeaway 3"
+                    value={insightFormData.keyTakeawaysText}
+                    onChange={(e) => setInsightFormData({ ...insightFormData, keyTakeawaysText: e.target.value })}
+                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs resize-none focus:outline-none focus:border-[#452415]"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">
+                    Applicable Statutes &amp; Forums <span className="text-gray-400 font-normal">(1 per line)</span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Code of Civil Procedure 1908&#10;Companies Act 2017"
+                    value={insightFormData.statutesReferencedText}
+                    onChange={(e) => setInsightFormData({ ...insightFormData, statutesReferencedText: e.target.value })}
+                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 text-xs resize-none focus:outline-none focus:border-[#452415]"
+                  />
                 </div>
               </div>
 
@@ -9116,224 +8581,6 @@ export const AdminPortal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleDeleteInsight(deleteConfirmInsight)}
-                className="bg-red-600 hover:bg-red-700 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Confirm Delete</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* --- MODAL: ADD / EDIT PARTNER LOGO --- */}
-      {showPartnerModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 border border-[#452415]/20 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4 border-b pb-3">
-              <div>
-                <span className="text-[10px] font-bold text-[#E5B842] uppercase tracking-wider block">
-                  Membership &amp; Partners Desk
-                </span>
-                <h3 className="text-lg font-heading font-extrabold text-[#1A1A1A]">
-                  {editingPartner ? 'Edit Partner Details' : 'Add Membership Partner Logo'}
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowPartnerModal(false)}
-                className="text-gray-400 hover:text-black font-bold cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSavePartner} className="space-y-4 text-xs">
-              {/* Field 1: Name */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Partner / Organization Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Islamabad High Court Bar Association"
-                  value={partnerFormData.name}
-                  onChange={(e) => setPartnerFormData({ ...partnerFormData, name: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 2: Category */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Category / Classification
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Bar Association, Statutory Regulator, Corporate Partner"
-                  value={partnerFormData.category}
-                  onChange={(e) => setPartnerFormData({ ...partnerFormData, category: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-                <div className="flex flex-wrap gap-1.5 mt-1.5">
-                  {[
-                    'Bar Association',
-                    'Tax & Regulatory Body',
-                    'Apex Governing Body',
-                    'Corporate Regulator',
-                    'IP Statutory Body',
-                    'Tax Bar Association'
-                  ].map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => setPartnerFormData({ ...partnerFormData, category: cat })}
-                      className="bg-gray-100 hover:bg-[#452415]/10 text-gray-700 hover:text-[#452415] text-[10px] font-semibold px-2.5 py-1 rounded-lg transition"
-                    >
-                      + {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Field 3: Logo Image URL */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Logo Image URL
-                </label>
-                <input
-                  type="url"
-                  placeholder="https://example.com/logo.png"
-                  value={partnerFormData.logoUrl}
-                  onChange={(e) => setPartnerFormData({ ...partnerFormData, logoUrl: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-                {partnerFormData.logoUrl && (
-                  <div className="mt-2 h-16 w-full bg-gray-50 border rounded-xl p-2 flex items-center justify-center relative">
-                    <img
-                      src={partnerFormData.logoUrl}
-                      alt="Logo Preview"
-                      className="w-full h-full object-contain p-1"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Field 4: Website URL */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Official Website Link
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. https://fbr.gov.pk or https://ihcbar.org.pk"
-                  value={partnerFormData.websiteUrl}
-                  onChange={(e) => setPartnerFormData({ ...partnerFormData, websiteUrl: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 5: Description */}
-              <div>
-                <label className="font-bold text-gray-800 block mb-1">
-                  Brief Subtitle / Description
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Short summary of official affiliation or regulatory scope..."
-                  value={partnerFormData.description}
-                  onChange={(e) => setPartnerFormData({ ...partnerFormData, description: e.target.value })}
-                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                />
-              </div>
-
-              {/* Field 6 & 7: Order & Status */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Display Order
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={partnerFormData.order}
-                    onChange={(e) => setPartnerFormData({ ...partnerFormData, order: Number(e.target.value) || 1 })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-gray-800 block mb-1">
-                    Status
-                  </label>
-                  <select
-                    value={partnerFormData.status}
-                    onChange={(e) => setPartnerFormData({ ...partnerFormData, status: e.target.value as 'published' | 'archived' })}
-                    className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
-                  >
-                    <option value="published">Published (Visible on Marquee)</option>
-                    <option value="archived">Archived (Hidden)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t">
-                <button
-                  type="button"
-                  onClick={() => setShowPartnerModal(false)}
-                  className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-[#612912] hover:bg-[#452415] text-white font-extrabold shadow-sm transition-colors cursor-pointer"
-                >
-                  {editingPartner ? 'Save Partner Changes' : 'Add Partner Logo'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* --- MODAL: CONFIRM DELETE PARTNER --- */}
-      {deleteConfirmPartner && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 border border-red-200 shadow-2xl space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-
-            <div className="text-center space-y-2">
-              <h3 className="font-heading font-extrabold text-base text-[#1A1A1A]">
-                Delete Partner Affiliation?
-              </h3>
-              <p className="text-xs text-gray-600">
-                Are you sure you want to delete{' '}
-                <strong className="text-black font-extrabold">
-                  &quot;{deleteConfirmPartner.name}&quot;
-                </strong>
-                ?
-              </p>
-              <p className="text-[11px] text-red-700 font-medium bg-red-50 p-2 rounded-xl">
-                This logo will be immediately removed from the live website marquee.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-end gap-2.5 pt-2">
-              <button
-                type="button"
-                onClick={() => setDeleteConfirmPartner(null)}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-4 py-2 rounded-xl text-xs transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDeletePartner(deleteConfirmPartner)}
                 className="bg-red-600 hover:bg-red-700 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />

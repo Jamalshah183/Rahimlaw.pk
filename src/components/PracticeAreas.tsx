@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { FIRM_CONFIG, PracticeArea } from '../data/firmData';
 import { PracticeModal } from './PracticeModal';
+import { usePortalStore } from '../lib/portalStore';
 
 interface PracticeAreasProps {
   onSelectPracticeForConsultation: (practiceTitle: string) => void;
@@ -10,7 +11,17 @@ interface PracticeAreasProps {
 export const PracticeAreas: React.FC<PracticeAreasProps> = ({
   onSelectPracticeForConsultation,
 }) => {
+  const { practiceAreas: storePracticeAreas } = usePortalStore();
   const [selectedPractice, setSelectedPractice] = useState<PracticeArea | null>(null);
+
+  const practiceAreas: PracticeArea[] = storePracticeAreas.map((pa) => ({
+    id: pa.id,
+    title: pa.title,
+    shortDesc: pa.shortDesc,
+    fullDesc: pa.fullDesc || pa.shortDesc,
+    image: pa.image || FIRM_CONFIG.images.about,
+    keyServices: pa.subServices?.length ? pa.subServices : pa.keyHighlights || [],
+  }));
 
   return (
     <section id="practice-areas" className="py-20 md:py-28 bg-[#FDF0D5] rounded-[32px] sm:rounded-[40px] mx-2 sm:mx-4 md:mx-6 my-6 border border-[#5B1111]/10 shadow-xs relative overflow-hidden">
@@ -39,7 +50,7 @@ export const PracticeAreas: React.FC<PracticeAreasProps> = ({
 
         {/* 6 Premium Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {FIRM_CONFIG.practiceAreas.map((practice) => (
+          {practiceAreas.map((practice) => (
             <div
               key={practice.id}
               onClick={() => setSelectedPractice(practice)}

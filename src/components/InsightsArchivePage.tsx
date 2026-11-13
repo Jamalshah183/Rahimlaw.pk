@@ -8,7 +8,8 @@ import {
   Check,
   MessageSquare,
 } from 'lucide-react';
-import { INSIGHTS_DATA, INSIGHT_CATEGORIES } from '../data/insightsData';
+import { usePortalStore } from '../lib/portalStore';
+import { mapInsightsToPosts, deriveInsightCategories } from '../utils/insightMapper';
 import { FIRM_CONFIG } from '../data/firmData';
 import { heroConfig } from '../data/heroConfig';
 import { useTransparentLogo } from '../utils/useTransparentLogo';
@@ -32,14 +33,21 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
   onNavigateHome,
   onNavigateToPost,
 }) => {
+  const { insights } = usePortalStore();
   const [selectedCategory, setSelectedCategory] = useState<string>('All Publications');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
   const { logoSrc, isProcessed } = useTransparentLogo(heroConfig.logo);
 
-  const filteredPosts = INSIGHTS_DATA.filter((post) => {
+  const posts = mapInsightsToPosts(insights);
+  const categories = deriveInsightCategories(posts);
+  const effectiveCategory = categories.includes(selectedCategory)
+    ? selectedCategory
+    : 'All Publications';
+
+  const filteredPosts = posts.filter((post) => {
     const matchesCategory =
-      selectedCategory === 'All Publications' || post.category === selectedCategory;
+      effectiveCategory === 'All Publications' || post.category === effectiveCategory;
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
       !q ||
@@ -213,10 +221,13 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
               role="tablist"
               aria-label="Filter blogs by practice area"
             >
-              {INSIGHT_CATEGORIES.map((category, idx) => {
-                const isActive = selectedCategory === category;
+              {categories.map((category, idx) => {
+                const isActive = effectiveCategory === category;
                 const isAllTab = idx === 0;
                 const mobileLabel = ARCHIVE_MOBILE_CATEGORY_LABELS[category] || category;
+                const count = isAllTab
+                  ? posts.length
+                  : posts.filter((p) => p.category === category).length;
 
                 return (
                   <button
@@ -242,9 +253,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
                           : 'bg-white/15 text-[#E5B842]'
                       }`}
                     >
-                      {isAllTab
-                        ? `0${INSIGHTS_DATA.length}`
-                        : `0${INSIGHTS_DATA.filter((p) => p.category === category).length}`}
+                      {String(count).padStart(2, '0')}
                     </span>
                   </button>
                 );
@@ -283,13 +292,13 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
             </span>{' '}
             of{' '}
             <span className="font-semibold text-[#452415] tabular-nums">
-              {INSIGHTS_DATA.length}
+              {posts.length}
             </span>{' '}
             published legal blogs
-            {selectedCategory !== 'All Publications' ? ` in ${selectedCategory}` : ''}
+            {effectiveCategory !== 'All Publications' ? ` in ${effectiveCategory}` : ''}
           </div>
 
-          {selectedCategory !== 'All Publications' || searchQuery ? (
+          {effectiveCategory !== 'All Publications' || searchQuery ? (
             <button
               type="button"
               onClick={() => {
@@ -330,7 +339,7 @@ export const InsightsArchivePage: React.FC<InsightsArchivePageProps> = ({
             <div className="md:hidden space-y-4">
               {filteredPosts.map((post, idx) => {
                 const isCopied = copiedSlug === post.slug;
-                const isLeadMobile = idx === 0 && selectedCategory === 'All Publications' && !searchQuery;
+                const isLeadMobile = idx === 0 && effectiveCategory === 'All Publications' && !searchQuery;
 
                 if (isLeadMobile) {
                   return (

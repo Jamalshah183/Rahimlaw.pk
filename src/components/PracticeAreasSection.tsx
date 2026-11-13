@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Scale } from 'lucide-react';
 import { FIRM_CONFIG, PracticeArea } from '../data/firmData';
 import { PracticeModal } from './PracticeModal';
+import { usePortalStore } from '../lib/portalStore';
 
 interface PracticeAreasSectionProps {
   onSelectPracticeForConsultation: (practiceTitle: string) => void;
@@ -11,7 +12,17 @@ interface PracticeAreasSectionProps {
 export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
   onSelectPracticeForConsultation,
 }) => {
+  const { practiceAreas: storePracticeAreas } = usePortalStore();
   const [selectedPractice, setSelectedPractice] = useState<PracticeArea | null>(null);
+
+  const practiceAreas: PracticeArea[] = storePracticeAreas.map((pa) => ({
+    id: pa.id,
+    title: pa.title,
+    shortDesc: pa.shortDesc,
+    fullDesc: pa.fullDesc || pa.shortDesc,
+    image: pa.image || FIRM_CONFIG.images.about,
+    keyServices: pa.subServices?.length ? pa.subServices : pa.keyHighlights || [],
+  }));
 
   return (
     <section
@@ -50,7 +61,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
 
         {/* Editorial Numbered Practice List with Staggered Slide In */}
         <div className="divide-y divide-slate-200 border-t border-b border-slate-200">
-          {FIRM_CONFIG.practiceAreas.map((practice, index) => (
+          {practiceAreas.map((practice, index) => (
             <motion.div
               key={practice.id}
               initial={{ opacity: 0, x: -30 }}
@@ -74,7 +85,7 @@ export const PracticeAreasSection: React.FC<PracticeAreasSectionProps> = ({
                   className="font-sans text-xl sm:text-2xl font-black !text-[#E5B842] tabular-nums shrink-0 [font-variant-numeric:lining-nums] tracking-tight"
                   style={{ color: '#E5B842' }}
                 >
-                  0{index + 1}.
+                  {String(index + 1).padStart(2, '0')}.
                 </span>
                 <h3 className="font-sans text-2xl sm:text-[1.75rem] lg:text-[1.85rem] font-bold tracking-[-0.02em] leading-[1.15] text-[#2C1309] group-hover:text-[#612912] transition-colors">
                   {practice.title}

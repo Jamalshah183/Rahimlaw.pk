@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShieldCheck, ArrowUpRight, MessageSquare, CheckCircle2 } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
+import { usePortalStore } from '../lib/portalStore';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -13,7 +14,10 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   onClose,
   preselectedPractice = '',
 }) => {
+  const { practiceAreas: storePracticeAreas } = usePortalStore();
   const [selectedPractice, setSelectedPractice] = useState<string>(preselectedPractice);
+  const practiceTopics =
+    storePracticeAreas.length > 0 ? storePracticeAreas : FIRM_CONFIG.practiceAreas;
 
   useEffect(() => {
     setSelectedPractice(preselectedPractice);
@@ -77,7 +81,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               Optional: Select Matter Topic to Pre-fill Message
             </span>
             <div className="flex flex-wrap gap-2">
-              {FIRM_CONFIG.practiceAreas.map((area) => {
+              {practiceTopics.map((area) => {
                 const isSelected = selectedPractice === area.title;
                 return (
                   <button

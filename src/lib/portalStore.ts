@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import {
   Client,
   CaseFile,
@@ -18,8 +18,7 @@ import {
   PracticeArea,
   TeamMember,
   ReviewItem,
-  LegalInsightItem,
-  PartnerItem
+  LegalInsightItem
 } from '../types/portal';
 import {
   INITIAL_CLIENTS,
@@ -35,10 +34,10 @@ import {
   INITIAL_PRACTICE_AREAS,
   INITIAL_TEAM_MEMBERS,
   INITIAL_REVIEWS,
-  INITIAL_INSIGHTS,
-  INITIAL_PARTNERS
+  INITIAL_INSIGHTS
 } from '../data/portalSeedData';
 import { db, handleFirestoreError, OperationType, auth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 const STORAGE_KEYS = {
@@ -52,11 +51,10 @@ const STORAGE_KEYS = {
   HEARINGS: 'rla_portal_hearings_v2',
   NOTIFICATIONS: 'rla_portal_notifications_v2',
   CLIENT_CREDENTIALS: 'rla_portal_client_credentials_v2',
-  PRACTICE_AREAS: 'rla_portal_practice_areas_v3',
-  TEAM_MEMBERS: 'rla_portal_team_members_v2',
-  REVIEWS: 'rla_portal_reviews_v2',
-  INSIGHTS: 'rla_portal_insights_v2',
-  PARTNERS: 'rla_portal_partners_v2'
+  PRACTICE_AREAS: 'rla_portal_practice_areas_v4',
+  TEAM_MEMBERS: 'rla_portal_team_members_v4',
+  REVIEWS: 'rla_portal_reviews_v4',
+  INSIGHTS: 'rla_portal_insights_v4'
 };
 
 const createUniqueId = (prefix: string) => `${prefix}-${Date.now().toString().slice(-4)}`;
@@ -65,7 +63,23 @@ const getTodayDateString = () => new Date().toISOString().split('T')[0];
 const getCurrentYearNumber = () => new Date().getFullYear();
 const getRandom3DigitNum = () => Math.floor(100 + Math.random() * 900);
 
-export function usePortalStore() {
+function stripUndefined<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripUndefined(item)) as unknown as T;
+  }
+  if (value !== null && typeof value === 'object') {
+    const cleaned: Record<string, any> = {};
+    for (const [k, v] of Object.entries(value as Record<string, any>)) {
+      if (v !== undefined) {
+        cleaned[k] = stripUndefined(v);
+      }
+    }
+    return cleaned as T;
+  }
+  return value;
+}
+
+function usePortalStoreState() {
   const [clients, setClients] = useState<Client[]>(() => {
     if (typeof window === 'undefined') return INITIAL_CLIENTS;
     try {
@@ -206,17 +220,16 @@ export function usePortalStore() {
     }
   });
 
-  const [partners, setPartners] = useState<PartnerItem[]>(() => {
-    if (typeof window === 'undefined') return INITIAL_PARTNERS;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PARTNERS);
-      return saved ? JSON.parse(saved) : INITIAL_PARTNERS;
-    } catch {
-      return INITIAL_PARTNERS;
-    }
-  });
-
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const [authUid, setAuthUid] = useState<string | null>(() => auth.currentUser?.uid || null);
+  const migratedCollectionsRef = useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
+      setAuthUid(user?.uid || null);
+    });
+    return () => unsubAuth();
+  }, []);
 
   // Helper to sync to Firestore and local storage
   const saveToStorage = (key: string, data: any) => {
@@ -229,7 +242,7 @@ export function usePortalStore() {
 
   const saveToFirestoreDoc = async (colName: string, id: string, data: any) => {
     try {
-      await setDoc(doc(db, colName, id), data, { merge: true });
+      await setDoc(doc(db, colName, id), stripUndefined(data), { merge: true });
     } catch (err) {
       handleFirestoreError(err, OperationType.WRITE, `${colName}/${id}`);
     }
@@ -243,14 +256,16 @@ export function usePortalStore() {
     }
   };
 
-  // Setup Firestore Real-time Listeners and Auto-Seed if empty
+  // Setup Firestore Real-time Listeners and Auto-Seed if empty (when authenticated)
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     // 1. Clients
     const unsubClients = onSnapshot(collection(db, 'clients'), (snap) => {
       if (snap.empty) {
-        INITIAL_CLIENTS.forEach((c) => saveToFirestoreDoc('clients', c.id, c));
+        if (auth.currentUser) {
+          INITIAL_CLIENTS.forEach((c) => saveToFirestoreDoc('clients', c.id, c));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as Client);
         setClients(items);
@@ -261,7 +276,9 @@ export function usePortalStore() {
     // 2. Cases
     const unsubCases = onSnapshot(collection(db, 'cases'), (snap) => {
       if (snap.empty) {
-        INITIAL_CASES.forEach((c) => saveToFirestoreDoc('cases', c.id, c));
+        if (auth.currentUser) {
+          INITIAL_CASES.forEach((c) => saveToFirestoreDoc('cases', c.id, c));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as CaseFile);
         setCases(items);
@@ -272,7 +289,9 @@ export function usePortalStore() {
     // 3. Notices
     const unsubNotices = onSnapshot(collection(db, 'notices'), (snap) => {
       if (snap.empty) {
-        INITIAL_NOTICES.forEach((n) => saveToFirestoreDoc('notices', n.id, n));
+        if (auth.currentUser) {
+          INITIAL_NOTICES.forEach((n) => saveToFirestoreDoc('notices', n.id, n));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as FBRNotice);
         setNotices(items);
@@ -283,7 +302,9 @@ export function usePortalStore() {
     // 4. Documents
     const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
       if (snap.empty) {
-        INITIAL_DOCUMENTS.forEach((d) => saveToFirestoreDoc('documents', d.id, d));
+        if (auth.currentUser) {
+          INITIAL_DOCUMENTS.forEach((d) => saveToFirestoreDoc('documents', d.id, d));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as DocumentItem);
         setDocuments(items);
@@ -294,7 +315,9 @@ export function usePortalStore() {
     // 5. Tasks
     const unsubTasks = onSnapshot(collection(db, 'tasks'), (snap) => {
       if (snap.empty) {
-        INITIAL_TASKS.forEach((t) => saveToFirestoreDoc('tasks', t.id, t));
+        if (auth.currentUser) {
+          INITIAL_TASKS.forEach((t) => saveToFirestoreDoc('tasks', t.id, t));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as InternalTask);
         setTasks(items);
@@ -305,7 +328,9 @@ export function usePortalStore() {
     // 6. Notes
     const unsubNotes = onSnapshot(collection(db, 'notes'), (snap) => {
       if (snap.empty) {
-        INITIAL_NOTES.forEach((n) => saveToFirestoreDoc('notes', n.id, n));
+        if (auth.currentUser) {
+          INITIAL_NOTES.forEach((n) => saveToFirestoreDoc('notes', n.id, n));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as InternalNote);
         setNotes(items);
@@ -316,7 +341,9 @@ export function usePortalStore() {
     // 7. Invoices
     const unsubInvoices = onSnapshot(collection(db, 'invoices'), (snap) => {
       if (snap.empty) {
-        INITIAL_INVOICES.forEach((i) => saveToFirestoreDoc('invoices', i.id, i));
+        if (auth.currentUser) {
+          INITIAL_INVOICES.forEach((i) => saveToFirestoreDoc('invoices', i.id, i));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as Invoice);
         setInvoices(items);
@@ -327,7 +354,9 @@ export function usePortalStore() {
     // 8. Hearings
     const unsubHearings = onSnapshot(collection(db, 'hearings'), (snap) => {
       if (snap.empty) {
-        INITIAL_HEARINGS.forEach((h) => saveToFirestoreDoc('hearings', h.id, h));
+        if (auth.currentUser) {
+          INITIAL_HEARINGS.forEach((h) => saveToFirestoreDoc('hearings', h.id, h));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as HearingEvent);
         setHearings(items);
@@ -338,7 +367,9 @@ export function usePortalStore() {
     // 9. Notifications
     const unsubNotifs = onSnapshot(collection(db, 'notifications'), (snap) => {
       if (snap.empty) {
-        INITIAL_NOTIFICATIONS.forEach((n) => saveToFirestoreDoc('notifications', n.id, n));
+        if (auth.currentUser) {
+          INITIAL_NOTIFICATIONS.forEach((n) => saveToFirestoreDoc('notifications', n.id, n));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as NotificationLog);
         setNotifications(items);
@@ -349,7 +380,9 @@ export function usePortalStore() {
     // 10. Client Credentials
     const unsubCreds = onSnapshot(collection(db, 'clientCredentials'), (snap) => {
       if (snap.empty) {
-        INITIAL_CLIENT_CREDENTIALS.forEach((c) => saveToFirestoreDoc('clientCredentials', c.id, c));
+        if (auth.currentUser) {
+          INITIAL_CLIENT_CREDENTIALS.forEach((c) => saveToFirestoreDoc('clientCredentials', c.id, c));
+        }
       } else {
         const items = snap.docs.map((d) => d.data() as ClientCredential);
         setClientCredentials(items);
@@ -360,64 +393,129 @@ export function usePortalStore() {
     // 11. Practice Areas
     const unsubPracticeAreas = onSnapshot(collection(db, 'practice_areas'), (snap) => {
       if (snap.empty) {
-        INITIAL_PRACTICE_AREAS.forEach((pa) => saveToFirestoreDoc('practice_areas', pa.id, pa));
+        setPracticeAreas(INITIAL_PRACTICE_AREAS);
+        saveToStorage(STORAGE_KEYS.PRACTICE_AREAS, INITIAL_PRACTICE_AREAS);
+        if (auth.currentUser && !migratedCollectionsRef.current.practice_areas) {
+          migratedCollectionsRef.current.practice_areas = true;
+          INITIAL_PRACTICE_AREAS.forEach((pa) => saveToFirestoreDoc('practice_areas', pa.id, pa));
+        }
       } else {
-        const items = snap.docs.map((d) => d.data() as PracticeArea);
-        setPracticeAreas(items);
-        saveToStorage(STORAGE_KEYS.PRACTICE_AREAS, items);
+        const docIds = snap.docs.map((d) => d.id);
+        const hasLegacy = docIds.includes('litigation-arbitration-white-collar');
+        const hasCurrent = docIds.includes('litigation-dispute-resolution');
+        if (hasLegacy && !hasCurrent) {
+          setPracticeAreas(INITIAL_PRACTICE_AREAS);
+          saveToStorage(STORAGE_KEYS.PRACTICE_AREAS, INITIAL_PRACTICE_AREAS);
+          if (auth.currentUser && !migratedCollectionsRef.current.practice_areas) {
+            migratedCollectionsRef.current.practice_areas = true;
+            const initialIds = new Set(INITIAL_PRACTICE_AREAS.map((pa) => pa.id));
+            docIds.filter((id) => !initialIds.has(id)).forEach((id) => deleteFromFirestoreDoc('practice_areas', id));
+            INITIAL_PRACTICE_AREAS.forEach((pa) => saveToFirestoreDoc('practice_areas', pa.id, pa));
+          }
+        } else {
+          const items = snap.docs.map((d) => d.data() as PracticeArea);
+          setPracticeAreas(items);
+          saveToStorage(STORAGE_KEYS.PRACTICE_AREAS, items);
+        }
       }
     }, (err) => console.warn('Practice Areas snapshot error:', err));
 
     // 12. Team Members
     const unsubTeam = onSnapshot(collection(db, 'team_members'), (snap) => {
       if (snap.empty) {
-        INITIAL_TEAM_MEMBERS.forEach((m) => saveToFirestoreDoc('team_members', m.id, m));
+        setTeamMembers(INITIAL_TEAM_MEMBERS);
+        saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, INITIAL_TEAM_MEMBERS);
+        if (auth.currentUser && !migratedCollectionsRef.current.team_members) {
+          migratedCollectionsRef.current.team_members = true;
+          INITIAL_TEAM_MEMBERS.forEach((m) => saveToFirestoreDoc('team_members', m.id, m));
+        }
       } else {
-        const items = snap.docs.map((d) => d.data() as TeamMember);
-        // Sort by order or ceo first
-        items.sort((a, b) => {
-          if (a.isCeo && !b.isCeo) return -1;
-          if (!a.isCeo && b.isCeo) return 1;
-          return (a.order || 99) - (b.order || 99);
-        });
-        setTeamMembers(items);
-        saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, items);
+        const docIds = snap.docs.map((d) => d.id);
+        const hasLegacy = docIds.includes('mirza-ahmed-raza');
+        const hasCurrent = docIds.includes('hasan-qamar');
+        if (hasLegacy && !hasCurrent) {
+          setTeamMembers(INITIAL_TEAM_MEMBERS);
+          saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, INITIAL_TEAM_MEMBERS);
+          if (auth.currentUser && !migratedCollectionsRef.current.team_members) {
+            migratedCollectionsRef.current.team_members = true;
+            const initialIds = new Set(INITIAL_TEAM_MEMBERS.map((m) => m.id));
+            docIds.filter((id) => !initialIds.has(id)).forEach((id) => deleteFromFirestoreDoc('team_members', id));
+            INITIAL_TEAM_MEMBERS.forEach((m) => saveToFirestoreDoc('team_members', m.id, m));
+          }
+        } else {
+          const items = snap.docs.map((d) => d.data() as TeamMember);
+          items.sort((a, b) => {
+            if (a.stickToLeft && !b.stickToLeft) return -1;
+            if (!a.stickToLeft && b.stickToLeft) return 1;
+            if (a.isCeo && !b.isCeo) return -1;
+            if (!a.isCeo && b.isCeo) return 1;
+            return (a.order || 99) - (b.order || 99);
+          });
+          setTeamMembers(items);
+          saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, items);
+        }
       }
     }, (err) => console.warn('Team Members snapshot error:', err));
 
     // 13. Client Reviews & Testimonials
     const unsubReviews = onSnapshot(collection(db, 'client_reviews'), (snap) => {
       if (snap.empty) {
-        INITIAL_REVIEWS.forEach((r) => saveToFirestoreDoc('client_reviews', r.id, r));
+        setReviews(INITIAL_REVIEWS);
+        saveToStorage(STORAGE_KEYS.REVIEWS, INITIAL_REVIEWS);
+        if (auth.currentUser && !migratedCollectionsRef.current.client_reviews) {
+          migratedCollectionsRef.current.client_reviews = true;
+          INITIAL_REVIEWS.forEach((r) => saveToFirestoreDoc('client_reviews', r.id, r));
+        }
       } else {
-        const items = snap.docs.map((d) => d.data() as ReviewItem);
-        setReviews(items);
-        saveToStorage(STORAGE_KEYS.REVIEWS, items);
+        const docIds = snap.docs.map((d) => d.id);
+        const hasLegacy = docIds.includes('rev-1');
+        const hasCurrent = docIds.includes('t1');
+        if (hasLegacy && !hasCurrent) {
+          setReviews(INITIAL_REVIEWS);
+          saveToStorage(STORAGE_KEYS.REVIEWS, INITIAL_REVIEWS);
+          if (auth.currentUser && !migratedCollectionsRef.current.client_reviews) {
+            migratedCollectionsRef.current.client_reviews = true;
+            const initialIds = new Set(INITIAL_REVIEWS.map((r) => r.id));
+            docIds.filter((id) => !initialIds.has(id)).forEach((id) => deleteFromFirestoreDoc('client_reviews', id));
+            INITIAL_REVIEWS.forEach((r) => saveToFirestoreDoc('client_reviews', r.id, r));
+          }
+        } else {
+          const items = snap.docs.map((d) => d.data() as ReviewItem);
+          setReviews(items);
+          saveToStorage(STORAGE_KEYS.REVIEWS, items);
+        }
       }
     }, (err) => console.warn('Client Reviews snapshot error:', err));
 
     // 14. Legal Insights & Blog Articles
     const unsubInsights = onSnapshot(collection(db, 'legal_insights'), (snap) => {
       if (snap.empty) {
-        INITIAL_INSIGHTS.forEach((ins) => saveToFirestoreDoc('legal_insights', ins.id, ins));
+        setInsights(INITIAL_INSIGHTS);
+        saveToStorage(STORAGE_KEYS.INSIGHTS, INITIAL_INSIGHTS);
+        if (auth.currentUser && !migratedCollectionsRef.current.legal_insights) {
+          migratedCollectionsRef.current.legal_insights = true;
+          INITIAL_INSIGHTS.forEach((ins) => saveToFirestoreDoc('legal_insights', ins.id, ins));
+        }
       } else {
-        const items = snap.docs.map((d) => d.data() as LegalInsightItem);
-        setInsights(items);
-        saveToStorage(STORAGE_KEYS.INSIGHTS, items);
+        const docIds = snap.docs.map((d) => d.id);
+        const hasLegacy = docIds.includes('fbr-tax-slabs-2024-2025');
+        const hasCurrent = docIds.includes('high-court-stay-orders-interim-relief-pakistan');
+        if (hasLegacy && !hasCurrent) {
+          setInsights(INITIAL_INSIGHTS);
+          saveToStorage(STORAGE_KEYS.INSIGHTS, INITIAL_INSIGHTS);
+          if (auth.currentUser && !migratedCollectionsRef.current.legal_insights) {
+            migratedCollectionsRef.current.legal_insights = true;
+            const initialIds = new Set(INITIAL_INSIGHTS.map((ins) => ins.id));
+            docIds.filter((id) => !initialIds.has(id)).forEach((id) => deleteFromFirestoreDoc('legal_insights', id));
+            INITIAL_INSIGHTS.forEach((ins) => saveToFirestoreDoc('legal_insights', ins.id, ins));
+          }
+        } else {
+          const items = snap.docs.map((d) => d.data() as LegalInsightItem);
+          setInsights(items);
+          saveToStorage(STORAGE_KEYS.INSIGHTS, items);
+        }
       }
     }, (err) => console.warn('Legal Insights snapshot error:', err));
-
-    // 15. Membership & Partners
-    const unsubPartners = onSnapshot(collection(db, 'membership_partners'), (snap) => {
-      if (snap.empty) {
-        INITIAL_PARTNERS.forEach((p) => saveToFirestoreDoc('membership_partners', p.id, p));
-      } else {
-        const items = snap.docs.map((d) => d.data() as PartnerItem);
-        items.sort((a, b) => (a.order || 99) - (b.order || 99));
-        setPartners(items);
-        saveToStorage(STORAGE_KEYS.PARTNERS, items);
-      }
-    }, (err) => console.warn('Membership Partners snapshot error:', err));
 
     return () => {
       unsubClients();
@@ -434,9 +532,8 @@ export function usePortalStore() {
       unsubTeam();
       unsubReviews();
       unsubInsights();
-      unsubPartners();
     };
-  }, []);
+  }, [authUid]);
 
   // --- CLIENT ACTIONS ---
   const addClient = (client: Omit<Client, 'id' | 'createdAt' | 'activeCasesCount' | 'totalTaxSaved'>, loginEmail?: string, loginPassword?: string) => {
@@ -1075,6 +1172,8 @@ export function usePortalStore() {
   };
 
   const resetPracticeAreas = () => {
+    const defaultIds = new Set(INITIAL_PRACTICE_AREAS.map((pa) => pa.id));
+    practiceAreas.filter((pa) => !defaultIds.has(pa.id)).forEach((pa) => deleteFromFirestoreDoc('practice_areas', pa.id));
     setPracticeAreas(INITIAL_PRACTICE_AREAS);
     saveToStorage(STORAGE_KEYS.PRACTICE_AREAS, INITIAL_PRACTICE_AREAS);
     INITIAL_PRACTICE_AREAS.forEach((pa) => saveToFirestoreDoc('practice_areas', pa.id, pa));
@@ -1138,6 +1237,8 @@ export function usePortalStore() {
   };
 
   const resetTeamMembers = () => {
+    const defaultIds = new Set(INITIAL_TEAM_MEMBERS.map((m) => m.id));
+    teamMembers.filter((m) => !defaultIds.has(m.id)).forEach((m) => deleteFromFirestoreDoc('team_members', m.id));
     setTeamMembers(INITIAL_TEAM_MEMBERS);
     saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, INITIAL_TEAM_MEMBERS);
     INITIAL_TEAM_MEMBERS.forEach((m) => saveToFirestoreDoc('team_members', m.id, m));
@@ -1184,6 +1285,8 @@ export function usePortalStore() {
   };
 
   const resetReviews = () => {
+    const defaultIds = new Set(INITIAL_REVIEWS.map((r) => r.id));
+    reviews.filter((r) => !defaultIds.has(r.id)).forEach((r) => deleteFromFirestoreDoc('client_reviews', r.id));
     setReviews(INITIAL_REVIEWS);
     saveToStorage(STORAGE_KEYS.REVIEWS, INITIAL_REVIEWS);
     INITIAL_REVIEWS.forEach((r) => saveToFirestoreDoc('client_reviews', r.id, r));
@@ -1231,56 +1334,11 @@ export function usePortalStore() {
   };
 
   const resetInsights = () => {
+    const defaultIds = new Set(INITIAL_INSIGHTS.map((ins) => ins.id));
+    insights.filter((ins) => !defaultIds.has(ins.id)).forEach((ins) => deleteFromFirestoreDoc('legal_insights', ins.id));
     setInsights(INITIAL_INSIGHTS);
     saveToStorage(STORAGE_KEYS.INSIGHTS, INITIAL_INSIGHTS);
     INITIAL_INSIGHTS.forEach((ins) => saveToFirestoreDoc('legal_insights', ins.id, ins));
-  };
-
-  // --- MEMBERSHIP & PARTNERS ACTIONS ---
-  const addPartner = (partnerData: Omit<PartnerItem, 'id' | 'createdAt'>) => {
-    const newId = createUniqueId('partner');
-    const newPartner: PartnerItem = {
-      ...partnerData,
-      id: newId,
-      status: partnerData.status || 'published',
-      order: partnerData.order || (partners.length + 1),
-      createdAt: getTodayDateString(),
-      updatedAt: getTodayDateString()
-    };
-    const updated = [...partners, newPartner];
-    setPartners(updated);
-    saveToStorage(STORAGE_KEYS.PARTNERS, updated);
-    saveToFirestoreDoc('membership_partners', newId, newPartner);
-    return newPartner;
-  };
-
-  const updatePartner = (id: string, updates: Partial<PartnerItem>) => {
-    let targetDoc: PartnerItem | null = null;
-    const updated = partners.map((p) => {
-      if (p.id === id) {
-        targetDoc = { ...p, ...updates, updatedAt: getTodayDateString() };
-        return targetDoc;
-      }
-      return p;
-    });
-    setPartners(updated);
-    saveToStorage(STORAGE_KEYS.PARTNERS, updated);
-    if (targetDoc) {
-      saveToFirestoreDoc('membership_partners', id, targetDoc);
-    }
-  };
-
-  const deletePartner = (id: string) => {
-    const updated = partners.filter((p) => p.id !== id);
-    setPartners(updated);
-    saveToStorage(STORAGE_KEYS.PARTNERS, updated);
-    deleteFromFirestoreDoc('membership_partners', id);
-  };
-
-  const resetPartners = () => {
-    setPartners(INITIAL_PARTNERS);
-    saveToStorage(STORAGE_KEYS.PARTNERS, INITIAL_PARTNERS);
-    INITIAL_PARTNERS.forEach((p) => saveToFirestoreDoc('membership_partners', p.id, p));
   };
 
   return {
@@ -1299,7 +1357,6 @@ export function usePortalStore() {
     teamMembers,
     reviews,
     insights,
-    partners,
     addClient,
     addClientCredential,
     addCase,
@@ -1334,10 +1391,23 @@ export function usePortalStore() {
     addInsight,
     updateInsight,
     deleteInsight,
-    resetInsights,
-    addPartner,
-    updatePartner,
-    deletePartner,
-    resetPartners
+    resetInsights
   };
+}
+
+type PortalStoreContextValue = ReturnType<typeof usePortalStoreState>;
+
+const PortalContext = createContext<PortalStoreContextValue | null>(null);
+
+export const PortalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const store = usePortalStoreState();
+  return React.createElement(PortalContext.Provider, { value: store }, children);
+};
+
+export function usePortalStore(): PortalStoreContextValue {
+  const ctx = useContext(PortalContext);
+  if (!ctx) {
+    throw new Error('usePortalStore must be used within a PortalProvider');
+  }
+  return ctx;
 }

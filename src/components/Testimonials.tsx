@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { FIRM_CONFIG } from '../data/firmData';
+import { usePortalStore } from '../lib/portalStore';
 
 export const Testimonials: React.FC = () => {
+  const { reviews } = usePortalStore();
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const activeTestimonials = (reviews || [])
+    .filter((r) => r.status !== 'archived')
+    .map((r) => ({
+      id: r.id,
+      quote: r.reviewText,
+      clientName: r.clientInitials,
+      matterArea: r.caseType || r.clientRole,
+      location: r.location,
+    }));
 
   // Automatically step through reviews one by one with zero heavy animation
   useEffect(() => {
+    if (activeTestimonials.length <= 1) return;
     const timer = window.setInterval(() => {
       setCurrentIndex((prev) =>
-        prev === FIRM_CONFIG.testimonials.length - 1 ? 0 : prev + 1
+        prev >= activeTestimonials.length - 1 ? 0 : prev + 1
       );
     }, 4500);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [activeTestimonials.length]);
 
-  const current = FIRM_CONFIG.testimonials[currentIndex];
+  if (activeTestimonials.length === 0) return null;
+
+  const safeIndex = currentIndex < activeTestimonials.length ? currentIndex : 0;
+  const current = activeTestimonials[safeIndex];
 
   return (
     <section
@@ -105,8 +120,8 @@ export const Testimonials: React.FC = () => {
                 so the card and section never resize or push the next section when reviews change.
               */}
               <div className="grid grid-cols-1 grid-rows-1 items-center mb-8">
-                {FIRM_CONFIG.testimonials.map((item, idx) => {
-                  const isActive = idx === currentIndex;
+                {activeTestimonials.map((item, idx) => {
+                  const isActive = idx === safeIndex;
                   return (
                     <blockquote
                       key={item.id}
@@ -141,13 +156,13 @@ export const Testimonials: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex justify-center gap-2 mt-6"
           >
-            {FIRM_CONFIG.testimonials.map((_, i) => (
+            {activeTestimonials.map((_, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setCurrentIndex(i)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  currentIndex === i ? 'w-8 bg-[#E5B842]' : 'w-2 bg-[#E5B842]/35 hover:bg-[#E5B842]/60'
+                  safeIndex === i ? 'w-8 bg-[#E5B842]' : 'w-2 bg-[#E5B842]/35 hover:bg-[#E5B842]/60'
                 }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
