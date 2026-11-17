@@ -2176,10 +2176,10 @@ export const AdminPortal: React.FC = () => {
 
   if (!adminUser) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] text-[#1A1A1A] p-4 sm:p-6 lg:p-8 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-3xl border border-[#452415]/20 shadow-2xl p-6 sm:p-8 space-y-6">
-          <div className="text-center space-y-3">
-            <div className="relative w-[240px] h-[75px] mx-auto">
+      <div className="min-h-[calc(100dvh-38px)] sm:min-h-screen bg-[#FAF8F5] text-[#1A1A1A] px-3 py-2 sm:p-6 lg:p-8 flex items-center justify-center overflow-hidden sm:overflow-visible">
+        <div className="max-w-md w-full bg-white rounded-2xl sm:rounded-3xl border border-[#452415]/20 shadow-2xl p-4 sm:p-8 space-y-3 sm:space-y-6">
+          <div className="text-center space-y-1.5 sm:space-y-3">
+            <div className="relative w-[155px] h-[46px] sm:w-[240px] sm:h-[75px] mx-auto">
               <img
                 src="https://i.ibb.co/xS4KS0LC/Untitled-design-2.png"
                 alt="Rahim Law Associates Logo"
@@ -2187,21 +2187,21 @@ export const AdminPortal: React.FC = () => {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <span className="bg-[#612912]/10 text-[#612912] text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+            <span className="bg-[#612912]/10 text-[#612912] text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-wider inline-block">
               Rahim Law Associates Admin Portal
             </span>
-            <h1 className="text-2xl font-heading font-extrabold text-[#1A1A1A]">
+            <h1 className="text-lg sm:text-2xl font-heading font-extrabold text-[#1A1A1A] leading-tight">
               Advocate Admin Authentication
             </h1>
-            <p className="text-xs text-gray-600">
+            <p className="text-[11px] sm:text-xs text-gray-600 leading-snug">
               Restricted Portal for Senior Advocates & Partners of Rahim Law Associates. Please sign in with your authorized account.
             </p>
           </div>
 
           {adminAuthError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3.5 rounded-2xl font-medium space-y-1">
+            <div className="bg-red-50 border border-red-200 text-red-700 text-[11px] sm:text-xs p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl font-medium space-y-0.5 sm:space-y-1">
               <div className="font-bold flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600 shrink-0" />
                 <span>Access Denied</span>
               </div>
               <p>{adminAuthError}</p>
@@ -2209,8 +2209,8 @@ export const AdminPortal: React.FC = () => {
           )}
 
           {adminAuthSuccessMessage && (
-            <div className="bg-[#612912]/5 border border-[#612912]/20 text-[#452415] text-xs p-3.5 rounded-2xl font-medium flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#612912] shrink-0 mt-0.5" />
+            <div className="bg-[#612912]/5 border border-[#612912]/20 text-[#452415] text-[11px] sm:text-xs p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl font-medium flex items-start gap-2">
+              <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#612912] shrink-0 mt-0.5" />
               <span>{adminAuthSuccessMessage}</span>
             </div>
           )}
@@ -2218,9 +2218,9 @@ export const AdminPortal: React.FC = () => {
           <button
             type="button"
             onClick={handleAdminGoogleSignIn}
-            className="w-full bg-[#612912] hover:bg-[#452415] text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-lg transition-all text-xs flex items-center justify-center gap-3 cursor-pointer border border-[#E5B842]/40/30"
+            className="w-full bg-[#612912] hover:bg-[#452415] text-white font-extrabold py-2.5 sm:py-3.5 px-3 sm:px-4 rounded-xl sm:rounded-2xl shadow-lg transition-all text-xs flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer border border-[#E5B842]/40/30"
           >
-            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
@@ -2242,17 +2242,17 @@ export const AdminPortal: React.FC = () => {
           </button>
 
           {/* OR DIVIDER */}
-          <div className="relative flex items-center justify-center my-2">
+          <div className="relative flex items-center justify-center my-0.5 sm:my-2">
             <div className="border-t border-gray-200 w-full"></div>
-            <span className="bg-white px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider shrink-0">
+            <span className="bg-white px-2.5 sm:px-3 text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider shrink-0">
               or sign in with email & password
             </span>
           </div>
 
           {/* EMAIL & PASSWORD SIGN IN FORM */}
-          <form onSubmit={handleAdminEmailPasswordSubmit} className="space-y-3.5">
+          <form onSubmit={handleAdminEmailPasswordSubmit} className="space-y-2.5 sm:space-y-3.5">
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-1">
+              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 sm:mb-1">
                 Admin Email Address
               </label>
               <div className="relative">
@@ -2264,13 +2264,13 @@ export const AdminPortal: React.FC = () => {
                   placeholder="Enter authorized email address"
                   required
                   autoComplete="email"
-                  className="w-full pl-10 pr-3 py-2.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#612912] focus:border-transparent transition"
+                  className="w-full pl-10 pr-3 py-2 sm:py-2.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#612912] focus:border-transparent transition"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-0.5 sm:mb-1">
                 <label className="block text-[11px] font-bold text-gray-700">
                   Password
                 </label>
@@ -2291,7 +2291,7 @@ export const AdminPortal: React.FC = () => {
                   placeholder={adminIsRegisterMode ? 'Set a password (min 6 chars)' : '••••••••'}
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-10 py-2.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#612912] focus:border-transparent transition"
+                  className="w-full pl-10 pr-10 py-2 sm:py-2.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#612912] focus:border-transparent transition"
                 />
                 <button
                   type="button"
@@ -2306,7 +2306,7 @@ export const AdminPortal: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#1A1A1A] hover:bg-[#612912] text-white font-extrabold py-3 px-4 rounded-xl shadow-md transition-all text-xs flex items-center justify-center gap-2 cursor-pointer border border-gray-800"
+              className="w-full bg-[#1A1A1A] hover:bg-[#612912] text-white font-extrabold py-2.5 sm:py-3 px-4 rounded-xl shadow-md transition-all text-xs flex items-center justify-center gap-2 cursor-pointer border border-gray-800"
             >
               <KeyRound className="w-3.5 h-3.5 text-[#E5B842]" />
               <span>
@@ -2314,7 +2314,7 @@ export const AdminPortal: React.FC = () => {
               </span>
             </button>
 
-            <div className="text-center pt-0.5">
+            <div className="text-center pt-0 sm:pt-0.5">
               <button
                 type="button"
                 onClick={() => {
@@ -2322,7 +2322,7 @@ export const AdminPortal: React.FC = () => {
                   setAdminAuthError(null);
                   setAdminAuthSuccessMessage(null);
                 }}
-                className="text-[11px] text-gray-500 hover:text-[#452415] font-medium hover:underline cursor-pointer"
+                className="text-[10px] sm:text-[11px] text-gray-500 hover:text-[#452415] font-medium hover:underline cursor-pointer leading-tight"
               >
                 {adminIsRegisterMode
                   ? 'Already set your password? Return to standard Sign In'
@@ -2536,7 +2536,298 @@ export const AdminPortal: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-1 w-full max-w-full overflow-x-hidden p-3 sm:p-6 lg:p-8 pb-24 md:pb-8">
         {activeTab === 'dashboard' && (
-          <div className="space-y-6 font-sans">
+          <>
+            {/* --- MOBILE-ONLY 5-SECOND SNAPSHOT DASHBOARD (< 768px) --- */}
+            <div className="md:hidden space-y-3.5 font-sans">
+              {/* 1. 2x2 At-a-Glance KPI Tiles (Fits immediately above the fold) */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('cases')}
+                  className="bg-white p-3.5 rounded-2xl border border-[#452415]/15 shadow-xs text-left active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#5A6275]">Active Cases</span>
+                    <Briefcase className="w-4 h-4 text-[#612912] shrink-0" />
+                  </div>
+                  <div className="text-2xl font-heading font-extrabold text-[#1A1A1A] mt-1 leading-none">
+                    {cases.length}
+                  </div>
+                  <div className="text-[11px] font-bold text-[#612912] mt-1.5 truncate">
+                    Rs. {(cases.reduce((a, c) => a + c.demandAmountPkr, 0) / 10000000).toFixed(1)} Cr Protected
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowNoticesModal(true)}
+                  className={`p-3.5 rounded-2xl border shadow-xs text-left active:scale-[0.98] transition-all cursor-pointer ${
+                    pendingNoticesCount > 0
+                      ? 'bg-red-50/70 border-red-200'
+                      : 'bg-white border-[#452415]/15'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-red-700">Notices Due</span>
+                    <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                  </div>
+                  <div className="text-2xl font-heading font-extrabold text-red-700 mt-1 leading-none">
+                    {pendingNoticesCount}
+                  </div>
+                  <div className="text-[11px] font-bold text-red-600 mt-1.5 truncate">
+                    {pendingNoticesCount > 0 ? 'Reply Pending' : `${notices.length} Total Logged`}
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('calendar')}
+                  className="bg-white p-3.5 rounded-2xl border border-[#452415]/15 shadow-xs text-left active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#5A6275]">Next Hearing</span>
+                    <CalendarIcon className="w-4 h-4 text-[#E5B842] shrink-0" />
+                  </div>
+                  <div className="text-lg font-heading font-extrabold text-[#1A1A1A] mt-1 leading-none truncate">
+                    {hearings[0]?.date || 'None'}
+                  </div>
+                  <div className="text-[11px] font-bold text-[#452415] mt-1.5 truncate">
+                    {hearings.length} Total Scheduled
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('billing')}
+                  className="bg-white p-3.5 rounded-2xl border border-[#452415]/15 shadow-xs text-left active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#5A6275]">Unpaid Fees</span>
+                    <CreditCard className="w-4 h-4 text-amber-700 shrink-0" />
+                  </div>
+                  <div className="text-xl font-heading font-extrabold text-[#452415] mt-1 leading-none truncate">
+                    Rs. {(invoices.filter((i) => i.status !== 'Paid').reduce((a, i) => a + (i.totalAmountPkr - i.paidAmountPkr), 0) / 1000).toFixed(0)}k
+                  </div>
+                  <div className="text-[11px] font-bold text-amber-800 mt-1.5 truncate">
+                    {invoices.filter((i) => i.status !== 'Paid').length} Pending Invoices
+                  </div>
+                </button>
+              </div>
+
+              {/* 2. 4-Button One-Tap Action Bar */}
+              <div className="grid grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddCaseModal(true)}
+                  className="bg-[#E5B842] text-[#1A1A1A] p-2.5 rounded-2xl font-extrabold text-[10px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>New Case</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddNoticeModal(true)}
+                  className="bg-white border border-[#452415]/15 text-[#452415] p-2.5 rounded-2xl font-extrabold text-[10px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  <AlertTriangle className="w-4 h-4 text-amber-600" />
+                  <span>Notice</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddHearingModal(true)}
+                  className="bg-white border border-[#452415]/15 text-[#452415] p-2.5 rounded-2xl font-extrabold text-[10px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  <CalendarIcon className="w-4 h-4 text-[#612912]" />
+                  <span>Hearing</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNewInvoiceData((prev) => ({
+                      ...prev,
+                      caseId: prev.caseId || cases[0]?.id || '',
+                      clientId: prev.clientId || cases[0]?.clientId || clients[0]?.id || ''
+                    }));
+                    setShowAddInvoiceModal(true);
+                  }}
+                  className="bg-[#612912] text-white p-2.5 rounded-2xl font-extrabold text-[10px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  <CreditCard className="w-4 h-4 text-[#E5B842]" />
+                  <span>Invoice</span>
+                </button>
+              </div>
+
+              {/* 3. Next Hearing Priority Strip (If Any) */}
+              {hearings[0] && (
+                <div
+                  onClick={() => {
+                    const selCase = cases.find((c) => c.id === hearings[0].caseId);
+                    if (selCase) setSelectedCase(selCase);
+                    else setActiveTab('calendar');
+                  }}
+                  className="bg-[#612912] text-white p-3.5 rounded-2xl shadow-sm flex items-center justify-between gap-3 cursor-pointer active:scale-[0.99] transition-all"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#E5B842]">
+                      <span>Next Court Appearance</span>
+                      <span>•</span>
+                      <span>{hearings[0].date}</span>
+                    </div>
+                    <div className="text-xs font-extrabold text-white truncate mt-0.5">
+                      {hearings[0].caseTitle}
+                    </div>
+                    <div className="text-[11px] text-amber-100/80 truncate">
+                      {hearings[0].forum}
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-[#E5B842] shrink-0" />
+                </div>
+              )}
+
+              {/* 4. Scannable Active Cases List */}
+              <div className="bg-white p-3.5 rounded-2xl border border-[#452415]/15 shadow-xs space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-heading font-extrabold text-sm text-[#1A1A1A]">
+                      Active Cases
+                    </h3>
+                    <span className="text-[10px] font-extrabold bg-[#612912] text-white px-2 py-0.5 rounded-full">
+                      {cases.length}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('cases')}
+                    className="text-[11px] font-extrabold text-[#612912] cursor-pointer"
+                  >
+                    See All →
+                  </button>
+                </div>
+
+                {/* Compact Search */}
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={dashSearch}
+                    onChange={(e) => setDashSearch(e.target.value)}
+                    placeholder="Search client, ref or forum..."
+                    className="w-full pl-8 pr-7 py-2 text-xs bg-[#FAF8F5] border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#612912]"
+                  />
+                  {dashSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setDashSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {/* Compact Case Cards */}
+                <div className="space-y-2">
+                  {(() => {
+                    const filtered = cases.filter((c) => {
+                      const q = dashSearch.toLowerCase();
+                      return (
+                        !q ||
+                        c.clientName.toLowerCase().includes(q) ||
+                        c.caseTitle.toLowerCase().includes(q) ||
+                        c.caseRef.toLowerCase().includes(q) ||
+                        c.forum.toLowerCase().includes(q)
+                      );
+                    });
+
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="p-4 text-center text-xs text-gray-500 bg-[#FAF8F5] rounded-xl">
+                          No matching cases found.
+                        </div>
+                      );
+                    }
+
+                    return filtered.slice(0, 5).map((c) => (
+                      <div
+                        key={c.id}
+                        onClick={() => setSelectedCase(c)}
+                        className="p-3 rounded-xl bg-[#FAF8F5] border border-gray-200 active:border-[#612912] space-y-1.5 cursor-pointer"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-mono font-extrabold bg-[#612912] text-white px-2 py-0.5 rounded">
+                            {c.caseRef}
+                          </span>
+                          <span className="text-[10px] font-extrabold bg-[#E5B842] text-[#1A1A1A] px-2 py-0.5 rounded-full truncate max-w-[52%]">
+                            {c.status}
+                          </span>
+                        </div>
+
+                        <div className="text-xs font-extrabold text-[#1A1A1A] leading-snug line-clamp-2">
+                          {c.caseTitle}
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 text-[11px] text-[#5A6275] pt-0.5">
+                          <span className="font-bold text-[#452415] truncate">{c.clientName}</span>
+                          <span className="font-mono font-extrabold text-red-700 shrink-0">
+                            Rs. {(c.demandAmountPkr / 100000).toFixed(1)}L
+                          </span>
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              </div>
+
+              {/* 5. Unpaid Invoices Snapshot (Compact) */}
+              {invoices.filter((i) => i.status !== 'Paid').length > 0 && (
+                <div className="bg-white p-3.5 rounded-2xl border border-[#452415]/15 shadow-xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-heading font-extrabold text-sm text-[#1A1A1A]">
+                      Pending Fee Invoices
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('billing')}
+                      className="text-[11px] font-extrabold text-[#612912] cursor-pointer"
+                    >
+                      All Bills →
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {invoices
+                      .filter((i) => i.status !== 'Paid')
+                      .slice(0, 3)
+                      .map((inv) => (
+                        <div
+                          key={inv.id}
+                          onClick={() => setSelectedInvoiceForPdf(inv)}
+                          className="p-2.5 rounded-xl bg-[#FAF8F5] border border-gray-200 flex items-center justify-between gap-2 cursor-pointer"
+                        >
+                          <div className="min-w-0">
+                            <div className="text-xs font-extrabold text-[#1A1A1A] truncate">
+                              {inv.clientName}
+                            </div>
+                            <div className="text-[10px] text-gray-500 font-mono">
+                              Due {inv.dueDate}
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <div className="text-xs font-mono font-extrabold text-[#452415]">
+                              Rs. {inv.totalAmountPkr.toLocaleString()}
+                            </div>
+                            <span className="text-[10px] font-bold text-[#612912] underline">
+                              PDF
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* --- DESKTOP DASHBOARD (UNCHANGED >= 768px) --- */}
+            <div className="hidden md:block space-y-6 font-sans">
             {/* 1. Executive Desk Header & Quick Action Launch Hub */}
             <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#452415]/15 shadow-sm space-y-5">
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
@@ -3035,6 +3326,7 @@ export const AdminPortal: React.FC = () => {
               </div>
             </div>
           </div>
+          </>
         )}
 
         {/* --- TAB 2: CASE MANAGEMENT --- */}
@@ -5354,7 +5646,10 @@ export const AdminPortal: React.FC = () => {
                     onChange={(e) => setNewCaseData({ ...newCaseData, assignedCounsel: e.target.value })}
                     className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200 font-bold"
                   >
-                    {ADVOCATES.map((adv) => (
+                    {(teamMembers && teamMembers.length > 0
+                      ? teamMembers.map((m) => m.name)
+                      : ADVOCATES
+                    ).map((adv) => (
                       <option key={adv} value={adv}>
                         {adv}
                       </option>
