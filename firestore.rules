@@ -109,5 +109,15 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow write: if isAdmin();
     }
+
+    match /legal_forums/{forumId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin()
+        && request.resource.data.keys().hasAll(['id', 'name'])
+        && request.resource.data.id is string
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 200;
+    }
   }
 }

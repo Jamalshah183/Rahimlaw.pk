@@ -299,6 +299,17 @@
         "addedAt": { "type": "string" }
       },
       "required": ["email", "role"]
+    },
+    "LegalForumItem": {
+      "title": "LegalForumItem",
+      "description": "Custom user-added legal forum or court bench",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name"]
     }
   },
   "firestore": {
@@ -365,6 +376,10 @@
     "/admins/{adminUid}": {
       "schema": "AdminUser",
       "description": "Designated administrator records"
+    },
+    "/legal_forums/{forumId}": {
+      "schema": "LegalForumItem",
+      "description": "Custom legal forums added by administrators"
     }
   }
 }

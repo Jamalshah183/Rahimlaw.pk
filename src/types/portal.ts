@@ -11,13 +11,7 @@ export type CaseStatus =
 
 export type RiskLevel = 'Critical' | 'High' | 'Medium' | 'Low';
 
-export type LegalForum = 
-  | 'FBR RTO Islamabad'
-  | 'FBR LTO Rawalpindi'
-  | 'Commissioner Inland Revenue (Appeals)'
-  | 'Appellate Tribunal Inland Revenue (ATIR)'
-  | 'Islamabad High Court (IHC)'
-  | 'Supreme Court of Pakistan';
+export type LegalForum = string;
 
 export interface Client {
   id: string;

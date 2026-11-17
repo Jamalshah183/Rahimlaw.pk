@@ -54,7 +54,8 @@ const STORAGE_KEYS = {
   PRACTICE_AREAS: 'rla_portal_practice_areas_v4',
   TEAM_MEMBERS: 'rla_portal_team_members_v4',
   REVIEWS: 'rla_portal_reviews_v4',
-  INSIGHTS: 'rla_portal_insights_v4'
+  INSIGHTS: 'rla_portal_insights_v4',
+  LEGAL_FORUMS: 'rla_portal_custom_legal_forums_v1'
 };
 
 const createUniqueId = (prefix: string) => `${prefix}-${Date.now().toString().slice(-4)}`;
@@ -217,6 +218,16 @@ function usePortalStoreState() {
       return saved ? JSON.parse(saved) : INITIAL_INSIGHTS;
     } catch {
       return INITIAL_INSIGHTS;
+    }
+  });
+
+  const [customLegalForums, setCustomLegalForums] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.LEGAL_FORUMS);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
   });
 
@@ -517,6 +528,29 @@ function usePortalStoreState() {
       }
     }, (err) => console.warn('Legal Insights snapshot error:', err));
 
+    // 15. Custom Legal Forums
+    let unsubForums = () => {};
+    if (auth.currentUser) {
+      unsubForums = onSnapshot(
+        collection(db, 'legal_forums'),
+        (snap) => {
+          if (!snap.empty) {
+            const remoteNames = snap.docs
+              .map((d) => (d.data() as { name?: string })?.name)
+              .filter((name): name is string => typeof name === 'string' && name.trim().length > 0);
+            if (remoteNames.length > 0) {
+              setCustomLegalForums((prev) => {
+                const merged = Array.from(new Set([...remoteNames, ...prev]));
+                saveToStorage(STORAGE_KEYS.LEGAL_FORUMS, merged);
+                return merged;
+              });
+            }
+          }
+        },
+        (err) => console.warn('Legal Forums snapshot error:', err)
+      );
+    }
+
     return () => {
       unsubClients();
       unsubCases();
@@ -532,6 +566,7 @@ function usePortalStoreState() {
       unsubTeam();
       unsubReviews();
       unsubInsights();
+      unsubForums();
     };
   }, [authUid]);
 
@@ -1341,6 +1376,36 @@ function usePortalStoreState() {
     INITIAL_INSIGHTS.forEach((ins) => saveToFirestoreDoc('legal_insights', ins.id, ins));
   };
 
+  // --- CUSTOM LEGAL FORUMS ACTIONS ---
+  const addCustomLegalForum = (forumName: string): string => {
+    const clean = forumName.trim().slice(0, 200);
+    if (!clean) return '';
+
+    setCustomLegalForums((prev) => {
+      const exists = prev.some((f) => f.toLowerCase() === clean.toLowerCase());
+      if (exists) return prev;
+      const updated = [clean, ...prev];
+      saveToStorage(STORAGE_KEYS.LEGAL_FORUMS, updated);
+      return updated;
+    });
+
+    if (auth.currentUser) {
+      const slugId =
+        clean
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '')
+          .slice(0, 80) || createFullTimestampId('forum');
+      saveToFirestoreDoc('legal_forums', slugId, {
+        id: slugId,
+        name: clean,
+        createdAt: getTodayDateString()
+      });
+    }
+
+    return clean;
+  };
+
   return {
     isLoaded,
     clients,
@@ -1357,6 +1422,7 @@ function usePortalStoreState() {
     teamMembers,
     reviews,
     insights,
+    customLegalForums,
     addClient,
     addClientCredential,
     addCase,
@@ -1391,7 +1457,8 @@ function usePortalStoreState() {
     addInsight,
     updateInsight,
     deleteInsight,
-    resetInsights
+    resetInsights,
+    addCustomLegalForum
   };
 }
 

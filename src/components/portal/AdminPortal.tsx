@@ -84,6 +84,7 @@ import {
 import { usePortalStore } from '../../lib/portalStore';
 import { InvoicePdfModal } from './InvoicePdfModal';
 import { SearchableCaseSelect } from './SearchableCaseSelect';
+import { SearchableForumSelect } from './SearchableForumSelect';
 import {
   CaseFile,
   Client,
@@ -471,9 +472,11 @@ export const AdminPortal: React.FC = () => {
     hearings,
     notifications,
     clientCredentials,
+    customLegalForums,
     addClientCredential,
     addClient,
     addCase,
+    addCustomLegalForum,
     updateCase,
     updateCaseStatus,
     addTimelineEvent,
@@ -1672,7 +1675,7 @@ export const AdminPortal: React.FC = () => {
     cnoNumber: '',
     sectionCode: '122(5A)',
     assignedCounsel: 'Mr. Rahim Nawaz Khan Abbasi',
-    forum: 'Islamabad High Court (IHC)' as LegalForum,
+    forum: 'Islamabad High Court' as LegalForum,
     taxYear: 'Tax Year 2025',
     status: 'Notice Received' as CaseStatus,
     riskLevel: 'High' as RiskLevel,
@@ -1874,7 +1877,7 @@ export const AdminPortal: React.FC = () => {
       clientId: createdNewClient?.id || clients[0]?.id || '',
       cnoNumber: '',
       sectionCode: '122(5A)',
-      forum: 'Islamabad High Court (IHC)' as LegalForum,
+      forum: 'Islamabad High Court' as LegalForum,
       taxYear: 'Tax Year 2025',
       status: 'Notice Received' as CaseStatus,
       riskLevel: 'High' as RiskLevel,
@@ -5312,19 +5315,12 @@ export const AdminPortal: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Legal Forum</label>
-                  <select
+                  <SearchableForumSelect
                     value={newCaseData.forum}
-                    onChange={(e) => setNewCaseData({ ...newCaseData, forum: e.target.value as LegalForum })}
-                    className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200"
-                  >
-                    <option value="Islamabad High Court (IHC)">Islamabad High Court (IHC)</option>
-                    <option value="Appellate Tribunal Inland Revenue (ATIR)">Appellate Tribunal (ATIR)</option>
-                    <option value="Commissioner Inland Revenue (Appeals)">CIR (Appeals)</option>
-                    <option value="FBR RTO Islamabad">FBR RTO Islamabad</option>
-                    <option value="FBR LTO Rawalpindi">FBR LTO Rawalpindi</option>
-                    <option value="Supreme Court of Pakistan">Supreme Court of Pakistan</option>
-                  </select>
+                    onChange={(forum) => setNewCaseData({ ...newCaseData, forum })}
+                    customForums={customLegalForums}
+                    onAddForum={addCustomLegalForum}
+                  />
                 </div>
 
                 <div>
