@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare } from 'lucide-react';
+import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare, MessageCircle } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
 import { usePortalStore } from '../lib/portalStore';
 import rahimMemberImg from '../assets/images/rahim_nawaz_khan_abbasi.png';
@@ -14,9 +14,20 @@ interface TeamMember {
   credentials: string;
   pillarWatermark: string;
   image: string;
+  whatsappNumber?: string;
   maxAspectRatio?: number;
   bioParagraphs: string[];
   specializations: string[];
+}
+
+function normalizeWhatsAppNumber(raw?: string): string {
+  const digits = (raw || '').replace(/\D/g, '');
+  if (!digits || digits.length < 7) return FIRM_CONFIG.contact.whatsappNumber;
+  if (digits.startsWith('00')) return digits.slice(2);
+  if (digits.startsWith('0') && (digits.length === 10 || digits.length === 11)) {
+    return `92${digits.slice(1)}`;
+  }
+  return digits;
 }
 
 
@@ -305,7 +316,7 @@ const TeamMemberCard: React.FC<{
       />
 
       <div className="absolute bottom-3.5 left-4 right-3.5 z-[4] flex items-end justify-between gap-2 text-left">
-        <div>
+        <div className="min-w-0">
           <h3
             className="font-sans font-bold text-[18px] sm:text-[19px] !text-white leading-tight tracking-[-0.01em]"
             style={{ color: '#FFFFFF' }}
@@ -320,12 +331,30 @@ const TeamMemberCard: React.FC<{
           </p>
         </div>
 
-        <span
-          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#452415] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
-          aria-hidden="true"
-        >
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {member.whatsappNumber && member.whatsappNumber.trim() !== '' && (
+            <a
+              href={`https://wa.me/${normalizeWhatsAppNumber(member.whatsappNumber)}?text=${encodeURIComponent(
+                `Assalam-o-Alaikum ${member.fullName}, I would like to request a legal consultation.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              aria-label={`Contact ${member.fullName} directly on WhatsApp`}
+              title={`WhatsApp ${member.fullName}`}
+              className="w-7 h-7 rounded-full bg-[#25D366] hover:bg-[#1ebe5d] text-white flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+            </a>
+          )}
+          <span
+            className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#452415] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
+            aria-hidden="true"
+          >
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -339,8 +368,6 @@ export const TeamSection: React.FC = () => {
   } | null>(null);
 
   const orderedMembers = [...(storeTeamMembers || [])].sort((a, b) => {
-    if (a.stickToLeft && !b.stickToLeft) return -1;
-    if (!a.stickToLeft && b.stickToLeft) return 1;
     if (a.isCeo && !b.isCeo) return -1;
     if (!a.isCeo && b.isCeo) return 1;
     return (a.order ?? 99) - (b.order ?? 99);
@@ -357,6 +384,7 @@ export const TeamSection: React.FC = () => {
         : m.title,
     pillarWatermark: m.pillarWatermark || (m.isCeo ? 'FOUNDER' : 'ADVOCATE'),
     image: m.image || rahimMemberImg,
+    whatsappNumber: m.whatsappNumber || '',
     maxAspectRatio: 1.08,
     bioParagraphs:
       m.fullBio && m.fullBio.length > 0
@@ -550,7 +578,7 @@ export const TeamSection: React.FC = () => {
                     </div>
 
                     <a
-                      href={`https://wa.me/${FIRM_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent(
+                      href={`https://wa.me/${normalizeWhatsAppNumber(selectedProfile.member.whatsappNumber)}?text=${encodeURIComponent(
                         `Assalam-o-Alaikum Rahim Law Associates, I would like to schedule a consultation with ${selectedProfile.member.fullName} (${selectedProfile.member.designation}).`
                       )}`}
                       target="_blank"
@@ -558,8 +586,17 @@ export const TeamSection: React.FC = () => {
                       className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#E5B842] hover:bg-[#d4a833] text-[#452415] font-sans text-[12px] uppercase tracking-[0.06em] font-bold shadow-lg transition-all duration-200 cursor-pointer"
                     >
                       <MessageSquare className="w-4 h-4 text-[#452415]" />
-                      <span>Consult via WhatsApp</span>
+                      <span>
+                        {selectedProfile.member.whatsappNumber?.trim()
+                          ? 'Contact Directly on WhatsApp'
+                          : 'Consult via WhatsApp'}
+                      </span>
                     </a>
+                    {selectedProfile.member.whatsappNumber?.trim() && (
+                      <div className="mt-2 font-sans text-[11.5px] font-medium text-white/80">
+                        Direct WhatsApp: {selectedProfile.member.whatsappNumber.trim()}
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -456,8 +456,6 @@ function usePortalStoreState() {
         } else {
           const items = snap.docs.map((d) => d.data() as TeamMember);
           items.sort((a, b) => {
-            if (a.stickToLeft && !b.stickToLeft) return -1;
-            if (!a.stickToLeft && b.stickToLeft) return 1;
             if (a.isCeo && !b.isCeo) return -1;
             if (!a.isCeo && b.isCeo) return 1;
             return (a.order || 99) - (b.order || 99);
@@ -600,6 +598,25 @@ function usePortalStoreState() {
     return newClient;
   };
 
+  const updateClient = (clientId: string, updates: Partial<Client>) => {
+    let updatedTargetClient: Client | null = null;
+    setClients((prev) => {
+      const updated = prev.map((c) => {
+        if (c.id === clientId) {
+          const nextClient = { ...c, ...updates };
+          updatedTargetClient = nextClient;
+          return nextClient;
+        }
+        return c;
+      });
+      saveToStorage(STORAGE_KEYS.CLIENTS, updated);
+      return updated;
+    });
+    if (updatedTargetClient) {
+      saveToFirestoreDoc('clients', clientId, updatedTargetClient);
+    }
+  };
+
   const addClientCredential = (cred: Omit<ClientCredential, 'id' | 'createdAt'>) => {
     const newCred: ClientCredential = {
       ...cred,
@@ -632,18 +649,25 @@ function usePortalStoreState() {
     riskLevel: RiskLevel;
     demandAmountPkr: number;
     summary: string;
+    cnoNumber?: string;
+    sectionCode?: string;
+    clientPhone?: string;
     nextHearingDate?: string;
     nextHearingPurpose?: string;
     clientLoginEmail?: string;
     clientLoginPassword?: string;
   }) => {
     const client = caseData.clientRecord || clients.find((c) => c.id === caseData.clientId);
+    const resolvedPhone = caseData.clientPhone ?? client?.phone;
     const newCase: CaseFile = {
       id: `case-${getCurrentYearNumber()}-${getRandom3DigitNum()}`,
       caseRef: `RLA-${caseData.forum.split(' ')[0]}-${createUniqueId('')}`,
       clientId: caseData.clientId,
       clientName: client ? client.name : 'Corporate Client',
       clientNtn: client ? client.ntn : 'N/A',
+      ...(resolvedPhone ? { clientPhone: resolvedPhone } : {}),
+      ...(caseData.cnoNumber ? { cnoNumber: caseData.cnoNumber } : {}),
+      ...(caseData.sectionCode ? { sectionCode: caseData.sectionCode } : {}),
       caseTitle: caseData.title,
       assignedCounsel: caseData.assignedCounsel,
       assignedCounselTitle: 'Advocate High Court | Rahim Law Associates',
@@ -1256,21 +1280,6 @@ function usePortalStoreState() {
     deleteFromFirestoreDoc('team_members', id);
   };
 
-  const setStuckTeamMember = (id: string) => {
-    const updated = teamMembers.map((m) => {
-      const isStuck = m.id === id;
-      const updatedMember: TeamMember = {
-        ...m,
-        stickToLeft: isStuck,
-        updatedAt: getTodayDateString()
-      };
-      saveToFirestoreDoc('team_members', m.id, updatedMember);
-      return updatedMember;
-    });
-    setTeamMembers(updated);
-    saveToStorage(STORAGE_KEYS.TEAM_MEMBERS, updated);
-  };
-
   const resetTeamMembers = () => {
     const defaultIds = new Set(INITIAL_TEAM_MEMBERS.map((m) => m.id));
     teamMembers.filter((m) => !defaultIds.has(m.id)).forEach((m) => deleteFromFirestoreDoc('team_members', m.id));
@@ -1424,6 +1433,7 @@ function usePortalStoreState() {
     insights,
     customLegalForums,
     addClient,
+    updateClient,
     addClientCredential,
     addCase,
     updateCase,
@@ -1449,7 +1459,6 @@ function usePortalStoreState() {
     updateTeamMember,
     deleteTeamMember,
     resetTeamMembers,
-    setStuckTeamMember,
     addReview,
     updateReview,
     deleteReview,

@@ -78,7 +78,6 @@ import {
   MessageSquareQuote,
   BookOpen,
   Newspaper,
-  Pin,
   Menu
 } from 'lucide-react';
 import { usePortalStore } from '../../lib/portalStore';
@@ -475,6 +474,7 @@ export const AdminPortal: React.FC = () => {
     customLegalForums,
     addClientCredential,
     addClient,
+    updateClient,
     addCase,
     addCustomLegalForum,
     updateCase,
@@ -502,7 +502,6 @@ export const AdminPortal: React.FC = () => {
     updateTeamMember,
     deleteTeamMember,
     resetTeamMembers,
-    setStuckTeamMember,
     reviews,
     addReview,
     updateReview,
@@ -560,7 +559,7 @@ export const AdminPortal: React.FC = () => {
     credentialsText: 'Advocate High Court',
     bio: '',
     image: rahimMemberImg,
-    stickToLeft: false
+    whatsappNumber: ''
   });
 
   // Reviews Search, Filters & Modal States
@@ -941,6 +940,7 @@ export const AdminPortal: React.FC = () => {
       m.title.toLowerCase().includes(q) ||
       m.specialty.toLowerCase().includes(q) ||
       m.bio.toLowerCase().includes(q) ||
+      (m.whatsappNumber && m.whatsappNumber.toLowerCase().includes(q)) ||
       (m.credentials && m.credentials.some((c) => c.toLowerCase().includes(q)));
 
     const matchesRole =
@@ -961,14 +961,13 @@ export const AdminPortal: React.FC = () => {
       credentialsText: 'Advocate High Court',
       bio: '',
       image: rahimMemberImg,
-      stickToLeft: false
+      whatsappNumber: ''
     });
     setShowTeamModal(true);
   };
 
   const handleOpenEditTeamMember = (member: TeamMember) => {
     setEditingTeamMember(member);
-    const isCurrentlyStuck = !!member.stickToLeft || (!teamMembers.some((m) => m.stickToLeft) && !!member.isCeo);
     const combinedBio =
       member.fullBio && member.fullBio.length > 0
         ? member.fullBio.join('\n\n')
@@ -985,18 +984,9 @@ export const AdminPortal: React.FC = () => {
       credentialsText: (member.credentials || []).join(', '),
       bio: combinedBio,
       image: member.image || rahimMemberImg,
-      stickToLeft: isCurrentlyStuck
+      whatsappNumber: member.whatsappNumber || ''
     });
     setShowTeamModal(true);
-  };
-
-  const handleStickToLeft = (memberId: string) => {
-    setStuckTeamMember(memberId);
-    const target = teamMembers.find((m) => m.id === memberId);
-    setTeamActionSuccess(
-      `"${target?.name || 'Selected profile'}" is now stuck to the left side of the screen.`
-    );
-    setTimeout(() => setTeamActionSuccess(null), 4000);
   };
 
   const handleSaveTeamMember = (e: React.FormEvent) => {
@@ -1027,6 +1017,7 @@ export const AdminPortal: React.FC = () => {
       : ['Appellate & Corporate Law'];
 
     const watermark = teamFormData.pillarWatermark.trim().toUpperCase() || 'ADVOCATE';
+    const cleanedWhatsapp = teamFormData.whatsappNumber.trim();
 
     if (editingTeamMember) {
       updateTeamMember(editingTeamMember.id, {
@@ -1042,16 +1033,10 @@ export const AdminPortal: React.FC = () => {
         keyWin: editingTeamMember.keyWin || '',
         image: teamFormData.image.trim() || rahimMemberImg,
         isCeo: editingTeamMember.isCeo || watermark === 'FOUNDER',
-        stickToLeft: teamFormData.stickToLeft
+        whatsappNumber: cleanedWhatsapp
       });
-      if (teamFormData.stickToLeft) {
-        setStuckTeamMember(editingTeamMember.id);
-      }
       setTeamActionSuccess(`Updated team member "${teamFormData.name.trim()}" successfully.`);
     } else {
-      const generatedId =
-        teamFormData.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') ||
-        `team-${Date.now()}`;
       addTeamMember({
         name: teamFormData.name.trim(),
         title: teamFormData.title.trim(),
@@ -1065,11 +1050,8 @@ export const AdminPortal: React.FC = () => {
         keyWin: '',
         image: teamFormData.image.trim() || rahimMemberImg,
         isCeo: watermark === 'FOUNDER',
-        stickToLeft: teamFormData.stickToLeft
+        whatsappNumber: cleanedWhatsapp
       });
-      if (teamFormData.stickToLeft) {
-        setStuckTeamMember(generatedId);
-      }
       setTeamActionSuccess(`Added "${teamFormData.name.trim()}" to the firm roster.`);
     }
 
@@ -1466,6 +1448,17 @@ export const AdminPortal: React.FC = () => {
   // Edit Case Details State
   const [isEditingCase, setIsEditingCase] = useState(false);
   const [editCaseForm, setEditCaseForm] = useState<Partial<CaseFile>>({});
+  const [isAddingNewClientInEditCase, setIsAddingNewClientInEditCase] = useState(false);
+  const [editCaseClientDraft, setEditCaseClientDraft] = useState({
+    name: '',
+    businessName: '',
+    ntn: '',
+    cnic: '',
+    phone: '',
+    email: '',
+    category: 'Corporate' as const,
+    city: 'Islamabad'
+  });
 
   // WhatsApp Tab State & Templates
   const [waTemplateType, setWaTemplateType] = useState<'hearing' | 'notice' | 'invoice' | 'stay' | 'custom'>('hearing');
@@ -1538,12 +1531,32 @@ export const AdminPortal: React.FC = () => {
   // Case File Details Edit Handlers
   const handleStartEditCase = () => {
     if (selectedCase) {
+      if (isEditingCase) {
+        setIsEditingCase(false);
+        setIsAddingNewClientInEditCase(false);
+        return;
+      }
+
+      const linkedClient = clients.find((c) => c.id === selectedCase.clientId);
       const existingCred = clientCredentials.find(
-        (c) => c.clientId === selectedCase.clientId || (c.email && c.email.toLowerCase() === selectedCase.clientLoginEmail?.toLowerCase())
+        (c) =>
+          c.clientId === selectedCase.clientId ||
+          (c.email && c.email.toLowerCase() === selectedCase.clientLoginEmail?.toLowerCase())
       );
+
+      // Extract legacy CNO/Section tags from summary if dedicated fields aren't populated yet
+      const cnoMatch = selectedCase.summary?.match(/\[CNO No:\s*([^,\]]+)/i);
+      const secMatch = selectedCase.summary?.match(/Sec:\s*([^\]]+)\]/i);
+
       setEditCaseForm({
         caseTitle: selectedCase.caseTitle,
+        clientId: selectedCase.clientId,
+        clientName: selectedCase.clientName,
+        clientNtn: selectedCase.clientNtn,
+        clientPhone: selectedCase.clientPhone ?? linkedClient?.phone ?? '',
         caseRef: selectedCase.caseRef,
+        cnoNumber: selectedCase.cnoNumber ?? (cnoMatch ? cnoMatch[1].trim() : ''),
+        sectionCode: selectedCase.sectionCode ?? (secMatch ? secMatch[1].trim() : ''),
         taxYear: selectedCase.taxYear,
         forum: selectedCase.forum,
         status: selectedCase.status,
@@ -1554,28 +1567,102 @@ export const AdminPortal: React.FC = () => {
         summary: selectedCase.summary,
         nextHearingDate: selectedCase.nextHearingDate || '',
         nextHearingPurpose: selectedCase.nextHearingPurpose || '',
-        clientLoginEmail: existingCred?.email || selectedCase.clientLoginEmail || '',
+        clientLoginEmail: existingCred?.email || selectedCase.clientLoginEmail || linkedClient?.email || '',
         clientLoginPassword: existingCred?.password || selectedCase.clientLoginPassword || ''
       });
-      setIsEditingCase(!isEditingCase);
+      setIsAddingNewClientInEditCase(false);
+      setEditCaseClientDraft({
+        name: '',
+        businessName: '',
+        ntn: '',
+        cnic: '',
+        phone: '',
+        email: '',
+        category: 'Corporate' as const,
+        city: 'Islamabad'
+      });
+      setCaseDetailTab('overview');
+      setIsEditingCase(true);
     }
   };
 
   const handleSaveCaseEdit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCase) return;
-    updateCase(selectedCase.id, editCaseForm);
-    if (editCaseForm.clientLoginEmail && editCaseForm.clientLoginPassword) {
+
+    let targetClientId = editCaseForm.clientId || selectedCase.clientId;
+    let targetClientName = editCaseForm.clientName || selectedCase.clientName;
+    let targetClientNtn = editCaseForm.clientNtn || selectedCase.clientNtn;
+    let targetClientPhone = (editCaseForm.clientPhone ?? '').trim();
+    const resolvedLoginEmail = (editCaseForm.clientLoginEmail || '').trim();
+    const resolvedLoginPassword = (editCaseForm.clientLoginPassword || '').trim();
+
+    if (isAddingNewClientInEditCase) {
+      const trimmedName = editCaseClientDraft.name.trim();
+      if (!trimmedName) return;
+
+      const newClientEmail = (editCaseClientDraft.email || resolvedLoginEmail).trim();
+      const newClientPhone = editCaseClientDraft.phone.trim();
+
+      const createdNewClient = addClient(
+        {
+          name: trimmedName,
+          businessName: editCaseClientDraft.businessName.trim(),
+          cnic: editCaseClientDraft.cnic.trim() || 'N/A',
+          ntn: editCaseClientDraft.ntn.trim() || 'Pending',
+          category: editCaseClientDraft.category,
+          phone: newClientPhone,
+          email: newClientEmail,
+          city: editCaseClientDraft.city.trim() || 'Islamabad',
+          registeredAddress: '',
+          status: 'Active' as const
+        },
+        newClientEmail && resolvedLoginPassword ? newClientEmail : undefined,
+        newClientEmail && resolvedLoginPassword ? resolvedLoginPassword : undefined
+      );
+
+      targetClientId = createdNewClient.id;
+      targetClientName = createdNewClient.name;
+      targetClientNtn = createdNewClient.ntn;
+      targetClientPhone = newClientPhone;
+    } else {
+      const matchedClient = clients.find((c) => c.id === targetClientId);
+      if (matchedClient) {
+        targetClientName = matchedClient.name;
+        targetClientNtn = matchedClient.ntn;
+        if (targetClientPhone !== matchedClient.phone) {
+          updateClient(matchedClient.id, { phone: targetClientPhone });
+        }
+      }
+    }
+
+    const finalUpdates: Partial<CaseFile> = {
+      ...editCaseForm,
+      clientId: targetClientId,
+      clientName: targetClientName,
+      clientNtn: targetClientNtn,
+      clientPhone: targetClientPhone,
+      cnoNumber: (editCaseForm.cnoNumber || '').trim(),
+      sectionCode: (editCaseForm.sectionCode || '').trim(),
+      clientLoginEmail: resolvedLoginEmail,
+      clientLoginPassword: resolvedLoginPassword
+    };
+
+    updateCase(selectedCase.id, finalUpdates);
+
+    if (resolvedLoginEmail && resolvedLoginPassword) {
       addClientCredential({
-        clientId: selectedCase.clientId,
-        clientName: selectedCase.clientName,
-        email: editCaseForm.clientLoginEmail,
-        password: editCaseForm.clientLoginPassword
+        clientId: targetClientId,
+        clientName: targetClientName,
+        email: resolvedLoginEmail,
+        password: resolvedLoginPassword
       });
     }
-    setSelectedCase((prev) => (prev ? { ...prev, ...editCaseForm } : null));
+
+    setSelectedCase((prev) => (prev ? { ...prev, ...finalUpdates } : null));
     setIsEditingCase(false);
-    alert('Case details and client portal access credentials updated successfully!');
+    setIsAddingNewClientInEditCase(false);
+    alert('Case details, WhatsApp contact, and client portal access updated successfully!');
   };
 
   // WhatsApp Message Generator
@@ -1606,7 +1693,7 @@ export const AdminPortal: React.FC = () => {
   const handleSendWhatsAppDirect = () => {
     if (!selectedCase) return;
     const client = clients.find((c) => c.id === selectedCase.clientId);
-    const phone = client?.phone || '+92 300 1234567';
+    const phone = selectedCase.clientPhone || client?.phone || '+92 300 1234567';
     const cleanPhone = phone.replace(/[^0-9]/g, '');
     const formattedPhone = cleanPhone.startsWith('03') ? '92' + cleanPhone.slice(1) : cleanPhone;
 
@@ -1626,7 +1713,7 @@ export const AdminPortal: React.FC = () => {
   const handleLogWhatsAppNotification = () => {
     if (!selectedCase) return;
     const client = clients.find((c) => c.id === selectedCase.clientId);
-    const phone = client?.phone || '+92 300 1234567';
+    const phone = selectedCase.clientPhone || client?.phone || '+92 300 1234567';
 
     sendNotification({
       clientId: selectedCase.clientId,
@@ -1817,6 +1904,7 @@ export const AdminPortal: React.FC = () => {
       targetClientId = createdNewClient.id;
     }
 
+    const resolvedCaseClient = createdNewClient || clients.find((c) => c.id === targetClientId);
     const created = addCase({
       title: newCaseData.title,
       clientId: targetClientId,
@@ -1827,6 +1915,9 @@ export const AdminPortal: React.FC = () => {
       status: newCaseData.status,
       riskLevel: newCaseData.riskLevel,
       demandAmountPkr: newCaseData.demandAmountPkr,
+      cnoNumber: newCaseData.cnoNumber.trim() || undefined,
+      sectionCode: newCaseData.sectionCode.trim() || undefined,
+      clientPhone: resolvedCaseClient?.phone || undefined,
       summary: `${newCaseData.summary} ${
         newCaseData.cnoNumber ? `[CNO No: ${newCaseData.cnoNumber}, Sec: ${newCaseData.sectionCode}]` : ''
       }`,
@@ -2093,8 +2184,9 @@ export const AdminPortal: React.FC = () => {
   const handleSendWhatsAppCaseReminder = () => {
     if (!selectedCase) return;
     const client = clients.find((c) => c.id === selectedCase.clientId);
-    const phone = client?.phone || '+92 300 1234567';
+    const phone = selectedCase.clientPhone || client?.phone || '+92 300 1234567';
     const cleanPhone = phone.replace(/[^0-9]/g, '');
+    const formattedPhone = cleanPhone.startsWith('03') ? '92' + cleanPhone.slice(1) : cleanPhone;
 
     const msg = `Assalamu Alaikum ${selectedCase.clientName},\n\nThis is an official hearing notice from Rahim Law Associates regarding your tax file *${selectedCase.caseTitle}* (${selectedCase.caseRef}).\n\n📌 *Forum:* ${selectedCase.forum}\n📅 *Next Hearing Date:* ${selectedCase.nextHearingDate || 'Upcoming Schedule'}\n⚖️ *Lead Counsel:* ${selectedCase.assignedCounsel}\n🎯 *Purpose:* ${selectedCase.nextHearingPurpose || 'Cause list hearing'}\n\nPlease keep your tax documentation ready. Reply to this message if you have any questions.`;
 
@@ -2108,7 +2200,7 @@ export const AdminPortal: React.FC = () => {
       message: msg
     });
 
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    window.open(`https://wa.me/${formattedPhone}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   const handleAddCaseToGoogleCalendar = () => {
@@ -4456,48 +4548,6 @@ export const AdminPortal: React.FC = () => {
               </div>
             )}
 
-            {/* Quick Sticky-to-Left Profile Control Banner */}
-            <div className="bg-amber-50/70 border border-amber-200/90 rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs shadow-xs">
-              <div className="flex items-start sm:items-center gap-3.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
-                  <Pin className="w-4 h-4 fill-amber-700 text-amber-700" />
-                </div>
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-extrabold text-[#1A1A1A]">Stuck Profile (Left Side of Screen):</span>
-                    <span className="text-[11px] font-extrabold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-lg border border-amber-300">
-                      {teamMembers.find((m) => m.stickToLeft)?.name ||
-                        teamMembers.find((m) => m.isCeo)?.name ||
-                        'CEO Profile (Default)'}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-gray-600 mt-0.5">
-                    This profile stays stationary on the left side of the screen in the team section while other members scroll in the carousel.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-                <label className="text-[11px] font-bold text-gray-700 whitespace-nowrap">Stick Profile to Left:</label>
-                <select
-                  value={
-                    teamMembers.find((m) => m.stickToLeft)?.id ||
-                    teamMembers.find((m) => m.isCeo)?.id ||
-                    teamMembers[0]?.id ||
-                    ''
-                  }
-                  onChange={(e) => handleStickToLeft(e.target.value)}
-                  className="bg-white border border-amber-300 text-amber-900 font-bold text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#452415] cursor-pointer shadow-xs"
-                >
-                  {teamMembers.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.name} {m.isCeo ? '(CEO)' : ''}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
             {/* Search & Filter Bar */}
             <div className="bg-white p-4 rounded-3xl border border-[#452415]/15 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div className="relative flex-1">
@@ -4622,28 +4672,25 @@ export const AdminPortal: React.FC = () => {
                             {member.specialty}
                           </div>
                         )}
+
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          {member.whatsappNumber && member.whatsappNumber.trim() !== '' ? (
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-lg border border-emerald-200">
+                              <MessageCircle className="w-3 h-3 text-emerald-600" />
+                              <span>WhatsApp: {member.whatsappNumber}</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-400">
+                              <MessageCircle className="w-3 h-3 text-gray-400" />
+                              <span>No direct WhatsApp set (uses firm line)</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
 
                     {/* Right: Action Buttons */}
                     <div className="flex items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-gray-100 shrink-0 justify-end flex-wrap">
-                      {member.stickToLeft || (!teamMembers.some((m) => m.stickToLeft) && member.isCeo) ? (
-                        <span className="px-3 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                          <Pin className="w-3.5 h-3.5 fill-amber-700 text-amber-700" />
-                          <span>Stuck to Left</span>
-                        </span>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => handleStickToLeft(member.id)}
-                          className="px-3 py-2 rounded-xl bg-gray-100 hover:bg-amber-50 hover:text-amber-900 hover:border-amber-300 border border-transparent text-gray-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-                          title="Stick this profile to the left side of the screen"
-                        >
-                          <Pin className="w-3.5 h-3.5 text-gray-500" />
-                          <span>Stick to Left</span>
-                        </button>
-                      )}
-
                       <button
                         type="button"
                         onClick={() => handleOpenEditTeamMember(member)}
@@ -6728,8 +6775,9 @@ export const AdminPortal: React.FC = () => {
                         <span className="text-xs text-gray-500 font-mono">Case ID: {selectedCase.id}</span>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="sm:col-span-2">
+                      <div className="space-y-3.5">
+                        {/* Case Title */}
+                        <div>
                           <label className="font-bold text-gray-700 block mb-1">Case Title</label>
                           <input
                             type="text"
@@ -6740,119 +6788,336 @@ export const AdminPortal: React.FC = () => {
                           />
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">CNO / Case Reference No.</label>
-                          <input
-                            type="text"
-                            required
-                            value={editCaseForm.caseRef || ''}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, caseRef: e.target.value })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold"
-                          />
+                        {/* Client Selection / Add New Client + WhatsApp Number */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className={isAddingNewClientInEditCase ? 'sm:col-span-2' : ''}>
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <label className="font-bold text-gray-700">
+                                {isAddingNewClientInEditCase ? 'New Client Details' : 'Select Client'}
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => setIsAddingNewClientInEditCase(!isAddingNewClientInEditCase)}
+                                className="text-[11px] font-extrabold text-[#612912] hover:text-[#452415] underline cursor-pointer whitespace-nowrap"
+                              >
+                                {isAddingNewClientInEditCase ? '← Select Existing Client' : '+ Add New Client'}
+                              </button>
+                            </div>
+
+                            {!isAddingNewClientInEditCase ? (
+                              <select
+                                value={editCaseForm.clientId || selectedCase.clientId}
+                                onChange={(e) => {
+                                  if (e.target.value === '__NEW_CLIENT__') {
+                                    setIsAddingNewClientInEditCase(true);
+                                  } else {
+                                    const picked = clients.find((c) => c.id === e.target.value);
+                                    const pickedCred = clientCredentials.find((cr) => cr.clientId === e.target.value);
+                                    setEditCaseForm({
+                                      ...editCaseForm,
+                                      clientId: e.target.value,
+                                      clientName: picked?.name || editCaseForm.clientName,
+                                      clientNtn: picked?.ntn || editCaseForm.clientNtn,
+                                      clientPhone: picked?.phone ?? '',
+                                      clientLoginEmail: pickedCred?.email || picked?.email || editCaseForm.clientLoginEmail || ''
+                                    });
+                                  }
+                                }}
+                                className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
+                              >
+                                {clients.map((c) => (
+                                  <option key={c.id} value={c.id}>
+                                    {c.name} (NTN: {c.ntn})
+                                  </option>
+                                ))}
+                                {!clients.some((c) => c.id === (editCaseForm.clientId || selectedCase.clientId)) && (
+                                  <option value={editCaseForm.clientId || selectedCase.clientId}>
+                                    {selectedCase.clientName} (NTN: {selectedCase.clientNtn})
+                                  </option>
+                                )}
+                                <option value="__NEW_CLIENT__">+ Add New Client...</option>
+                              </select>
+                            ) : (
+                              <div className="bg-[#612912]/5 p-3 rounded-2xl border border-[#452415]/20 space-y-2.5">
+                                <div>
+                                  <label className="font-bold text-gray-700 block mb-1">
+                                    New Client Name / Entity <span className="text-red-500">*</span>
+                                  </label>
+                                  <input
+                                    type="text"
+                                    required
+                                    placeholder="e.g. Al-Farooq Traders or Muhammad Tariq"
+                                    value={editCaseClientDraft.name}
+                                    onChange={(e) =>
+                                      setEditCaseClientDraft({ ...editCaseClientDraft, name: e.target.value })
+                                    }
+                                    className="w-full bg-white p-2.5 rounded-xl border border-gray-200 font-bold"
+                                  />
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                  <div>
+                                    <label className="font-bold text-gray-700 block mb-1">NTN Number (Optional)</label>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. 3948572-9"
+                                      value={editCaseClientDraft.ntn}
+                                      onChange={(e) =>
+                                        setEditCaseClientDraft({ ...editCaseClientDraft, ntn: e.target.value })
+                                      }
+                                      className="w-full bg-white p-2 rounded-xl border border-gray-200 font-mono"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="font-bold text-gray-700 block mb-1">CNIC Number (Optional)</label>
+                                    <input
+                                      type="text"
+                                      placeholder="35202-1234567-1"
+                                      value={editCaseClientDraft.cnic}
+                                      onChange={(e) =>
+                                        setEditCaseClientDraft({ ...editCaseClientDraft, cnic: e.target.value })
+                                      }
+                                      className="w-full bg-white p-2 rounded-xl border border-gray-200 font-mono"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="font-bold text-gray-700 block mb-1">WhatsApp / Phone Number</label>
+                                    <input
+                                      type="text"
+                                      placeholder="+92 300 1234567"
+                                      value={editCaseClientDraft.phone}
+                                      onChange={(e) =>
+                                        setEditCaseClientDraft({ ...editCaseClientDraft, phone: e.target.value })
+                                      }
+                                      className="w-full bg-white p-2 rounded-xl border border-gray-200 font-mono"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="font-bold text-gray-700 block mb-1">Client Email (Optional)</label>
+                                    <input
+                                      type="email"
+                                      placeholder="client@company.pk"
+                                      value={editCaseClientDraft.email}
+                                      onChange={(e) =>
+                                        setEditCaseClientDraft({ ...editCaseClientDraft, email: e.target.value })
+                                      }
+                                      className="w-full bg-white p-2 rounded-xl border border-gray-200"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {!isAddingNewClientInEditCase && (
+                            <div>
+                              <label className="font-bold text-gray-700 flex items-center gap-1 mb-1">
+                                <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                                <span>WhatsApp / Phone Number</span>
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="+92 300 1234567"
+                                value={editCaseForm.clientPhone ?? ''}
+                                onChange={(e) => setEditCaseForm({ ...editCaseForm, clientPhone: e.target.value })}
+                                className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold text-[#1A1A1A]"
+                              />
+                            </div>
+                          )}
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Tax Year</label>
-                          <input
-                            type="text"
-                            required
-                            value={editCaseForm.taxYear || ''}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, taxYear: e.target.value })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
-                          />
+                        {/* Case Ref, FBR CNO, Section Code, Tax Year */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Case Reference No.</label>
+                            <input
+                              type="text"
+                              required
+                              value={editCaseForm.caseRef || ''}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, caseRef: e.target.value })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">FBR CNO / Order No.</label>
+                            <input
+                              type="text"
+                              placeholder="e.g. CNO-100008927"
+                              value={editCaseForm.cnoNumber || ''}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, cnoNumber: e.target.value })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono"
+                            />
+                          </div>
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Legal Forum</label>
-                          <select
-                            value={editCaseForm.forum}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, forum: e.target.value as LegalForum })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
-                          >
-                            <option value="Islamabad High Court (IHC)">Islamabad High Court (IHC)</option>
-                            <option value="Appellate Tribunal Inland Revenue (ATIR)">Appellate Tribunal (ATIR)</option>
-                            <option value="Commissioner Inland Revenue (Appeals)">CIR (Appeals)</option>
-                            <option value="FBR RTO Islamabad">FBR RTO Islamabad</option>
-                            <option value="FBR LTO Rawalpindi">FBR LTO Rawalpindi</option>
-                            <option value="Supreme Court of Pakistan">Supreme Court of Pakistan</option>
-                          </select>
+                        {/* Legal Forum (Searchable + Custom), Section Code, Tax Year */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <SearchableForumSelect
+                              value={editCaseForm.forum || 'Islamabad High Court'}
+                              onChange={(forum) => setEditCaseForm({ ...editCaseForm, forum })}
+                              customForums={customLegalForums}
+                              onAddForum={addCustomLegalForum}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Section Code</label>
+                            <input
+                              type="text"
+                              value={editCaseForm.sectionCode || ''}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, sectionCode: e.target.value })}
+                              placeholder="122(5A), 177, 7E, 214C"
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Tax Year</label>
+                            <input
+                              type="text"
+                              required
+                              value={editCaseForm.taxYear || ''}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, taxYear: e.target.value })}
+                              placeholder="Tax Year 2025"
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
+                            />
+                          </div>
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Case Status</label>
-                          <select
-                            value={editCaseForm.status}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, status: e.target.value as CaseStatus })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold text-[#452415]"
-                          >
-                            <option value="Notice Received">Notice Received</option>
-                            <option value="Response Drafted">Response Drafted</option>
-                            <option value="Under Audit">Under Audit</option>
-                            <option value="CIR Appeal Pending">CIR Appeal Pending</option>
-                            <option value="ATIR Tribunal Pending">ATIR Tribunal Pending</option>
-                            <option value="High Court Writ Active">High Court Writ Active</option>
-                            <option value="Stay Granted">Stay Granted</option>
-                            <option value="Favorable Order Passed">Favorable Order Passed</option>
-                            <option value="Closed & Settled">Closed & Settled</option>
-                          </select>
+                        {/* Lead Counsel (Team Members synced), Case Status, Risk Level */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Lead Counsel</label>
+                            <select
+                              value={editCaseForm.assignedCounsel || ''}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, assignedCounsel: e.target.value })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold text-[#452415]"
+                            >
+                              {(() => {
+                                const teamNames =
+                                  teamMembers && teamMembers.length > 0
+                                    ? teamMembers.map((m) => m.name)
+                                    : ADVOCATES;
+                                const options =
+                                  editCaseForm.assignedCounsel &&
+                                  !teamNames.includes(editCaseForm.assignedCounsel)
+                                    ? [editCaseForm.assignedCounsel, ...teamNames]
+                                    : teamNames;
+                                return options.map((adv) => (
+                                  <option key={adv} value={adv}>
+                                    {adv}
+                                  </option>
+                                ));
+                              })()}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Case Status</label>
+                            <select
+                              value={editCaseForm.status}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, status: e.target.value as CaseStatus })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold text-[#452415]"
+                            >
+                              <option value="Notice Received">Notice Received</option>
+                              <option value="Response Drafted">Response Drafted</option>
+                              <option value="Under Audit">Under Audit</option>
+                              <option value="CIR Appeal Pending">CIR Appeal Pending</option>
+                              <option value="ATIR Tribunal Pending">ATIR Tribunal Pending</option>
+                              <option value="High Court Writ Active">High Court Writ Active</option>
+                              <option value="Stay Granted">Stay Granted</option>
+                              <option value="Favorable Order Passed">Favorable Order Passed</option>
+                              <option value="Closed & Settled">Closed & Settled</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Risk Level</label>
+                            <select
+                              value={editCaseForm.riskLevel}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, riskLevel: e.target.value as RiskLevel })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
+                            >
+                              <option value="Critical">Critical</option>
+                              <option value="High">High</option>
+                              <option value="Medium">Medium</option>
+                              <option value="Low">Low</option>
+                            </select>
+                          </div>
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Risk Level</label>
-                          <select
-                            value={editCaseForm.riskLevel}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, riskLevel: e.target.value as RiskLevel })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold"
-                          >
-                            <option value="Critical">Critical</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
-                          </select>
+                        {/* Demand Amount & Tax Saved */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Disputed Demand (PKR)</label>
+                            <input
+                              type="number"
+                              value={editCaseForm.demandAmountPkr || 0}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, demandAmountPkr: Number(e.target.value) })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold text-red-700"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="font-bold text-gray-700 block mb-1">Tax Saved Amount (PKR)</label>
+                            <input
+                              type="number"
+                              value={editCaseForm.savedAmountPkr || 0}
+                              onChange={(e) => setEditCaseForm({ ...editCaseForm, savedAmountPkr: Number(e.target.value) })}
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold text-[#612912]"
+                            />
+                          </div>
                         </div>
 
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Demand Amount (PKR)</label>
-                          <input
-                            type="number"
-                            value={editCaseForm.demandAmountPkr || 0}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, demandAmountPkr: Number(e.target.value) })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold text-red-700"
-                          />
+                        {/* Cause List Schedule Block */}
+                        <div className="bg-[#612912]/5 p-3 rounded-2xl border border-[#452415]/20 space-y-2">
+                          <span className="font-extrabold text-[#452415] block">Cause List Schedule</span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="font-bold text-gray-700 block mb-1">Next Hearing Date</label>
+                              <input
+                                type="date"
+                                value={editCaseForm.nextHearingDate || ''}
+                                onChange={(e) => setEditCaseForm({ ...editCaseForm, nextHearingDate: e.target.value })}
+                                className="w-full bg-white p-2 rounded-xl border border-gray-200"
+                              />
+                            </div>
+                            <div>
+                              <label className="font-bold text-gray-700 block mb-1">Hearing Purpose</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. Confirmation of Stay Order"
+                                value={editCaseForm.nextHearingPurpose || ''}
+                                onChange={(e) => setEditCaseForm({ ...editCaseForm, nextHearingPurpose: e.target.value })}
+                                className="w-full bg-white p-2 rounded-xl border border-gray-200"
+                              />
+                            </div>
+                          </div>
                         </div>
 
+                        {/* Case Summary & Legal Grounds */}
                         <div>
-                          <label className="font-bold text-gray-700 block mb-1">Tax Saved Amount (PKR)</label>
-                          <input
-                            type="number"
-                            value={editCaseForm.savedAmountPkr || 0}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, savedAmountPkr: Number(e.target.value) })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-mono font-bold text-[#612912]"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="font-bold text-gray-700 block mb-1">Assigned Lead Counsel</label>
-                          <input
-                            type="text"
-                            value={editCaseForm.assignedCounsel || ''}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, assignedCounsel: e.target.value })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 font-bold text-[#452415]"
+                          <label className="font-bold text-gray-700 block mb-1">Case Summary & Legal Grounds</label>
+                          <textarea
+                            rows={3}
+                            value={editCaseForm.summary || ''}
+                            onChange={(e) => setEditCaseForm({ ...editCaseForm, summary: e.target.value })}
+                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 text-xs"
                           />
                         </div>
 
                         {/* Client Portal Credentials Edit */}
-                        <div className="sm:col-span-2 bg-[#612912]/5/60 p-3 rounded-xl border border-[#612912]/20/80 space-y-2">
+                        <div className="bg-amber-500/10 p-3 rounded-2xl border border-amber-500/20 space-y-2">
                           <div className="text-[11px] font-extrabold text-[#612912] flex items-center gap-1.5">
                             <Lock className="w-3.5 h-3.5 text-[#452415]" />
-                            <span>Client Portal Sign-In Credentials (Email & Password)</span>
+                            <span>Client Portal Sign-In Credentials (Optional)</span>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="font-bold text-gray-700 block text-[10px] mb-0.5">Client Portal Email</label>
                               <input
                                 type="email"
-                                required
                                 value={editCaseForm.clientLoginEmail || ''}
                                 onChange={(e) => setEditCaseForm({ ...editCaseForm, clientLoginEmail: e.target.value })}
                                 placeholder="client@company.com"
@@ -6863,38 +7128,30 @@ export const AdminPortal: React.FC = () => {
                               <label className="font-bold text-gray-700 block text-[10px] mb-0.5">Client Portal Password</label>
                               <input
                                 type="text"
-                                required
                                 value={editCaseForm.clientLoginPassword || ''}
                                 onChange={(e) => setEditCaseForm({ ...editCaseForm, clientLoginPassword: e.target.value })}
-                                placeholder="e.g. ClientPass123"
+                                placeholder="e.g. Password123!"
                                 className="w-full bg-white p-2 rounded-xl border border-gray-300 font-mono text-xs text-gray-900"
                               />
                             </div>
                           </div>
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className="font-bold text-gray-700 block mb-1">Case Synopsis / Legal Summary</label>
-                          <textarea
-                            rows={3}
-                            value={editCaseForm.summary || ''}
-                            onChange={(e) => setEditCaseForm({ ...editCaseForm, summary: e.target.value })}
-                            className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-300 text-xs"
-                          />
                         </div>
                       </div>
 
                       <div className="flex justify-end gap-2 pt-3 border-t">
                         <button
                           type="button"
-                          onClick={() => setIsEditingCase(false)}
-                          className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 font-bold"
+                          onClick={() => {
+                            setIsEditingCase(false);
+                            setIsAddingNewClientInEditCase(false);
+                          }}
+                          className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 font-bold cursor-pointer"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="px-5 py-2 rounded-xl bg-[#612912] text-white font-extrabold shadow-sm hover:bg-[#452415]"
+                          className="px-5 py-2 rounded-xl bg-[#612912] text-white font-extrabold shadow-sm hover:bg-[#452415] cursor-pointer"
                         >
                           Save Case Changes
                         </button>
@@ -6902,14 +7159,26 @@ export const AdminPortal: React.FC = () => {
                     </form>
                   ) : (
                     /* Case Info Grid */
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#FAF8F5] p-4 rounded-2xl border border-gray-200 text-xs">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-[#FAF8F5] p-4 rounded-2xl border border-gray-200 text-xs">
                       <div>
                         <span className="text-[#5A6275] block">Client Name:</span>
                         <span className="font-bold text-[#1A1A1A]">{selectedCase.clientName}</span>
                       </div>
                       <div>
+                        <span className="text-[#5A6275] block">WhatsApp / Phone:</span>
+                        <span className="font-mono font-bold text-[#1A1A1A]">
+                          {selectedCase.clientPhone ||
+                            clients.find((c) => c.id === selectedCase.clientId)?.phone ||
+                            'Not set'}
+                        </span>
+                      </div>
+                      <div>
                         <span className="text-[#5A6275] block">NTN Number:</span>
                         <span className="font-mono font-bold text-[#452415]">{selectedCase.clientNtn}</span>
+                      </div>
+                      <div>
+                        <span className="text-[#5A6275] block">Legal Forum:</span>
+                        <span className="font-bold text-[#452415]">{selectedCase.forum}</span>
                       </div>
                       <div>
                         <span className="text-[#5A6275] block">Lead Advocate:</span>
@@ -7002,23 +7271,16 @@ export const AdminPortal: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label className="font-bold text-gray-700 block mb-1">Legal Forum</label>
-                            <select
+                            <SearchableForumSelect
                               value={caseHearingForm.forum}
-                              onChange={(e) =>
-                                setCaseHearingForm({ ...caseHearingForm, forum: e.target.value as LegalForum })
+                              onChange={(forum) =>
+                                setCaseHearingForm({ ...caseHearingForm, forum })
                               }
-                              className="w-full bg-[#FAF8F5] p-2 rounded-xl border border-gray-200 font-bold"
-                            >
-                              <option value="Islamabad High Court (IHC)">Islamabad High Court (IHC)</option>
-                              <option value="Appellate Tribunal Inland Revenue (ATIR)">Appellate Tribunal (ATIR)</option>
-                              <option value="Commissioner Inland Revenue (Appeals)">CIR (Appeals)</option>
-                              <option value="FBR RTO Islamabad">FBR RTO Islamabad</option>
-                              <option value="FBR LTO Rawalpindi">FBR LTO Rawalpindi</option>
-                              <option value="Supreme Court of Pakistan">Supreme Court of Pakistan</option>
-                            </select>
+                              customForums={customLegalForums}
+                              onAddForum={addCustomLegalForum}
+                            />
                           </div>
 
                           <div>
@@ -7028,7 +7290,7 @@ export const AdminPortal: React.FC = () => {
                               placeholder="e.g. Division Bench - IHC"
                               value={caseHearingForm.bench}
                               onChange={(e) => setCaseHearingForm({ ...caseHearingForm, bench: e.target.value })}
-                              className="w-full bg-[#FAF8F5] p-2 rounded-xl border border-gray-200"
+                              className="w-full bg-[#FAF8F5] p-2.5 rounded-xl border border-gray-200"
                             />
                           </div>
                         </div>
@@ -7047,12 +7309,28 @@ export const AdminPortal: React.FC = () => {
 
                         <div>
                           <label className="font-bold text-gray-700 block mb-1">Assigned Counsel</label>
-                          <input
-                            type="text"
+                          <select
                             value={caseHearingForm.counselAssigned}
                             onChange={(e) => setCaseHearingForm({ ...caseHearingForm, counselAssigned: e.target.value })}
                             className="w-full bg-[#FAF8F5] p-2 rounded-xl border border-gray-200 font-bold text-[#452415]"
-                          />
+                          >
+                            {(() => {
+                              const teamNames =
+                                teamMembers && teamMembers.length > 0
+                                  ? teamMembers.map((m) => m.name)
+                                  : ADVOCATES;
+                              const options =
+                                caseHearingForm.counselAssigned &&
+                                !teamNames.includes(caseHearingForm.counselAssigned)
+                                  ? [caseHearingForm.counselAssigned, ...teamNames]
+                                  : teamNames;
+                              return options.map((adv) => (
+                                <option key={adv} value={adv}>
+                                  {adv}
+                                </option>
+                              ));
+                            })()}
+                          </select>
                         </div>
 
                         <div className="flex justify-end gap-2 pt-2 border-t">
@@ -7512,7 +7790,7 @@ export const AdminPortal: React.FC = () => {
                       <div className="text-[10px] font-extrabold uppercase text-[#452415]">Client Recipient Contact</div>
                       <div className="font-extrabold text-sm text-[#1A1A1A] mt-0.5">{selectedCase.clientName}</div>
                       <div className="text-gray-600 font-mono text-xs">
-                        Phone: {clients.find((c) => c.id === selectedCase.clientId)?.phone || '+92 300 1234567'} • NTN: {selectedCase.clientNtn}
+                        Phone: {selectedCase.clientPhone || clients.find((c) => c.id === selectedCase.clientId)?.phone || '+92 300 1234567'} • NTN: {selectedCase.clientNtn}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -8264,7 +8542,28 @@ export const AdminPortal: React.FC = () => {
                 />
               </div>
 
-              {/* Field 6: Portrait Photo & Leftmost Pin */}
+              {/* Field 6: Direct WhatsApp Number */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-gray-800 flex items-center gap-1.5">
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>WhatsApp Number (Direct Contact)</span>
+                  </label>
+                  <span className="text-[10px] text-gray-400">Allows website visitors to message directly</span>
+                </div>
+                <input
+                  type="tel"
+                  placeholder="e.g. +92 300 1234567"
+                  value={teamFormData.whatsappNumber}
+                  onChange={(e) => setTeamFormData({ ...teamFormData, whatsappNumber: e.target.value })}
+                  className="w-full bg-[#FAF8F5] px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-[#452415]"
+                />
+                <p className="text-[10px] text-gray-500 mt-1">
+                  Enter with country code (e.g. +92 300 1234567 or 03001234567). Leave blank to fall back to the firm&apos;s main WhatsApp line.
+                </p>
+              </div>
+
+              {/* Field 7: Portrait Photo */}
               <div className="space-y-2">
                 <label className="font-bold text-gray-800 block">
                   Portrait Photo
@@ -8306,21 +8605,6 @@ export const AdminPortal: React.FC = () => {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              <div>
-                <label className="inline-flex items-center gap-2 cursor-pointer bg-[#FAF8F5] px-3 py-2 rounded-xl border border-gray-200 hover:border-amber-400">
-                  <input
-                    type="checkbox"
-                    checked={teamFormData.stickToLeft}
-                    onChange={(e) => setTeamFormData({ ...teamFormData, stickToLeft: e.target.checked })}
-                    className="w-4 h-4 text-amber-600 rounded border-gray-300 focus:ring-amber-500 cursor-pointer"
-                  />
-                  <span className="font-bold text-gray-800 text-[11px] flex items-center gap-1">
-                    <Pin className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
-                    Pin First on Left (Team Grid Order)
-                  </span>
-                </label>
               </div>
 
               {/* Form Buttons */}

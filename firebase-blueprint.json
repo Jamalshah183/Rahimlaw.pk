@@ -32,7 +32,10 @@
         "caseTitle": { "type": "string" },
         "clientName": { "type": "string" },
         "clientNtn": { "type": "string" },
+        "clientPhone": { "type": "string" },
         "caseRef": { "type": "string" },
+        "cnoNumber": { "type": "string" },
+        "sectionCode": { "type": "string" },
         "assignedCounsel": { "type": "string" },
         "assignedCounselTitle": { "type": "string" },
         "forum": { "type": "string" },
@@ -231,7 +234,7 @@
         "image": { "type": "string" },
         "keyWin": { "type": "string" },
         "isCeo": { "type": "boolean" },
-        "stickToLeft": { "type": "boolean" },
+        "whatsappNumber": { "type": "string" },
         "order": { "type": "number" }
       },
       "required": ["id", "name", "title"]

@@ -67,7 +67,10 @@ export interface CaseFile {
   caseTitle: string;
   clientName: string;
   clientNtn: string;
+  clientPhone?: string;
   caseRef: string;
+  cnoNumber?: string;
+  sectionCode?: string;
   assignedCounsel: string;
   assignedCounselTitle: string;
   forum: LegalForum;
@@ -207,7 +210,7 @@ export interface TeamMember {
   image: string;
   keyWin: string;
   isCeo?: boolean;
-  stickToLeft?: boolean;
+  whatsappNumber?: string;
   order?: number;
   createdAt?: string;
   updatedAt?: string;

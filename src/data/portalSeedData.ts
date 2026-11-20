@@ -650,7 +650,6 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     image: rahimMemberImg,
     keyWin: 'Lead Senior Counsel overseeing Taxation, Corporate, Banking & NBFC litigation.',
     isCeo: true,
-    stickToLeft: true,
     order: 1,
     createdAt: '2025-01-01'
   },
@@ -676,7 +675,6 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     image: hasanImg,
     keyWin: 'Advocate Supreme Court since 2020 & CIArb Accredited Mediator.',
     isCeo: false,
-    stickToLeft: false,
     order: 2,
     createdAt: '2025-01-01'
   },
@@ -702,7 +700,6 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     image: mehakImg,
     keyWin: 'Corporate & Tax Litigation before SECP, FBR, and the High Court.',
     isCeo: false,
-    stickToLeft: false,
     order: 3,
     createdAt: '2025-01-01'
   },
@@ -728,7 +725,6 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     image: khadijaImg,
     keyWin: 'Litigation, IP, Banking, NAB matters & Alternative Dispute Resolution (ADR).',
     isCeo: false,
-    stickToLeft: false,
     order: 4,
     createdAt: '2025-01-01'
   }
