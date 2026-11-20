@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare, MessageCircle } from 'lucide-react';
+import { X, CheckCircle2, ArrowUpRight, Award, MessageSquare } from 'lucide-react';
 import { FIRM_CONFIG } from '../data/firmData';
 import { usePortalStore } from '../lib/portalStore';
 import rahimMemberImg from '../assets/images/rahim_nawaz_khan_abbasi.png';
@@ -331,30 +331,12 @@ const TeamMemberCard: React.FC<{
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0">
-          {member.whatsappNumber && member.whatsappNumber.trim() !== '' && (
-            <a
-              href={`https://wa.me/${normalizeWhatsAppNumber(member.whatsappNumber)}?text=${encodeURIComponent(
-                `Assalam-o-Alaikum ${member.fullName}, I would like to request a legal consultation.`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
-              aria-label={`Contact ${member.fullName} directly on WhatsApp`}
-              title={`WhatsApp ${member.fullName}`}
-              className="w-7 h-7 rounded-full bg-[#25D366] hover:bg-[#1ebe5d] text-white flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-            </a>
-          )}
-          <span
-            className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#452415] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
-            aria-hidden="true"
-          >
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </span>
-        </div>
+        <span
+          className="w-7 h-7 rounded-full bg-[#E5B842] group-hover:bg-white text-[#452415] flex items-center justify-center transition-all duration-200 shrink-0 shadow-xs"
+          aria-hidden="true"
+        >
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </span>
       </div>
     </div>
   );
