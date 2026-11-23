@@ -479,15 +479,18 @@ export const AdminPortal: React.FC = () => {
     addCustomLegalForum,
     updateCase,
     updateCaseStatus,
+    deleteCase,
     addTimelineEvent,
     addNotice,
     updateNoticeStatus,
     addDocument,
+    deleteDocument,
     addTask,
     toggleTask,
     addNote,
     addInvoice,
     markInvoicePaid,
+    deleteInvoice,
     addHearing,
     updateCaseHearing,
     updateHearing,
@@ -1467,6 +1470,57 @@ export const AdminPortal: React.FC = () => {
 
   // PDF Invoice Modal State
   const [selectedInvoiceForPdf, setSelectedInvoiceForPdf] = useState<Invoice | null>(null);
+
+  // Final Warning Deletion State (Cases, Files/Documents, Invoices)
+  const [pendingDeletion, setPendingDeletion] = useState<
+    | { type: 'case'; item: CaseFile }
+    | { type: 'document'; item: DocumentItem }
+    | { type: 'invoice'; item: Invoice }
+    | null
+  >(null);
+  const [finalWarningAck, setFinalWarningAck] = useState(false);
+  const [deleteActionNotice, setDeleteActionNotice] = useState<string | null>(null);
+
+  const requestFinalDelete = (
+    target:
+      | { type: 'case'; item: CaseFile }
+      | { type: 'document'; item: DocumentItem }
+      | { type: 'invoice'; item: Invoice }
+  ) => {
+    setFinalWarningAck(false);
+    setPendingDeletion(target);
+  };
+
+  const handleConfirmFinalDelete = () => {
+    if (!pendingDeletion || !finalWarningAck) return;
+
+    if (pendingDeletion.type === 'case') {
+      const target = pendingDeletion.item;
+      deleteCase(target.id);
+      if (selectedCase?.id === target.id) {
+        setSelectedCase(null);
+        setIsEditingCase(false);
+      }
+      setDeleteActionNotice(
+        `Case file "${target.caseTitle}" (${target.caseRef}) and its linked records were permanently deleted.`
+      );
+    } else if (pendingDeletion.type === 'document') {
+      const target = pendingDeletion.item;
+      deleteDocument(target.id);
+      setDeleteActionNotice(`File "${target.title}" was permanently deleted.`);
+    } else if (pendingDeletion.type === 'invoice') {
+      const target = pendingDeletion.item;
+      deleteInvoice(target.id);
+      if (selectedInvoiceForPdf?.id === target.id) {
+        setSelectedInvoiceForPdf(null);
+      }
+      setDeleteActionNotice(`Invoice "${target.invoiceNumber}" was permanently deleted.`);
+    }
+
+    setPendingDeletion(null);
+    setFinalWarningAck(false);
+    setTimeout(() => setDeleteActionNotice(null), 5000);
+  };
 
   // Case Detail Hearing Form States
   const [isEditingCaseHearing, setIsEditingCaseHearing] = useState(false);
@@ -3448,6 +3502,23 @@ export const AdminPortal: React.FC = () => {
               </div>
             </div>
 
+            {/* Deletion Confirmation Toast */}
+            {deleteActionNotice && (
+              <div className="bg-red-50 border border-red-200 text-red-900 px-5 py-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>{deleteActionNotice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDeleteActionNotice(null)}
+                  className="text-red-700 hover:text-red-950 font-bold cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             {/* Filter Bar */}
             <div className="bg-white p-4 rounded-2xl border border-[#452415]/15 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2 flex-1 min-w-[280px]">
@@ -3571,13 +3642,26 @@ export const AdminPortal: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="shrink-0 flex md:flex-col items-center md:items-end justify-between border-t md:border-t-0 md:border-l border-gray-100 pt-3 md:pt-0 md:pl-6 gap-3">
+                  <div className="shrink-0 flex md:flex-col items-center md:items-end justify-between border-t md:border-t-0 md:border-l border-gray-100 pt-3 md:pt-0 md:pl-6 gap-2.5">
                     <button
+                      type="button"
                       onClick={() => setSelectedCase(c)}
-                      className="bg-[#612912] hover:bg-[#452415] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
+                      className="bg-[#612912] hover:bg-[#452415] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
                     >
                       <span>Open Case File</span>
                       <ChevronRight className="w-4 h-4 text-[#E5B842]" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        requestFinalDelete({ type: 'case', item: c });
+                      }}
+                      className="bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 text-xs font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                      title="Delete Case File"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Case</span>
                     </button>
                   </div>
                 </div>
@@ -3815,6 +3899,23 @@ export const AdminPortal: React.FC = () => {
               </button>
             </div>
 
+            {/* Deletion Confirmation Toast */}
+            {deleteActionNotice && (
+              <div className="bg-red-50 border border-red-200 text-red-900 px-5 py-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>{deleteActionNotice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDeleteActionNotice(null)}
+                  className="text-red-700 hover:text-red-950 font-bold cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             {/* Document Vault Search & Filter Bar */}
             <div className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm space-y-3">
               <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -3947,17 +4048,27 @@ export const AdminPortal: React.FC = () => {
                         <div className="text-[11px] font-mono text-[#452415]">Size: {doc.fileSize}</div>
                       </div>
 
-                      <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          alert(`Simulated PDF Download: Downloading "${doc.title}"...`);
-                        }}
-                        className="bg-[#612912] text-white p-3 rounded-2xl hover:bg-[#452415] transition-colors shrink-0"
-                        title="Download File"
-                      >
-                        <Download className="w-4 h-4 text-[#E5B842]" />
-                      </a>
+                      <div className="flex flex-col gap-2 shrink-0">
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            alert(`Simulated PDF Download: Downloading "${doc.title}"...`);
+                          }}
+                          className="bg-[#612912] text-white p-3 rounded-2xl hover:bg-[#452415] transition-colors flex items-center justify-center"
+                          title="Download File"
+                        >
+                          <Download className="w-4 h-4 text-[#E5B842]" />
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => requestFinalDelete({ type: 'document', item: doc })}
+                          className="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white border border-red-200 p-3 rounded-2xl transition-colors flex items-center justify-center cursor-pointer"
+                          title="Delete File"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -4132,6 +4243,23 @@ export const AdminPortal: React.FC = () => {
               </button>
             </div>
 
+            {/* Deletion Confirmation Toast */}
+            {deleteActionNotice && (
+              <div className="bg-red-50 border border-red-200 text-red-900 px-5 py-3 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>{deleteActionNotice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDeleteActionNotice(null)}
+                  className="text-red-700 hover:text-red-950 font-bold cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             {/* Billing Search & Filter Bar */}
             <div className="bg-white p-5 rounded-3xl border border-[#452415]/15 shadow-sm space-y-3">
               <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -4288,14 +4416,26 @@ export const AdminPortal: React.FC = () => {
                           </button>
                         </div>
 
-                        {inv.status !== 'Paid' && (
+                        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                          {inv.status !== 'Paid' && (
+                            <button
+                              type="button"
+                              onClick={() => markInvoicePaid(inv.id, 'Bank Transfer')}
+                              className="bg-[#FAF8F5] text-gray-700 text-[11px] font-bold px-3 py-1 rounded-xl hover:bg-gray-200 border border-gray-300 cursor-pointer"
+                            >
+                              Mark Paid
+                            </button>
+                          )}
                           <button
-                            onClick={() => markInvoicePaid(inv.id, 'Bank Transfer')}
-                            className="bg-[#FAF8F5] text-gray-700 text-[11px] font-bold px-3 py-1 rounded-xl hover:bg-gray-200 border border-gray-300"
+                            type="button"
+                            onClick={() => requestFinalDelete({ type: 'invoice', item: inv })}
+                            className="bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 text-[11px] font-bold px-3 py-1 rounded-xl transition-colors flex items-center gap-1 cursor-pointer"
+                            title="Delete Invoice"
                           >
-                            Mark Paid
+                            <Trash2 className="w-3 h-3" />
+                            <span>Delete</span>
                           </button>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -6717,10 +6857,11 @@ export const AdminPortal: React.FC = () => {
                   </h2>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap justify-end">
                   <button
+                    type="button"
                     onClick={handleStartEditCase}
-                    className="bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 shadow-sm"
+                    className="bg-[#612912] hover:bg-[#452415] text-white font-extrabold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 shadow-sm cursor-pointer"
                     title="Edit Case File Details"
                   >
                     <Edit3 className="w-3.5 h-3.5 text-[#E5B842]" />
@@ -6728,16 +6869,43 @@ export const AdminPortal: React.FC = () => {
                   </button>
 
                   <button
+                    type="button"
+                    onClick={() => requestFinalDelete({ type: 'case', item: selectedCase })}
+                    className="bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 font-extrabold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                    title="Delete Case File"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => {
                       setSelectedCase(null);
                       setIsEditingCase(false);
                     }}
-                    className="text-gray-400 hover:text-black font-extrabold p-1 text-base ml-2"
+                    className="text-gray-400 hover:text-black font-extrabold p-1 text-base ml-1 cursor-pointer"
                   >
                     ✕
                   </button>
                 </div>
               </div>
+
+              {deleteActionNotice && (
+                <div className="bg-red-50 border border-red-200 text-red-900 px-4 py-2.5 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-red-600 shrink-0" />
+                    <span>{deleteActionNotice}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteActionNotice(null)}
+                    className="text-red-700 hover:text-red-950 font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
 
               {/* Navigation Tabs inside Case Detail Drawer */}
               <div className="flex items-center gap-1 border-b pb-2 text-xs font-bold overflow-x-auto">
@@ -8085,16 +8253,27 @@ export const AdminPortal: React.FC = () => {
                               </div>
                             </div>
 
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                alert(`Downloading ${d.title}...`);
-                              }}
-                              className="bg-[#612912] text-white p-2.5 rounded-xl hover:bg-[#452415]"
-                            >
-                              <Download className="w-4 h-4 text-[#E5B842]" />
-                            </a>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <a
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  alert(`Downloading ${d.title}...`);
+                                }}
+                                className="bg-[#612912] text-white p-2.5 rounded-xl hover:bg-[#452415]"
+                                title="Download File"
+                              >
+                                <Download className="w-4 h-4 text-[#E5B842]" />
+                              </a>
+                              <button
+                                type="button"
+                                onClick={() => requestFinalDelete({ type: 'document', item: d })}
+                                className="bg-red-50 hover:bg-red-600 text-red-600 hover:text-white border border-red-200 p-2.5 rounded-xl transition-colors cursor-pointer"
+                                title="Delete File"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
                         ))
                     )}
@@ -8188,11 +8367,11 @@ export const AdminPortal: React.FC = () => {
                                 </div>
                               </div>
 
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <button
                                   type="button"
                                   onClick={() => setSelectedInvoiceForPdf(i)}
-                                  className="bg-[#612912] hover:bg-[#452415] text-white px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-sm"
+                                  className="bg-[#612912] hover:bg-[#452415] text-white px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-sm cursor-pointer"
                                 >
                                   <Printer className="w-3.5 h-3.5 text-[#E5B842]" />
                                   <span>View / Print PDF</span>
@@ -8201,10 +8380,20 @@ export const AdminPortal: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => setSelectedInvoiceForPdf(i)}
-                                  className="bg-[#25D366] hover:bg-[#612912] text-white px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-sm"
+                                  className="bg-[#25D366] hover:bg-[#612912] text-white px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1 shadow-sm cursor-pointer"
                                 >
                                   <Send className="w-3.5 h-3.5" />
                                   <span>WhatsApp</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => requestFinalDelete({ type: 'invoice', item: i })}
+                                  className="bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                                  title="Delete Invoice"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <span>Delete</span>
                                 </button>
                               </div>
                             </div>
@@ -9213,6 +9402,177 @@ export const AdminPortal: React.FC = () => {
           onClose={() => setSelectedInvoiceForPdf(null)}
           onMarkPaid={markInvoicePaid}
         />
+      )}
+
+      {/* --- FINAL WARNING MODAL: PERMANENT DELETE (CASES, FILES, INVOICES) --- */}
+      {pendingDeletion && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setPendingDeletion(null);
+              setFinalWarningAck(false);
+            }
+          }}
+        >
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 border-2 border-red-300 shadow-2xl space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center shrink-0 border border-red-200">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-red-600 text-white px-2.5 py-0.5 rounded-full mb-1">
+                  Final Warning
+                </span>
+                <h3 className="text-base font-heading font-extrabold text-[#1A1A1A] leading-snug">
+                  {pendingDeletion.type === 'case'
+                    ? 'Permanently Delete Case File?'
+                    : pendingDeletion.type === 'document'
+                    ? 'Permanently Delete File?'
+                    : 'Permanently Delete Invoice?'}
+                </h3>
+                <p className="text-[11px] text-gray-500 mt-0.5">
+                  This action is irreversible and removes the record from the chambers database.
+                </p>
+              </div>
+            </div>
+
+            {/* Record Summary & Linked Impact */}
+            <div className="bg-red-50/70 p-4 rounded-2xl border border-red-200 text-xs text-gray-800 space-y-2">
+              {pendingDeletion.type === 'case' && (() => {
+                const c = pendingDeletion.item;
+                const linkedDocsCount = documents.filter((d) => d.caseId === c.id).length;
+                const linkedInvoicesCount = invoices.filter((i) => i.caseId === c.id).length;
+                const linkedNoticesCount = notices.filter((n) => n.caseId === c.id).length;
+                const linkedHearingsCount = hearings.filter((h) => h.caseId === c.id).length;
+                const linkedTasksCount = tasks.filter((t) => t.caseId === c.id).length;
+                const linkedNotesCount = notes.filter((n) => n.caseId === c.id).length;
+
+                return (
+                  <>
+                    <div>
+                      <span className="text-[10px] font-mono font-extrabold bg-[#612912] text-white px-2 py-0.5 rounded mr-2">
+                        {c.caseRef}
+                      </span>
+                      <strong className="text-black font-extrabold">{c.caseTitle}</strong>
+                    </div>
+                    <div className="text-[11px] text-gray-600">
+                      Client: <strong className="text-[#1A1A1A]">{c.clientName}</strong> • {c.forum}
+                    </div>
+                    <div className="pt-2 border-t border-red-200/80 text-[11px] text-red-800 font-semibold space-y-1">
+                      <p>
+                        Deleting this case file will also permanently erase all linked case records:
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 text-[10px] font-bold">
+                        <span className="bg-white border border-red-200 px-2 py-0.5 rounded-lg">
+                          {linkedDocsCount} Files
+                        </span>
+                        <span className="bg-white border border-red-200 px-2 py-0.5 rounded-lg">
+                          {linkedInvoicesCount} Invoices
+                        </span>
+                        <span className="bg-white border border-red-200 px-2 py-0.5 rounded-lg">
+                          {linkedNoticesCount} Notices
+                        </span>
+                        <span className="bg-white border border-red-200 px-2 py-0.5 rounded-lg">
+                          {linkedHearingsCount} Hearings
+                        </span>
+                        <span className="bg-white border border-red-200 px-2 py-0.5 rounded-lg">
+                          {linkedTasksCount + linkedNotesCount} Tasks &amp; Notes
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+
+              {pendingDeletion.type === 'document' && (() => {
+                const d = pendingDeletion.item;
+                const linkedCase = cases.find((c) => c.id === d.caseId);
+                return (
+                  <>
+                    <div className="font-extrabold text-[#1A1A1A]">{d.title}</div>
+                    <div className="text-[11px] text-gray-600 space-y-0.5">
+                      <div>Category: <strong className="text-[#1A1A1A]">{d.category}</strong></div>
+                      {linkedCase && (
+                        <div>Case: <strong className="text-[#452415]">[{linkedCase.caseRef}] {linkedCase.clientName}</strong></div>
+                      )}
+                      <div>Uploaded by {d.uploadedBy} on {d.uploadedAt} ({d.fileSize})</div>
+                    </div>
+                    <p className="text-[11px] text-red-800 font-semibold pt-1 border-t border-red-200/80">
+                      This file will be permanently deleted from the Document Vault and linked case file.
+                    </p>
+                  </>
+                );
+              })()}
+
+              {pendingDeletion.type === 'invoice' && (() => {
+                const inv = pendingDeletion.item;
+                const linkedCase = cases.find((c) => c.id === inv.caseId);
+                return (
+                  <>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[11px] font-extrabold bg-[#612912] text-white px-2 py-0.5 rounded">
+                        {inv.invoiceNumber}
+                      </span>
+                      <span className="font-extrabold text-[#452415]">
+                        Rs. {(inv.retainerFeePkr + inv.hearingFeePkr).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="font-extrabold text-[#1A1A1A]">{inv.serviceDescription}</div>
+                    <div className="text-[11px] text-gray-600 space-y-0.5">
+                      <div>Client: <strong className="text-[#1A1A1A]">{inv.clientName}</strong> ({inv.status})</div>
+                      {linkedCase && (
+                        <div>Case: <strong className="text-[#452415]">[{linkedCase.caseRef}] {linkedCase.caseTitle}</strong></div>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-red-800 font-semibold pt-1 border-t border-red-200/80">
+                      This invoice record will be permanently removed from Billing &amp; the linked case ledger.
+                    </p>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* Final Warning Acknowledgment Checkbox */}
+            <label className="flex items-start gap-2.5 bg-[#FAF8F5] hover:bg-red-50/40 p-3 rounded-2xl border border-gray-200 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={finalWarningAck}
+                onChange={(e) => setFinalWarningAck(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-red-300 text-red-600 focus:ring-red-500 cursor-pointer shrink-0"
+              />
+              <span className="text-xs font-bold text-[#1A1A1A] leading-snug">
+                Final warning: I understand this deletion is permanent and cannot be undone.
+              </span>
+            </label>
+
+            <div className="flex items-center justify-end gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingDeletion(null);
+                  setFinalWarningAck(false);
+                }}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!finalWarningAck}
+                onClick={handleConfirmFinalDelete}
+                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-sm ${
+                  finalWarningAck
+                    ? 'bg-red-600 hover:bg-red-700 text-white cursor-pointer'
+                    : 'bg-red-200 text-white/90 cursor-not-allowed'
+                }`}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Permanently Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

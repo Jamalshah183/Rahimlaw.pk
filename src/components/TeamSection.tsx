@@ -40,6 +40,7 @@ export function useStudioCutout(src: string, maxAspectRatio = 1.22): string {
   const [cutoutUrl, setCutoutUrl] = useState<string>(src);
 
   useEffect(() => {
+    setCutoutUrl(src);
     let isCancelled = false;
     const img = new Image();
     img.crossOrigin = 'anonymous';
